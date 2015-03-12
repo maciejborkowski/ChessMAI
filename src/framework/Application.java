@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class Application {
-	private final static String WINDOW_LABEL = "Document Integrity";
+	private final static String WINDOW_LABEL = "ChessMAI";
 	private final static String RUN_TAB_LABEL = "Run";
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private JFrame frame;
