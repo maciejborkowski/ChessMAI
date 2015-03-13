@@ -6,8 +6,10 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class RunPanel extends JPanel {
-	
+	private ChessOptions options;
+
 	public RunPanel() {
+		options = new ChessOptions();
 		initialize();
 		addChessBoard();
 		addPlayerOptions();
@@ -17,25 +19,21 @@ public class RunPanel extends JPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 	}
-	
+
 	private void addChessBoard() {
-		ChessBoardPanel panel = new ChessBoardPanel();
+		ChessBoardPanel panel = new ChessBoardPanel(options);
 		add(panel, BorderLayout.CENTER);
-		
+
 	}
-	
+
 	private void addPlayerOptions() {
-		PlayerOptionsPanel panel = new PlayerOptionsPanel();
+		PlayerOptionsPanel panel = new PlayerOptionsPanel(options);
 		add(panel, BorderLayout.LINE_END);
 	}
 
 	private void addRunOptions() {
-		RunOptionsPanel panel = new RunOptionsPanel();
+		RunOptionsPanel panel = new RunOptionsPanel(options);
 		add(panel, BorderLayout.PAGE_END);
 	}
-
-
-
-
 
 }
