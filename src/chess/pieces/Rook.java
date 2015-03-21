@@ -9,8 +9,13 @@ import chess.Square;
 
 public final class Rook extends Piece {
 
-	public Rook(ChessEngine game, int type, Color color, int x, int y) {
-		super(game, type, color, x, y);
+	public Rook(ChessEngine game, Color color, int x, int y) {
+		super(game, color, x, y);
+		if (color.equals(Color.BLACK)) {
+			type = Piece.BLACK_ROOK;
+		} else {
+			type = Piece.WHITE_ROOK;
+		}
 	}
 
 	@Override
@@ -21,28 +26,35 @@ public final class Rook extends Piece {
 		for (int i = 1; i < ChessEngine.SQUARE_HEIGHT; i++) {
 			if (!north && !south && !west && !east)
 				break;
-
 			if (north) {
-				int dx = x, dy = y;
-				dy -= i;
-				north = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x, y - i);
+				north = processSquare(square);
 			}
 			if (south) {
-				int dx = x, dy = y;
-				dy += i;
-				south = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x, y + i);
+				south = processSquare(square);
 			}
 			if (west) {
-				int dx = x, dy = y;
-				dx -= i;
-				west = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y);
+				west = processSquare(square);
 			}
 			if (east) {
-				int dx = x, dy = y;
-				dx += i;
-				east = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y);
+				east = processSquare(square);
 			}
 		}
+	}
+
+	private boolean processSquare(Square square) {
+		if (checkMovableSquare(square)) {
+			possibleMoves.add(square);
+		} else {
+			if (checkAttackableSquare(square)) {
+				possibleMoves.add(square);
+			}
+			return false;
+		}
+		return true;
 	}
 
 }

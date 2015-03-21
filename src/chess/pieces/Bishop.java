@@ -9,8 +9,13 @@ import chess.Square;
 
 public final class Bishop extends Piece {
 
-	public Bishop(ChessEngine game, int type, Color color, int x, int y) {
-		super(game, type, color, x, y);
+	public Bishop(ChessEngine game, Color color, int x, int y) {
+		super(game, color, x, y);
+		if(color.equals(Color.BLACK)) {
+			type = Piece.BLACK_BISHOP;
+		} else {
+			type = Piece.WHITE_BISHOP;
+		}
 	}
 
 	@Override
@@ -22,29 +27,33 @@ public final class Bishop extends Piece {
 			if (!nw && !ne && !sw && !se)
 				break;
 			if (nw) {
-				int dx = x, dy = y;
-				dx += i * -1;
-				dy += i * -1;
-				nw = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y - i);
+				nw = processSquare(square);
 			}
 			if (ne) {
-				int dx = x, dy = y;
-				dx += i * 1;
-				dy += i * -1;
-				ne = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y - i);
+				ne = processSquare(square);
 			}
 			if (sw) {
-				int dx = x, dy = y;
-				dx -= i;
-				dy += i;
-				sw = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y + i);
+				sw = processSquare(square);
 			}
 			if (se) {
-				int dx = x, dy = y;
-				dx += i;
-				dy += i;
-				se = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y + i);
+				se = processSquare(square);
 			}
 		}
+	}
+
+	private boolean processSquare(Square square) {
+		if (checkMovableSquare(square)) {
+			possibleMoves.add(square);
+		} else {
+			if (checkAttackableSquare(square)) {
+				possibleMoves.add(square);
+			}
+			return false;
+		}
+		return true;
 	}
 }

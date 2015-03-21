@@ -9,8 +9,13 @@ import chess.Square;
 
 public final class Queen extends Piece {
 
-	public Queen(ChessEngine game, int type, Color color, int x, int y) {
-		super(game, type, color, x, y);
+	public Queen(ChessEngine game, Color color, int x, int y) {
+		super(game, color, x, y);
+		if (color.equals(Color.BLACK)) {
+			type = Piece.BLACK_QUEEN;
+		} else {
+			type = Piece.WHITE_QUEEN;
+		}
 	}
 
 	@Override
@@ -21,54 +26,51 @@ public final class Queen extends Piece {
 		for (int i = 1; i < ChessEngine.SQUARE_HEIGHT; i++) {
 			if (!nw && !ne && !sw && !se && !north && !south && !west && !east)
 				break;
-
 			if (north) {
-				int dx = x, dy = y;
-				dy -= i;
-				north = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x, y - i);
+				north = processSquare(square);
 			}
 			if (south) {
-				int dx = x, dy = y;
-				dy += i;
-				south = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x, y + i);
+				south = processSquare(square);
 			}
 			if (west) {
-				int dx = x, dy = y;
-				dx -= i;
-				west = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y);
+				west = processSquare(square);
 			}
 			if (east) {
-				int dx = x, dy = y;
-				dx += i;
-				east = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y);
+				east = processSquare(square);
 			}
 			if (nw) {
-				int dx = x, dy = y;
-				dx += i * -1;
-				dy += i * -1;
-				nw = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y - i);
+				nw = processSquare(square);
 			}
 			if (ne) {
-				int dx = x, dy = y;
-				dx += i * 1;
-				dy += i * -1;
-				ne = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y - i);
+				ne = processSquare(square);
 			}
 			if (sw) {
-				int dx = x, dy = y;
-				dx -= i;
-				dy += i;
-				sw = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x - i, y + i);
+				sw = processSquare(square);
 			}
 			if (se) {
-				int dx = x, dy = y;
-				dx += i;
-				dy += i;
-				se = checkMovableSquare(dx, dy);
+				Square square = engine.getSquare(x + i, y + i);
+				se = processSquare(square);
 			}
-
 		}
+	}
 
+	private boolean processSquare(Square square) {
+		if (checkMovableSquare(square)) {
+			possibleMoves.add(square);
+		} else {
+			if (checkAttackableSquare(square)) {
+				possibleMoves.add(square);
+			}
+			return false;
+		}
+		return true;
 	}
 
 }

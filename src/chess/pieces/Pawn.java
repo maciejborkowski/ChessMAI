@@ -2,38 +2,67 @@ package chess.pieces;
 
 import java.util.ArrayList;
 
-import chess.*;
+import chess.ChessEngine;
+import chess.Color;
+import chess.Piece;
+import chess.Square;
 
 public class Pawn extends Piece {
-
 	private int ny = 0;
+	private boolean passantTarget = false;
 
-	public Pawn(ChessEngine game, int type, Color color, int x, int y) {
-		super(game, type, color, x, y);
-		possibleMoves = null;
-		if (color == Color.WHITE)
-			ny = -1;
-		else
+	public Pawn(ChessEngine game, Color color, int x, int y) {
+		super(game, color, x, y);
+		if (color.equals(Color.BLACK)) {
 			ny = 1;
+			type = Piece.BLACK_PAWN;
+		} else {
+			ny = -1;
+			type = Piece.WHITE_PAWN;
+		}
 	}
 
 	@Override
 	public void createPossibleMoves() {
 		possibleMoves = new ArrayList<Square>();
-		int dy = ny;
-		Square ahead = game.getSquare(x, y + dy);
-		if (ahead != null && ahead.getPiece() == null) {
-			possibleMoves.add(ahead);
+		Square forward = engine.getSquare(x, y + ny);
+		if (checkMovableSquare(forward)) {
+			possibleMoves.add(forward);
 		}
-		Square aheadLeft = game.getSquare(x - 1, y + dy);
-		if ((aheadLeft != null) && (aheadLeft.getPiece() != null) && (isOpponent(aheadLeft.getPiece()))) {
-			possibleMoves.add(aheadLeft);
+		// Pawn can move two squares forward on his first move
+		Square doubleForward = engine.getSquare(x, y + 2 * ny);
+		if (!moved && (possibleMoves.contains(forward)) && checkMovableSquare(doubleForward)) {
+			possibleMoves.add(doubleForward);
 		}
-		Square aheadRight = game.getSquare(x + 1, y + dy);
-		if ((aheadRight != null) && (aheadRight.getPiece() != null) && isOpponent(aheadRight.getPiece())) {
-			possibleMoves.add(aheadRight);
+		Square forwardLeft = engine.getSquare(x - 1, y + ny);
+		if (checkAttackableSquare(forwardLeft)) {
+			possibleMoves.add(forwardLeft);
 		}
+		Square forwardRight = engine.getSquare(x + 1, y + ny);
+		if (checkAttackableSquare(forwardRight)) {
+			possibleMoves.add(forwardRight);
+		}
+		// En Passant
+		Square passantLeft = engine.getSquare(x - 1, y);
+		Square passantLeftForward = engine.getSquare(x - 1, y + ny);
+		if (checkMovableSquare(passantLeftForward) && (passantLeft.getPiece() instanceof Pawn)
+				&& ((Pawn) (passantLeft.getPiece())).isEnPassantTarget()) {
+			possibleMoves.add(passantLeftForward);
+		}
+		Square passantRight = engine.getSquare(x + 1, y);
+		Square passantRightForward = engine.getSquare(x + 1, y + ny);
+		if (checkMovableSquare(passantRightForward) && (passantRight.getPiece() instanceof Pawn)
+				&& ((Pawn) (passantRight.getPiece())).isEnPassantTarget()) {
 
+			possibleMoves.add(passantRightForward);
+		}
 	}
 
+	public boolean isEnPassantTarget() {
+		return passantTarget;
+	}
+
+	public void setPassantTarget(boolean target) {
+		passantTarget = target;
+	}
 }

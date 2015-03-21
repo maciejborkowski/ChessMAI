@@ -31,8 +31,8 @@ public class PlayerOptionsPanel extends JPanel {
 		this.options = options;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		options.setBlack(new AIPlayer());
-		options.setWhite(new AIPlayer());
+		options.setBlack(new HumanPlayer());
+		options.setWhite(new HumanPlayer());
 		addBlack();
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		addWhite();
@@ -43,7 +43,6 @@ public class PlayerOptionsPanel extends JPanel {
 		add(playerLabel);
 		JRadioButton ai = new JRadioButton(AI_LABEL);
 		ai.addActionListener(new SelectionActionListener(Color.BLACK, AIPlayer.class));
-		ai.setSelected(true);
 		add(ai);
 
 		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
@@ -51,6 +50,7 @@ public class PlayerOptionsPanel extends JPanel {
 
 		JRadioButton player = new JRadioButton(HUMAN_LABEL);
 		player.addActionListener(new SelectionActionListener(Color.BLACK, HumanPlayer.class));
+		player.setSelected(true);
 		add(player);
 
 		ButtonGroup group = new ButtonGroup();
@@ -64,7 +64,6 @@ public class PlayerOptionsPanel extends JPanel {
 		add(playerLabel);
 		JRadioButton ai = new JRadioButton(AI_LABEL);
 		ai.addActionListener(new SelectionActionListener(Color.WHITE, AIPlayer.class));
-		ai.setSelected(true);
 		add(ai);
 
 		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
@@ -72,6 +71,7 @@ public class PlayerOptionsPanel extends JPanel {
 
 		JRadioButton player = new JRadioButton(HUMAN_LABEL);
 		player.addActionListener(new SelectionActionListener(Color.WHITE, HumanPlayer.class));
+		player.setSelected(true);
 		add(player);
 
 		ButtonGroup group = new ButtonGroup();

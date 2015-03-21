@@ -16,15 +16,15 @@ public abstract class Piece {
 	public static final int BLACK_QUEEN = 10;
 	public static final int BLACK_KING = 11;
 
-	protected ChessEngine game;
+	protected ChessEngine engine;
 	protected int x, y;
 	protected int type;
 	protected Color color;
 	protected List<Square> possibleMoves = null;
+	protected boolean moved = false;
 
-	public Piece(ChessEngine game, int type, Color color, int x, int y) {
-		this.game = game;
-		this.type = type;
+	public Piece(ChessEngine game, Color color, int x, int y) {
+		this.engine = game;
 		this.color = color;
 		this.x = x;
 		this.y = y;
@@ -38,7 +38,7 @@ public abstract class Piece {
 	}
 
 	public boolean canMove(int x, int y) {
-		Square ms = game.getSquare(x, y);
+		Square ms = engine.getSquare(x, y);
 
 		createPossibleMoves();
 		if (possibleMoves.contains(ms)) {
@@ -48,21 +48,23 @@ public abstract class Piece {
 		return false;
 	}
 
-	public boolean checkMovableSquare(int dx, int dy) {
-
-		Square s = game.getSquare(dx, dy);
-		if (s != null) {
-			if (s.getPiece() != null) {
-				if (isOpponent(s.getPiece()))
-					possibleMoves.add(s);
-				return false;
-			} else {
-				possibleMoves.add(s);
+	protected boolean checkMovableSquare(Square square) {
+		if (square != null) {
+			if (square.getPiece() == null) {
 				return true;
 			}
 		}
 		return false;
+	}
 
+	protected boolean checkAttackableSquare(Square square) {
+		if (square != null) {
+			if (square.getPiece() != null) {
+				if (isOpponent(square.getPiece()))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isOpponent(Piece p) {
@@ -95,6 +97,14 @@ public abstract class Piece {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public void setMoved(boolean b) {
+		moved = true;
+	}
+
+	public boolean getMoved() {
+		return moved;
 	}
 
 }
