@@ -124,34 +124,27 @@ public class ChessEngine {
 		Square moveTo = squares[newMove[2]][newMove[3]];
 		Piece piece = moveFrom.getPiece();
 		if (piece != null && piece.getColor() == currentTurn) {
-			System.out.println("TURN");
-			if (piece.move(moveTo.getX(), moveTo.getY())) {
-				if (moveTo.getPiece() != null) {
-					removePiece(moveTo.getPiece());
-				}
-				piece.setX(moveTo.getX());
-				piece.setY(moveTo.getY());
-				System.out.println("POSSIBLE");
-				moveFrom.setPiece(null);
-				moveTo.setPiece(piece);
-				setActive(null);
-				changeTurn();
-				return true;
-			} else {
-				System.out.println("MOVE FAILED");
+			if (moveTo.getPiece() != null) {
+				removePiece(moveTo.getPiece());
 			}
+			piece.setX(moveTo.getX());
+			piece.setY(moveTo.getY());
+			moveFrom.setPiece(null);
+			moveTo.setPiece(piece);
+			setActive(null);
+			changeTurn();
+			return true;
 		}
 		return false;
 	}
 
 	public boolean canMove(int x, int y) {
 		if (getActive() == null) {
-			System.out.println("ERROR canMove() called while active == null!");
 			return false;
 		}
 		Piece piece = getActive().getPiece();
 		if (piece != null && piece.getColor() == currentTurn) {
-			if (piece.move(x, y)) {
+			if (piece.canMove(x, y)) {
 				return true;
 			}
 		}

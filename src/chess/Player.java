@@ -29,6 +29,5 @@ public abstract class Player {
 		this.color = color;
 	}
 	
-	public abstract void think();
-	public abstract int[] getMove();
+	public abstract int[] think();
 }

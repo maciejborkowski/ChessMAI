@@ -3,12 +3,11 @@ package chess;
 public class AIPlayer extends Player {
 
 	@Override
-	public void think() {
+	public int[] think() {
 		System.out.println(color + " THINKS");
+		while(true) {
+			
+		}
 	}
 
-	@Override
-	public int[] getMove() {
-		return null;
-	}
 }
