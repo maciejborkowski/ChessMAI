@@ -11,15 +11,14 @@ public class AIPlayer extends Player {
 	public AIPlayer() {
 		adapter.uci();
 		adapter.isready();
-		adapter.ucinewgame();
-		adapter.isready();
 	}
 
 	@Override
 	public int[] think() {
 		System.out.println(color + " THINKS");
 
-		// Tell engine what move has been made by opponent
+		// Tell engine what moves have already happened
+		adapter.ucinewgame();
 		adapter.position(engine.getMoveHistory());
 		adapter.isready();
 
@@ -27,9 +26,6 @@ public class AIPlayer extends Player {
 		String moveString = adapter.go(100);
 		System.out.println(color.toString() + " MOVE: " + moveString);
 		MovesParser.parse(moveString, move);
-		
-		adapter.ucinewgame();
-		adapter.isready();
 		
 		return move;
 	}
