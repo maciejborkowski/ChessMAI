@@ -3,6 +3,7 @@ package chess;
 import java.util.LinkedList;
 import java.util.List;
 
+import uci.MovesParser;
 import chess.pieces.*;
 
 public class ChessEngine {
@@ -15,6 +16,7 @@ public class ChessEngine {
 	private Square active;
 	private Color currentTurn;
 	private ChessBoard board;
+	private StringBuilder moveHistory = new StringBuilder();
 
 	public ChessBoard getBoard() {
 		return board;
@@ -66,9 +68,9 @@ public class ChessEngine {
 		setActive(null);
 		whitePieces = new LinkedList<Piece>();
 		blackPieces = new LinkedList<Piece>();
-		squares = new Square[SQUARE_HEIGHT][SQUARE_WIDTH];
-		for (int i = 0; i < SQUARE_HEIGHT; i++) {
-			for (int j = 0; j < SQUARE_WIDTH; j++) {
+		squares = new Square[SQUARE_WIDTH][SQUARE_HEIGHT];
+		for (int i = 0; i < SQUARE_WIDTH; i++) {
+			for (int j = 0; j < SQUARE_HEIGHT; j++) {
 				squares[i][j] = new Square(i, j);
 			}
 		}
@@ -166,6 +168,7 @@ public class ChessEngine {
 			processEnPassant(moveFrom, moveTo, piece);
 			processPromotion(piece);
 			processCastling(moveFrom, moveTo, piece);
+			moveHistory.append(MovesParser.parse(newMove) + " ");
 			setActive(null);
 			changeTurn();
 			return true;
@@ -268,6 +271,10 @@ public class ChessEngine {
 				rook.setX(5);
 			}
 		}
+	}
+
+	public String getMoveHistory() {
+		return moveHistory.toString();
 	}
 
 }
