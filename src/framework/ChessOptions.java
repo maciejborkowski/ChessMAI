@@ -1,22 +1,22 @@
 package framework;
 
-import chess.ChessEngine;
+import chess.ChessBoard;
 import chess.Player;
 
 public class ChessOptions {
-	private ChessEngine engine;
+	private ChessBoard board;
 	private Player white;
 	private Player black;
 
 	public ChessOptions() {
 	}
 
-	public ChessEngine getEngine() {
-		return engine;
+	public ChessBoard getBoard() {
+		return board;
 	}
 
-	public void setEngine(ChessEngine engine) {
-		this.engine = engine;
+	public void setBoard(ChessBoard board) {
+		this.board = board;
 	}
 
 	public Player getWhite() {
@@ -34,4 +34,5 @@ public class ChessOptions {
 	public void setBlack(Player black) {
 		this.black = black;
 	}
+
 }

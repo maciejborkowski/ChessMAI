@@ -2,19 +2,19 @@ package chess.pieces;
 
 import java.util.List;
 
-import chess.ChessEngine;
+import chess.ChessGame;
 import chess.Color;
 import chess.Square;
 
 public abstract class Piece {
-	protected ChessEngine engine;
+	protected ChessGame game;
 	protected int x, y;
 	protected Color color;
 	protected List<Square> possibleMoves = null;
 	protected boolean moved = false;
 
-	public Piece(ChessEngine game, Color color, int x, int y) {
-		this.engine = game;
+	public Piece(ChessGame game, Color color, int x, int y) {
+		this.game = game;
 		this.color = color;
 		this.x = x;
 		this.y = y;
@@ -28,7 +28,7 @@ public abstract class Piece {
 	}
 
 	public boolean canMove(int x, int y) {
-		Square ms = engine.getSquare(x, y);
+		Square ms = game.getSquare(x, y);
 
 		createPossibleMoves();
 		if (possibleMoves.contains(ms)) {

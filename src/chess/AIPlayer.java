@@ -19,14 +19,14 @@ public class AIPlayer extends Player {
 
 		// Tell engine what moves have already happened
 		adapter.ucinewgame();
-		adapter.position(engine.getMoveHistory());
+		adapter.position(game.getMoveHistory().toString());
 		adapter.isready();
 
 		// Make your move
 		String moveString = adapter.go(100);
 		System.out.println(color.toString() + " MOVE: " + moveString);
 		MovesParser.parse(moveString, move);
-		
+
 		return move;
 	}
 

@@ -3,12 +3,13 @@ package chess.pieces;
 import java.util.ArrayList;
 
 import chess.ChessEngine;
+import chess.ChessGame;
 import chess.Color;
 import chess.Square;
 
 public final class Rook extends Piece {
 
-	public Rook(ChessEngine game, Color color, int x, int y) {
+	public Rook(ChessGame game, Color color, int x, int y) {
 		super(game, color, x, y);
 	}
 
@@ -21,19 +22,19 @@ public final class Rook extends Piece {
 			if (!north && !south && !west && !east)
 				break;
 			if (north) {
-				Square square = engine.getSquare(x, y - i);
+				Square square = game.getSquare(x, y - i);
 				north = processSquare(square);
 			}
 			if (south) {
-				Square square = engine.getSquare(x, y + i);
+				Square square = game.getSquare(x, y + i);
 				south = processSquare(square);
 			}
 			if (west) {
-				Square square = engine.getSquare(x - i, y);
+				Square square = game.getSquare(x - i, y);
 				west = processSquare(square);
 			}
 			if (east) {
-				Square square = engine.getSquare(x + i, y);
+				Square square = game.getSquare(x + i, y);
 				east = processSquare(square);
 			}
 		}

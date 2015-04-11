@@ -3,12 +3,13 @@ package chess.pieces;
 import java.util.ArrayList;
 
 import chess.ChessEngine;
+import chess.ChessGame;
 import chess.Color;
 import chess.Square;
 
 public final class Queen extends Piece {
 
-	public Queen(ChessEngine game, Color color, int x, int y) {
+	public Queen(ChessGame game, Color color, int x, int y) {
 		super(game, color, x, y);
 	}
 
@@ -21,35 +22,35 @@ public final class Queen extends Piece {
 			if (!nw && !ne && !sw && !se && !north && !south && !west && !east)
 				break;
 			if (north) {
-				Square square = engine.getSquare(x, y - i);
+				Square square = game.getSquare(x, y - i);
 				north = processSquare(square);
 			}
 			if (south) {
-				Square square = engine.getSquare(x, y + i);
+				Square square = game.getSquare(x, y + i);
 				south = processSquare(square);
 			}
 			if (west) {
-				Square square = engine.getSquare(x - i, y);
+				Square square = game.getSquare(x - i, y);
 				west = processSquare(square);
 			}
 			if (east) {
-				Square square = engine.getSquare(x + i, y);
+				Square square = game.getSquare(x + i, y);
 				east = processSquare(square);
 			}
 			if (nw) {
-				Square square = engine.getSquare(x - i, y - i);
+				Square square = game.getSquare(x - i, y - i);
 				nw = processSquare(square);
 			}
 			if (ne) {
-				Square square = engine.getSquare(x + i, y - i);
+				Square square = game.getSquare(x + i, y - i);
 				ne = processSquare(square);
 			}
 			if (sw) {
-				Square square = engine.getSquare(x - i, y + i);
+				Square square = game.getSquare(x - i, y + i);
 				sw = processSquare(square);
 			}
 			if (se) {
-				Square square = engine.getSquare(x + i, y + i);
+				Square square = game.getSquare(x + i, y + i);
 				se = processSquare(square);
 			}
 		}

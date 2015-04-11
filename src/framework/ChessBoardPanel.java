@@ -17,9 +17,8 @@ public class ChessBoardPanel extends JPanel {
 	
 	public ChessBoardPanel(ChessOptions options) {
 		this.options = options;
-		ChessEngine engine = new ChessEngine();
-		options.setEngine(engine);
-		chessBoard = new ChessBoard(engine);
+		chessBoard = new ChessBoard();
+		options.setBoard(chessBoard);
 		chessBoard.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
 		setFocusable(true);	
 		add(chessBoard);

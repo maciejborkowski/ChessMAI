@@ -2,32 +2,23 @@ package chess;
 
 public abstract class Player {
 	protected Color color;
-	protected ChessBoard board;
-	protected ChessEngine engine;
-	
-	public ChessBoard getBoard() {
-		return board;
+	protected ChessGame game;
+
+	public ChessGame getGame() {
+		return game;
 	}
-	
-	public void setBoard(ChessBoard board) {
-		this.board = board;
+
+	public void setGame(ChessGame game) {
+		this.game = game;
 	}
-	
-	public ChessEngine getEngine() {
-		return engine;
-	}
-	
-	public void setEngine(ChessEngine engine) {
-		this.engine = engine;
-	}
-	
+
 	public Color getColor() {
 		return color;
 	}
-	
+
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
-	public abstract int[] think();
+
+	public abstract int[] think() throws Exception;
 }

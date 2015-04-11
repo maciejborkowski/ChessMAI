@@ -29,7 +29,7 @@ public class RunOptionsPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			ChessGame game = new ChessGame(options.getWhite(), options.getBlack(), options.getEngine());
+			ChessGame game = new ChessGame(options.getWhite(), options.getBlack(), options.getBoard());
 			game.start();
 		}
 	}

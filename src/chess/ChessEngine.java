@@ -2,7 +2,6 @@ package chess;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import uci.MovesParser;
@@ -20,178 +19,110 @@ public class ChessEngine {
 		pieceMap.put(4, Queen.class);
 	}
 
-	private Square[][] squares;
-	private List<Piece> whitePieces = new LinkedList<>();
-	private List<Piece> blackPieces = new LinkedList<>();
-	private Square active;
-	private Color currentTurn;
-	private ChessBoard board;
-	private StringBuilder moveHistory = new StringBuilder();
-
-	public ChessBoard getBoard() {
-		return board;
-	}
-
-	public void setBoard(ChessBoard board) {
-		this.board = board;
-	}
-
-	public ChessEngine() {
-	}
-
-	public ChessEngine(ChessBoard board) {
-		this.board = board;
-	}
-
-	public Square getActive() {
-		return active;
-	}
-
-	public void setActive(Square active) {
-		this.active = active;
-	}
-
-	public void setActive(int x, int y) {
-		this.active = squares[x][y];
-
-	}
-
-	public List<Piece> getWhitePieces() {
-		return whitePieces;
-	}
-
-	public List<Piece> getBlackPieces() {
-		return blackPieces;
-	}
-
-	public Color getTurn() {
-		return currentTurn;
-	}
-
-	public Square getSquare(int x, int y) {
-		if (x >= 0 && x < SQUARE_WIDTH && y >= 0 && y < SQUARE_HEIGHT)
-			return squares[x][y];
-		return null;
-	}
-
-	public void initGame() {
-		setActive(null);
-		whitePieces = new LinkedList<Piece>();
-		blackPieces = new LinkedList<Piece>();
-		squares = new Square[SQUARE_WIDTH][SQUARE_HEIGHT];
-		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			for (int j = 0; j < SQUARE_HEIGHT; j++) {
-				squares[i][j] = new Square(i, j);
-			}
-		}
-		createPieces();
-		currentTurn = Color.WHITE;
-	}
-
-	public void createPieces() {
+	public static void createPieces(ChessGame game) {
 		Piece piece = null;
+		List<Piece> whitePieces = game.getWhitePieces();
+		List<Piece> blackPieces = game.getBlackPieces();
 
 		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			piece = new Pawn(this, Color.WHITE, i, 6);
+			piece = new Pawn(game, Color.WHITE, i, 6);
 			whitePieces.add(piece);
-			squares[i][6].setPiece(piece);
+			game.getSquare(i, 6).setPiece(piece);
 		}
 
-		piece = new Knight(this, Color.WHITE, 1, 7);
-		squares[1][7].setPiece(piece);
+		piece = new Knight(game, Color.WHITE, 1, 7);
+		game.getSquare(1, 7).setPiece(piece);
 		whitePieces.add(piece);
-		piece = new Knight(this, Color.WHITE, 6, 7);
-		squares[6][7].setPiece(piece);
-		whitePieces.add(piece);
-
-		piece = new Bishop(this, Color.WHITE, 2, 7);
-		squares[2][7].setPiece(piece);
-		whitePieces.add(piece);
-		piece = new Bishop(this, Color.WHITE, 5, 7);
-		squares[5][7].setPiece(piece);
+		piece = new Knight(game, Color.WHITE, 6, 7);
+		game.getSquare(6, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new Rook(this, Color.WHITE, 0, 7);
-		squares[0][7].setPiece(piece);
+		piece = new Bishop(game, Color.WHITE, 2, 7);
+		game.getSquare(2, 7).setPiece(piece);
 		whitePieces.add(piece);
-		piece = new Rook(this, Color.WHITE, 7, 7);
-		squares[7][7].setPiece(piece);
-		whitePieces.add(piece);
-
-		piece = new Queen(this, Color.WHITE, 3, 7);
-		squares[3][7].setPiece(piece);
+		piece = new Bishop(game, Color.WHITE, 5, 7);
+		game.getSquare(5, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new King(this, Color.WHITE, 4, 7);
-		squares[4][7].setPiece(piece);
+		piece = new Rook(game, Color.WHITE, 0, 7);
+		game.getSquare(0, 7).setPiece(piece);
+		whitePieces.add(piece);
+		piece = new Rook(game, Color.WHITE, 7, 7);
+		game.getSquare(7, 7).setPiece(piece);
+		whitePieces.add(piece);
+
+		piece = new Queen(game, Color.WHITE, 3, 7);
+		game.getSquare(3, 7).setPiece(piece);
+		whitePieces.add(piece);
+
+		piece = new King(game, Color.WHITE, 4, 7);
+		game.getSquare(4, 7).setPiece(piece);
 		whitePieces.add(piece);
 
 		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			piece = new Pawn(this, Color.BLACK, i, 1);
+			piece = new Pawn(game, Color.BLACK, i, 1);
 			blackPieces.add(piece);
-			squares[i][1].setPiece(piece);
+			game.getSquare(i, 1).setPiece(piece);
 		}
 
-		piece = new Knight(this, Color.BLACK, 1, 0);
-		squares[1][0].setPiece(piece);
+		piece = new Knight(game, Color.BLACK, 1, 0);
+		game.getSquare(1, 0).setPiece(piece);
 		blackPieces.add(piece);
-		piece = new Knight(this, Color.BLACK, 6, 0);
-		squares[6][0].setPiece(piece);
-		blackPieces.add(piece);
-
-		piece = new Bishop(this, Color.BLACK, 2, 0);
-		squares[2][0].setPiece(piece);
-		blackPieces.add(piece);
-		piece = new Bishop(this, Color.BLACK, 5, 0);
-		squares[5][0].setPiece(piece);
+		piece = new Knight(game, Color.BLACK, 6, 0);
+		game.getSquare(6, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new Rook(this, Color.BLACK, 0, 0);
-		squares[0][0].setPiece(piece);
+		piece = new Bishop(game, Color.BLACK, 2, 0);
+		game.getSquare(2, 0).setPiece(piece);
 		blackPieces.add(piece);
-		piece = new Rook(this, Color.BLACK, 7, 0);
-		squares[7][0].setPiece(piece);
-		blackPieces.add(piece);
-
-		piece = new Queen(this, Color.BLACK, 3, 0);
-		squares[3][0].setPiece(piece);
+		piece = new Bishop(game, Color.BLACK, 5, 0);
+		game.getSquare(5, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new King(this, Color.BLACK, 4, 0);
-		squares[4][0].setPiece(piece);
+		piece = new Rook(game, Color.BLACK, 0, 0);
+		game.getSquare(0, 0).setPiece(piece);
+		blackPieces.add(piece);
+		piece = new Rook(game, Color.BLACK, 7, 0);
+		game.getSquare(7, 0).setPiece(piece);
+		blackPieces.add(piece);
+
+		piece = new Queen(game, Color.BLACK, 3, 0);
+		game.getSquare(3, 0).setPiece(piece);
+		blackPieces.add(piece);
+
+		piece = new King(game, Color.BLACK, 4, 0);
+		game.getSquare(4, 0).setPiece(piece);
 		blackPieces.add(piece);
 	}
 
-	public boolean move(int[] newMove) {
-		Square moveFrom = squares[newMove[0]][newMove[1]];
-		Square moveTo = squares[newMove[2]][newMove[3]];
+	public static boolean move(ChessGame game, int[] newMove) {
+		Square moveFrom = game.getSquare(newMove[0], newMove[1]);
+		Square moveTo = game.getSquare(newMove[2], newMove[3]);
 		Piece piece = moveFrom.getPiece();
-		if (piece != null && piece.getColor() == currentTurn) {
-			if (moveTo.getPiece() != null) {
-				removePiece(moveTo.getPiece());
-			}
+
+		if (piece != null && piece.getColor() == game.getTurn()) {
+			game.cleanSquare(moveTo);
 			piece.setX(moveTo.getX());
 			piece.setY(moveTo.getY());
 			moveFrom.setPiece(null);
 			moveTo.setPiece(piece);
 			piece.setMoved(true);
-			processEnPassant(moveFrom, moveTo, piece);
-			processPromotion(newMove, piece);
-			processCastling(moveFrom, moveTo, piece);
-			moveHistory.append(MovesParser.parse(newMove) + " ");
-			setActive(null);
-			changeTurn();
+			processEnPassant(game, moveFrom, moveTo, piece);
+			processPromotion(game, newMove, piece);
+			processCastling(game, moveFrom, moveTo, piece);
+			game.getMoveHistory().append(MovesParser.parse(newMove) + " ");
+			game.setActive(null);
 			return true;
 		}
 		return false;
 	}
 
-	public boolean canMove(int x, int y) {
-		if (getActive() == null) {
+	public static boolean canMove(ChessGame game, int x, int y) {
+		if (game.getActive() == null) {
 			return false;
 		}
-		Piece piece = getActive().getPiece();
-		if (piece != null && piece.getColor() == currentTurn) {
+		Piece piece = game.getActive().getPiece();
+		if (piece != null && piece.getColor() == game.getTurn()) {
 			if (piece.canMove(x, y)) {
 				return true;
 			}
@@ -199,47 +130,27 @@ public class ChessEngine {
 		return false;
 	}
 
-	private void removePiece(Piece piece) {
-		if (piece.getColor() == Color.WHITE) {
-			whitePieces.remove(piece);
-		} else {
-			blackPieces.remove(piece);
-		}
-	}
-
-	private void changeTurn() {
-		switch (currentTurn) {
-		case WHITE:
-			currentTurn = Color.BLACK;
-			break;
-		case BLACK:
-			currentTurn = Color.WHITE;
-			break;
-		}
-	}
-
-	private void processEnPassant(Square moveFrom, Square moveTo, Piece piece) {
+	private static void processEnPassant(ChessGame game, Square moveFrom, Square moveTo, Piece piece) {
 		if (piece instanceof Pawn) {
 			if (Math.abs(moveFrom.getY() - moveTo.getY()) == 2) {
 				((Pawn) piece).setPassantTarget(true);
 			} else {
 				Square passant;
 				if (piece.getColor().equals(Color.BLACK)) {
-					passant = squares[piece.getX()][piece.getY() - 1];
+					passant = game.getSquare(piece.getX(), piece.getY() - 1);
 				} else {
-					passant = squares[piece.getX()][piece.getY() + 1];
+					passant = game.getSquare(piece.getX(), piece.getY() + 1);
 				}
 				if (passant.getPiece() instanceof Pawn && ((Pawn) passant.getPiece()).isEnPassantTarget()) {
-					removePiece(passant.getPiece());
-					passant.setPiece(null);
+					game.cleanSquare(passant);
 				}
 			}
 		}
 		List<Piece> pieces;
 		if (piece.getColor().equals(Color.BLACK)) {
-			pieces = whitePieces;
+			pieces = game.getWhitePieces();
 		} else {
-			pieces = blackPieces;
+			pieces = game.getBlackPieces();
 		}
 		for (Piece aPiece : pieces) {
 			if (aPiece instanceof Pawn) {
@@ -248,25 +159,25 @@ public class ChessEngine {
 		}
 	}
 
-	private void processPromotion(int[] newMove, Piece piece) {
+	private static void processPromotion(ChessGame game, int[] newMove, Piece piece) {
 		if (newMove[4] != 0) {
-			promote(piece, pieceMap.get(newMove[4]));
+			promote(game, piece, pieceMap.get(newMove[4]));
 		}
 	}
 
-	private void promote(Piece piece, Class<? extends Piece> clazz) {
+	private static void promote(ChessGame game, Piece piece, Class<? extends Piece> clazz) {
 		try {
 			List<Piece> piecesList;
 			if (piece.getColor().equals(Color.WHITE)) {
-				piecesList = whitePieces;
+				piecesList = game.getWhitePieces();
 			} else {
-				piecesList = blackPieces;
+				piecesList = game.getBlackPieces();
 			}
 
 			piecesList.remove(piece);
-			Piece newPiece = clazz.getConstructor(ChessEngine.class, Color.class, int.class, int.class)
-					.newInstance(this, piece.getColor(), piece.getX(), piece.getY());
-			squares[piece.getX()][piece.getY()].setPiece(newPiece);
+			Piece newPiece = clazz.getConstructor(ChessGame.class, Color.class, int.class, int.class).newInstance(game,
+					piece.getColor(), piece.getX(), piece.getY());
+			game.getSquare(piece.getX(), piece.getY()).setPiece(newPiece);
 			piecesList.add(newPiece);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
@@ -275,25 +186,21 @@ public class ChessEngine {
 		}
 	}
 
-	private void processCastling(Square moveFrom, Square moveTo, Piece piece) {
+	private static void processCastling(ChessGame game, Square moveFrom, Square moveTo, Piece piece) {
 		// There should a check for checkmate
 		if (piece instanceof King) {
 			if (moveFrom.getX() - moveTo.getX() == 2) {
-				Piece rook = squares[0][piece.getY()].getPiece();
-				squares[0][piece.getY()].setPiece(null);
-				squares[3][piece.getY()].setPiece(rook);
+				Piece rook = game.getSquare(0, piece.getY()).getPiece();
+				game.getSquare(0, piece.getY()).setPiece(null);
+				game.getSquare(3, piece.getY()).setPiece(rook);
 				rook.setX(3);
 			} else if (moveFrom.getX() - moveTo.getX() == -2) {
-				Piece rook = squares[7][piece.getY()].getPiece();
-				squares[7][piece.getY()].setPiece(null);
-				squares[5][piece.getY()].setPiece(rook);
+				Piece rook = game.getSquare(7, piece.getY()).getPiece();
+				game.getSquare(7, piece.getY()).setPiece(null);
+				game.getSquare(5, piece.getY()).setPiece(rook);
 				rook.setX(5);
 			}
 		}
-	}
-
-	public String getMoveHistory() {
-		return moveHistory.toString();
 	}
 
 }

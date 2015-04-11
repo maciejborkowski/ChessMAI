@@ -7,7 +7,11 @@ public class HumanPlayer extends Player {
 	private int[] move = new int[5];
 	private boolean moved = false;
 
-	public int[] think() {
+	public int[] think() throws Exception {
+		ChessBoard board = game.getBoard();
+		if (board == null) {
+			throw new Exception("THERE IS NO GUI FOR BOARD");
+		}
 		moved = false;
 
 		while (!moved) {
@@ -16,21 +20,19 @@ public class HumanPlayer extends Player {
 				MouseEvent event = mouseEvents.get(0);
 				int x = event.getX() / (int) ChessBoard.SQUARE_PIXEL_WIDTH;
 				int y = event.getY() / (int) ChessBoard.SQUARE_PIXEL_HEIGHT;
-				if (isMovablePieceActive() && engine.canMove(x, y)) {
-					move[0] = engine.getActive().getX();
-					move[1] = engine.getActive().getY();
+				if (isMovablePieceActive() && ChessEngine.canMove(game, x, y)) {
+					move[0] = game.getActive().getX();
+					move[1] = game.getActive().getY();
 					move[2] = x;
 					move[3] = y;
 					move[4] = 0;
 					processPromotion();
 					moved = true;
 				} else {
-					engine.setActive(x, y);
+					game.setActive(x, y);
 				}
 				mouseEvents.remove(event);
-				if (engine.getBoard() != null) {
-					engine.getBoard().repaint();
-				}
+				board.repaint();
 			}
 			try {
 				Thread.sleep(20);
@@ -53,8 +55,8 @@ public class HumanPlayer extends Player {
 	}
 
 	private boolean isMovablePieceActive() {
-		return engine.getActive() != null && engine.getActive().getPiece() != null
-				&& engine.getActive().getPiece().getColor() == color;
+		return game.getActive() != null && game.getActive().getPiece() != null
+				&& game.getActive().getPiece().getColor() == color;
 	}
 
 }

@@ -19,21 +19,35 @@ public class ChessBoard extends JPanel {
 
 	private Assets assets;
 	private MouseAction mouse;
-	private ChessEngine engine;
 	private List<MouseEvent> mouseEvents;
+	private ChessGame game;
 
-	public ChessBoard(ChessEngine engine) {
-		this.mouse = new MouseAction();
-		this.engine = engine;
-		engine.setBoard(this);
+	public ChessBoard() {
+		mouse = new MouseAction();
 		addMouseListener(mouse);
 		mouseEvents = new ArrayList<MouseEvent>();
 		loadAssets();
 	}
 
+	private int getSquareX(Square square) {
+		return (int) (SQUARE_PIXEL_WIDTH * square.getX());
+	}
+
+	private int getSquareY(Square square) {
+		return (int) (SQUARE_PIXEL_HEIGHT * square.getY());
+	}
+
+	public ChessGame getGame() {
+		return game;
+	}
+
+	public void setGame(ChessGame game) {
+		this.game = game;
+	}
+
 	public void loadAssets() {
-		this.assets = new Assets();
-		this.assets.loadAssets();
+		assets = new Assets();
+		assets.loadAssets();
 	}
 
 	public void paint(Graphics g) {
@@ -43,19 +57,19 @@ public class ChessBoard extends JPanel {
 	}
 
 	private void boardDraw(Graphics2D g2d) {
-		if (engine != null) {
+		if (game != null) {
 			g2d.drawImage(assets.getBackground(), 0, 0, null);
 
-			for (Piece piece : engine.getWhitePieces()) {
+			for (Piece piece : game.getWhitePieces()) {
 				drawPiece(piece, g2d);
 			}
-			for (Piece piece : engine.getBlackPieces()) {
+			for (Piece piece : game.getBlackPieces()) {
 				drawPiece(piece, g2d);
 			}
-			if (engine.getActive() != null) {
-				g2d.drawImage(assets.getActive(), getSquareX(engine.getActive()), getSquareY(engine.getActive()), null);
-				if (engine.getActive().getPiece() != null) {
-					List<Square> possibleMoves = engine.getActive().getPiece().getPossibleMoves();
+			if (game.getActive() != null) {
+				g2d.drawImage(assets.getActive(), getSquareX(game.getActive()), getSquareY(game.getActive()), null);
+				if (game.getActive().getPiece() != null) {
+					List<Square> possibleMoves = game.getActive().getPiece().getPossibleMoves();
 					for (Square square : possibleMoves) {
 						g2d.drawImage(assets.getActive(), getSquareX(square), getSquareY(square), null);
 					}
@@ -104,11 +118,4 @@ public class ChessBoard extends JPanel {
 		mouseEvents.clear();
 	}
 
-	private int getSquareX(Square square) {
-		return (int) (SQUARE_PIXEL_WIDTH * square.getX());
-	}
-
-	private int getSquareY(Square square) {
-		return (int) (SQUARE_PIXEL_HEIGHT * square.getY());
-	}
 }
