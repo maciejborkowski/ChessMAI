@@ -22,7 +22,7 @@ public class PlayerOptionsPanel extends JPanel {
 	private static final String BLACK_LABEL = "Black: ";
 	private static final String WHITE_LABEL = "White: ";
 	private static final String AI_LABEL = "AI";
-	private static final String METAHEURESTIC_LABEL = "Metaheurestic";
+	private static final String METAHEURESTIC_LABEL = "Metaheuristic";
 	private static final String HUMAN_LABEL = "Human";
 
 	private ChessOptions options;

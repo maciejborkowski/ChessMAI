@@ -4,18 +4,12 @@ import java.util.ArrayList;
 
 import chess.ChessEngine;
 import chess.Color;
-import chess.Piece;
 import chess.Square;
 
 public final class Rook extends Piece {
 
 	public Rook(ChessEngine game, Color color, int x, int y) {
 		super(game, color, x, y);
-		if (color.equals(Color.BLACK)) {
-			type = Piece.BLACK_ROOK;
-		} else {
-			type = Piece.WHITE_ROOK;
-		}
 	}
 
 	@Override

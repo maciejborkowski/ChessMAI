@@ -1,140 +1,88 @@
 package chess;
 
 import java.awt.Image;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
+import chess.pieces.Bishop;
+import chess.pieces.King;
+import chess.pieces.Knight;
+import chess.pieces.Pawn;
+import chess.pieces.Piece;
+import chess.pieces.Queen;
+import chess.pieces.Rook;
+
 public class Assets {
+	private static final HashMap<Class<? extends Piece>, Integer> imageMap = new HashMap<>();
 	private Image background;
 	private Image active;
-	
-	private final Image white_pawn;
-	private final Image white_rook;
-	private final Image white_bishop;
-	private final Image white_knight;
-	private final Image white_queen;
-	private final Image white_king;
-	private final Image black_pawn;
-	private final Image black_rook;
-	private final Image black_bishop;
-	private final Image black_knight;
-	private final Image black_queen;
-	private final Image black_king;
-	
-	private Image[] pieces;
-	
-	public Assets() {
-		//Load white assets:
-		ImageIcon white_pawn = new ImageIcon("img/pieces/chess_piece_2_white_pawn.png");
-		this.white_pawn = white_pawn.getImage();
-		ImageIcon white_rook = new ImageIcon("img/pieces/chess_piece_2_white_rook.png");
-		this.white_rook = white_rook.getImage();
-		ImageIcon white_bishop = new ImageIcon("img/pieces/chess_piece_2_white_bishop.png");
-		this.white_bishop = white_bishop.getImage();
-		ImageIcon white_queen = new ImageIcon("img/pieces/chess_piece_2_white_queen.png");
-		this.white_queen = white_queen.getImage();
-		ImageIcon white_king = new ImageIcon("img/pieces/chess_piece_2_white_king.png");
-		this.white_king = white_king.getImage();
-		ImageIcon white_knight = new ImageIcon("img/pieces/chess_piece_2_white_knight.png");
-		this.white_knight = white_knight.getImage();
-		//Load black assets:
-		ImageIcon black_pawn = new ImageIcon("img/pieces/chess_piece_2_black_pawn.png");
-		this.black_pawn = black_pawn.getImage();		
-		ImageIcon black_king = new ImageIcon("img/pieces/chess_piece_2_black_king.png");
-		this.black_king = black_king.getImage();
-		ImageIcon black_rook = new ImageIcon("img/pieces/chess_piece_2_black_rook.png");
-		this.black_rook = black_rook.getImage();
-		ImageIcon black_bishop = new ImageIcon("img/pieces/chess_piece_2_black_bishop.png");
-		this.black_bishop = black_bishop.getImage();
-		ImageIcon black_queen = new ImageIcon("img/pieces/chess_piece_2_black_queen.png");
-		this.black_queen = black_queen.getImage();
-		ImageIcon black_knight = new ImageIcon("img/pieces/chess_piece_2_black_knight.png");
-		this.black_knight = black_knight.getImage();
-		
+	private Image[] images;
+
+	static {
+		imageMap.put(Pawn.class, 0);
+		imageMap.put(Rook.class, 1);
+		imageMap.put(Bishop.class, 2);
+		imageMap.put(Knight.class, 3);
+		imageMap.put(King.class, 4);
+		imageMap.put(Queen.class, 5);
 	}
-	
+
+	public Assets() {
+	}
+
 	public void loadAssets() {
-		
 		ImageIcon background = new ImageIcon("img/chessgrid.png");
 		this.background = background.getImage();
-		
+
 		ImageIcon active = new ImageIcon("img/active.png");
 		this.active = active.getImage();
-		
-		pieces = new Image[12];
-		int i = 0;
-		pieces[i++] = white_pawn;
-		pieces[i++] = white_knight;
-		pieces[i++] = white_bishop;
-		pieces[i++] = white_rook;
-		pieces[i++] = white_queen;
-		pieces[i++] = white_king;
-		pieces[i++] = black_pawn;
-		pieces[i++] = black_knight;
-		pieces[i++] = black_bishop;
-		pieces[i++] = black_rook;
-		pieces[i++] = black_queen;
-		pieces[i++] = black_king;
+
+		// Load white assets:
+		Image whitePawn = new ImageIcon("img/pieces/chess_piece_2_white_pawn.png").getImage();
+		Image whiteRook = new ImageIcon("img/pieces/chess_piece_2_white_rook.png").getImage();
+		Image whiteBishop = new ImageIcon("img/pieces/chess_piece_2_white_bishop.png").getImage();
+		Image whiteQueen = new ImageIcon("img/pieces/chess_piece_2_white_queen.png").getImage();
+		Image whiteKing = new ImageIcon("img/pieces/chess_piece_2_white_king.png").getImage();
+		Image whiteKnight = new ImageIcon("img/pieces/chess_piece_2_white_knight.png").getImage();
+		// Load black assets:
+		Image blackPawn = new ImageIcon("img/pieces/chess_piece_2_black_pawn.png").getImage();
+		Image blackKing = new ImageIcon("img/pieces/chess_piece_2_black_king.png").getImage();
+		Image blackRook = new ImageIcon("img/pieces/chess_piece_2_black_rook.png").getImage();
+		Image blackBishop = new ImageIcon("img/pieces/chess_piece_2_black_bishop.png").getImage();
+		Image blackQueen = new ImageIcon("img/pieces/chess_piece_2_black_queen.png").getImage();
+		Image blackKnight = new ImageIcon("img/pieces/chess_piece_2_black_knight.png").getImage();
+
+		images = new Image[12];
+		images[0] = whitePawn;
+		images[1] = whiteRook;
+		images[2] = whiteBishop;
+		images[3] = whiteKnight;
+		images[4] = whiteKing;
+		images[5] = whiteQueen;
+
+		images[6] = blackPawn;
+		images[7] = blackRook;
+		images[8] = blackBishop;
+		images[9] = blackKnight;
+		images[10] = blackKing;
+		images[11] = blackQueen;
 	}
 
 	public Image getBackground() {
 		return background;
 	}
-	
+
 	public Image getActive() {
 		return active;
 	}
 
-	public Image getPiece(int piece) {
-		return pieces[piece];
-	}
-	
-	public Image getWhite_pawn() {
-		return white_pawn;
-	}
-
-	public Image getWhite_rook() {
-		return white_rook;
-	}
-
-	public Image getWhite_bishop() {
-		return white_bishop;
-	}
-
-	public Image getWhite_knight() {
-		return white_knight;
-	}
-
-	public Image getWhite_queen() {
-		return white_queen;
-	}
-
-	public Image getWhite_king() {
-		return white_king;
-	}
-
-	public Image getBlack_pawn() {
-		return black_pawn;
-	}
-
-	public Image getBlack_rook() {
-		return black_rook;
-	}
-
-	public Image getBlack_king() {
-		return black_king;
-	}
-
-	public Image getBlack_queen() {
-		return black_queen;
-	}
-
-	public Image getBlack_knight() {
-		return black_knight;
-	}
-
-	public Image getBlack_bishop() {
-		return black_bishop;
+	public Image getImage(Class<? extends Piece> clazz, Color color) {
+		if (color.equals(Color.WHITE)) {
+			return images[imageMap.get(clazz)];
+		} else {
+			return images[imageMap.get(clazz) + 6];
+		}
 	}
 
 }

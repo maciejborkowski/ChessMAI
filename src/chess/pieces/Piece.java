@@ -1,24 +1,14 @@
-package chess;
+package chess.pieces;
 
 import java.util.List;
 
-public abstract class Piece {
-	public static final int WHITE_PAWN = 0;
-	public static final int WHITE_KNIGHT = 1;
-	public static final int WHITE_BISHOP = 2;
-	public static final int WHITE_ROOK = 3;
-	public static final int WHITE_QUEEN = 4;
-	public static final int WHITE_KING = 5;
-	public static final int BLACK_PAWN = 6;
-	public static final int BLACK_KNIGHT = 7;
-	public static final int BLACK_BISHOP = 8;
-	public static final int BLACK_ROOK = 9;
-	public static final int BLACK_QUEEN = 10;
-	public static final int BLACK_KING = 11;
+import chess.ChessEngine;
+import chess.Color;
+import chess.Square;
 
+public abstract class Piece {
 	protected ChessEngine engine;
 	protected int x, y;
-	protected int type;
 	protected Color color;
 	protected List<Square> possibleMoves = null;
 	protected boolean moved = false;
@@ -89,10 +79,6 @@ public abstract class Piece {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public int getType() {
-		return type;
 	}
 
 	public Color getColor() {

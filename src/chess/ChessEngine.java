@@ -1,5 +1,7 @@
 package chess;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +11,14 @@ import chess.pieces.*;
 public class ChessEngine {
 	public static final int SQUARE_WIDTH = 8;
 	public static final int SQUARE_HEIGHT = 8;
+	private static final HashMap<Integer, Class<? extends Piece>> pieceMap = new HashMap<>();
+
+	static {
+		pieceMap.put(1, Knight.class);
+		pieceMap.put(2, Bishop.class);
+		pieceMap.put(3, Rook.class);
+		pieceMap.put(4, Queen.class);
+	}
 
 	private Square[][] squares;
 	private List<Piece> whitePieces = new LinkedList<>();
@@ -166,7 +176,7 @@ public class ChessEngine {
 			moveTo.setPiece(piece);
 			piece.setMoved(true);
 			processEnPassant(moveFrom, moveTo, piece);
-			processPromotion(piece);
+			processPromotion(newMove, piece);
 			processCastling(moveFrom, moveTo, piece);
 			moveHistory.append(MovesParser.parse(newMove) + " ");
 			setActive(null);
@@ -238,21 +248,30 @@ public class ChessEngine {
 		}
 	}
 
-	private void processPromotion(Piece piece) {
-		// There should be a choice of pieces, but it has a low priority in this
-		// simulation, so it always creates Queen
-		if (piece instanceof Pawn) {
-			if (piece.getColor().equals(Color.BLACK) && piece.getY() == 7) {
-				blackPieces.remove(piece);
-				Piece newPiece = new Queen(this, Color.BLACK, piece.getX(), 7);
-				squares[piece.getX()][piece.getY()].setPiece(newPiece);
-				blackPieces.add(newPiece);
-			} else if (piece.getColor().equals(Color.WHITE) && piece.getY() == 0) {
-				whitePieces.remove(piece);
-				Piece newPiece = new Queen(this, Color.WHITE, piece.getX(), 0);
-				squares[piece.getX()][piece.getY()].setPiece(newPiece);
-				whitePieces.add(newPiece);
+	private void processPromotion(int[] newMove, Piece piece) {
+		if (newMove[4] != 0) {
+			promote(piece, pieceMap.get(newMove[4]));
+		}
+	}
+
+	private void promote(Piece piece, Class<? extends Piece> clazz) {
+		try {
+			List<Piece> piecesList;
+			if (piece.getColor().equals(Color.WHITE)) {
+				piecesList = whitePieces;
+			} else {
+				piecesList = blackPieces;
 			}
+
+			piecesList.remove(piece);
+			Piece newPiece = clazz.getConstructor(ChessEngine.class, Color.class, int.class, int.class)
+					.newInstance(this, piece.getColor(), piece.getX(), piece.getY());
+			squares[piece.getX()][piece.getY()].setPiece(newPiece);
+			piecesList.add(newPiece);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			System.out.println("PROMOTION FAILED");
+			e.printStackTrace();
 		}
 	}
 

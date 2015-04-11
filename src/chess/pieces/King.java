@@ -4,24 +4,18 @@ import java.util.ArrayList;
 
 import chess.ChessEngine;
 import chess.Color;
-import chess.Piece;
 import chess.Square;
 
 public final class King extends Piece {
+	int[][] offsets = { { 0, -1 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } };
 
 	public King(ChessEngine game, Color color, int x, int y) {
 		super(game, color, x, y);
-		if (color.equals(Color.BLACK)) {
-			type = Piece.BLACK_KING;
-		} else {
-			type = Piece.WHITE_KING;
-		}
 	}
 
 	@Override
 	public void createPossibleMoves() {
 		possibleMoves = new ArrayList<Square>();
-		int[][] offsets = { { 0, -1 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } };
 
 		for (int[] dir : offsets) {
 			Square square = engine.getSquare(x + dir[0], y + dir[1]);
@@ -48,5 +42,31 @@ public final class King extends Piece {
 				possibleMoves.add(square2);
 			}
 		}
+
+	}
+
+	// King blocks king
+	@Override
+	protected boolean checkMovableSquare(Square square) {
+		if (square != null) {
+			if (square.getPiece() == null) {
+				if (!nearOpponentKing(square)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean nearOpponentKing(Square square) {
+		for (int[] dir : offsets) {
+			Square tempSquare = engine.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
+			if (tempSquare != null && tempSquare.getPiece() instanceof King
+					&& tempSquare.getPiece().getColor() != color) {
+				return true;
+			}
+
+		}
+		return false;
 	}
 }

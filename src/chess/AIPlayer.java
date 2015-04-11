@@ -6,7 +6,7 @@ import uci.WindowsUCIAdapter;
 
 public class AIPlayer extends Player {
 	private UCIAdapter adapter = new WindowsUCIAdapter();
-	private int[] move = new int[4];
+	private int[] move = new int[5];
 
 	public AIPlayer() {
 		adapter.uci();

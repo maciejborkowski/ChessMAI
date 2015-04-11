@@ -1,5 +1,7 @@
 package chess;
 
+import chess.pieces.Piece;
+
 public class Square {
 	private final int x, y;
 	private boolean active;

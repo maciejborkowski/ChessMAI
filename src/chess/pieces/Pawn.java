@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import chess.ChessEngine;
 import chess.Color;
-import chess.Piece;
 import chess.Square;
 
 public class Pawn extends Piece {
@@ -15,10 +14,8 @@ public class Pawn extends Piece {
 		super(game, color, x, y);
 		if (color.equals(Color.BLACK)) {
 			ny = 1;
-			type = Piece.BLACK_PAWN;
 		} else {
 			ny = -1;
-			type = Piece.WHITE_PAWN;
 		}
 	}
 

@@ -4,12 +4,12 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class HumanPlayer extends Player {
-	private int[] move = new int[4];
+	private int[] move = new int[5];
 	private boolean moved = false;
 
 	public int[] think() {
 		moved = false;
-		
+
 		while (!moved) {
 			List<MouseEvent> mouseEvents = board.getMouseEvents();
 			if (mouseEvents.size() > 0) {
@@ -21,6 +21,8 @@ public class HumanPlayer extends Player {
 					move[1] = engine.getActive().getY();
 					move[2] = x;
 					move[3] = y;
+					move[4] = 0;
+					processPromotion();
 					moved = true;
 				} else {
 					engine.setActive(x, y);
@@ -38,6 +40,16 @@ public class HumanPlayer extends Player {
 		}
 		board.clearMouseEvents();
 		return move;
+	}
+
+	private void processPromotion() {
+		// There should be a choice of pieces for player, but it has a low
+		// priority in this simulation, so it always creates a Queen
+		if (color.equals(Color.WHITE) && move[3] == 0) {
+			move[4] = 4;
+		} else if (color.equals(Color.BLACK) && move[3] == 7) {
+			move[4] = 4;
+		}
 	}
 
 	private boolean isMovablePieceActive() {

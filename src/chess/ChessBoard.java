@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import chess.pieces.Piece;
+
 @SuppressWarnings("serial")
 public class ChessBoard extends JPanel {
 	public static final double SQUARE_PIXEL_WIDTH = 62.25;
@@ -51,8 +53,7 @@ public class ChessBoard extends JPanel {
 				drawPiece(piece, g2d);
 			}
 			if (engine.getActive() != null) {
-				g2d.drawImage(assets.getActive(), getSquareX(engine.getActive()), getSquareY(engine.getActive()),
-						null);
+				g2d.drawImage(assets.getActive(), getSquareX(engine.getActive()), getSquareY(engine.getActive()), null);
 				if (engine.getActive().getPiece() != null) {
 					List<Square> possibleMoves = engine.getActive().getPiece().getPossibleMoves();
 					for (Square square : possibleMoves) {
@@ -63,10 +64,10 @@ public class ChessBoard extends JPanel {
 		}
 	}
 
-	private void drawPiece(Piece p, Graphics2D g2d) {
-		Image img = assets.getPiece(p.getType());
-		int pixelX = (int) (p.getX() * SQUARE_PIXEL_WIDTH);
-		int pixelY = (int) (p.getY() * SQUARE_PIXEL_HEIGHT);
+	private void drawPiece(Piece piece, Graphics2D g2d) {
+		Image img = assets.getImage(piece.getClass(), piece.getColor());
+		int pixelX = (int) (piece.getX() * SQUARE_PIXEL_WIDTH);
+		int pixelY = (int) (piece.getY() * SQUARE_PIXEL_HEIGHT);
 		g2d.drawImage(img, pixelX, pixelY, null);
 
 	}
