@@ -27,10 +27,6 @@ public class AIPlayer extends Player {
 		System.out.println(color.toString() + " MOVE: " + moveString);
 		MoveParser.parse(moveString, move);
 
-		if (!game.getSquare(move[0], move[1]).getPiece().getColor().equals(color)) {
-			game.setState(ChessEngine.State.CHECKMATE);
-		}
-
 		return move;
 	}
 

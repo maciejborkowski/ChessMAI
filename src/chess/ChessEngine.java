@@ -104,6 +104,12 @@ public class ChessEngine {
 		Square moveTo = game.getSquare(newMove[2], newMove[3]);
 		Piece piece = moveFrom.getPiece();
 
+		if (newMove[4] == 5) {
+			game.setState(ChessEngine.State.CHECKMATE);
+			game.setWinner(game.getTurn());
+			return;
+		}
+
 		if (piece != null && piece.getColor() == game.getTurn()) {
 			if (removePieceOnSquare(game, moveTo)) {
 				return;
@@ -117,9 +123,11 @@ public class ChessEngine {
 			processPromotion(game, newMove, piece);
 			processCastling(game, moveFrom, moveTo, piece);
 			processCheck(game);
+
 			game.getMoveHistory().append(MoveParser.parse(newMove) + " ");
 			game.setActive(null);
 		}
+
 	}
 
 	public static boolean canMove(ChessGame game, int x, int y) {
@@ -232,6 +240,7 @@ public class ChessEngine {
 		if (piece != null) {
 			if (piece instanceof King) {
 				game.setState(State.CHECKMATE);
+				game.setWinner(game.getTurn());
 				return true;
 			}
 			if (piece.getColor() == Color.WHITE) {

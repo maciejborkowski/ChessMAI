@@ -19,6 +19,7 @@ public class ChessGame implements Runnable {
 	private Color currentTurn;
 	private ChessBoard board;
 	private StringBuilder moveHistory = new StringBuilder();
+	private Color winner;
 
 	public ChessGame(final Player white, final Player black, ChessBoard board) {
 		running = true;
@@ -132,7 +133,7 @@ public class ChessGame implements Runnable {
 			}
 
 			if (state == State.CHECKMATE) {
-				System.out.println("CHECKMATE! " + currentTurn.negate() + " WINS!");
+				System.out.println("CHECKMATE! " + winner + " WINS!");
 				running = false;
 			}
 		}
@@ -148,6 +149,10 @@ public class ChessGame implements Runnable {
 		int[] move = blackPlayer.think();
 		ChessEngine.move(this, move);
 		currentTurn = Color.WHITE;
+	}
+
+	public void setWinner(Color color) {
+		winner = color;
 	}
 
 }

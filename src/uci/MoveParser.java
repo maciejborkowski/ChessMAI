@@ -34,6 +34,7 @@ public class MoveParser {
 		pieceMap.put('b', 2);
 		pieceMap.put('r', 3);
 		pieceMap.put('q', 4);
+		pieceMap.put('\r', 5);
 	}
 
 	public static void parse(final String moveString, final int[] move) {
