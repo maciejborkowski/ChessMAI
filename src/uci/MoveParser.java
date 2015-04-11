@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class MovesParser {
+public class MoveParser {
 
 	private static final HashMap<Character, Integer> columnMap = new HashMap<>();
 	private static final HashMap<Character, Integer> rowMap = new HashMap<>();

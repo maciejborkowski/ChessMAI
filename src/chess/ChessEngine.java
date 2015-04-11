@@ -4,10 +4,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
-import uci.MovesParser;
+import uci.MoveParser;
 import chess.pieces.*;
 
 public class ChessEngine {
+	public static enum State {
+		INIT, NORMAL, CHECK, CHECKMATE
+	}
+
 	public static final int SQUARE_WIDTH = 8;
 	public static final int SQUARE_HEIGHT = 8;
 	private static final HashMap<Integer, Class<? extends Piece>> pieceMap = new HashMap<>();
@@ -95,13 +99,15 @@ public class ChessEngine {
 		blackPieces.add(piece);
 	}
 
-	public static boolean move(ChessGame game, int[] newMove) {
+	public static void move(ChessGame game, int[] newMove) {
 		Square moveFrom = game.getSquare(newMove[0], newMove[1]);
 		Square moveTo = game.getSquare(newMove[2], newMove[3]);
 		Piece piece = moveFrom.getPiece();
 
 		if (piece != null && piece.getColor() == game.getTurn()) {
-			game.cleanSquare(moveTo);
+			if (removePieceOnSquare(game, moveTo)) {
+				return;
+			}
 			piece.setX(moveTo.getX());
 			piece.setY(moveTo.getY());
 			moveFrom.setPiece(null);
@@ -110,11 +116,10 @@ public class ChessEngine {
 			processEnPassant(game, moveFrom, moveTo, piece);
 			processPromotion(game, newMove, piece);
 			processCastling(game, moveFrom, moveTo, piece);
-			game.getMoveHistory().append(MovesParser.parse(newMove) + " ");
+			processCheck(game);
+			game.getMoveHistory().append(MoveParser.parse(newMove) + " ");
 			game.setActive(null);
-			return true;
 		}
-		return false;
 	}
 
 	public static boolean canMove(ChessGame game, int x, int y) {
@@ -142,7 +147,7 @@ public class ChessEngine {
 					passant = game.getSquare(piece.getX(), piece.getY() + 1);
 				}
 				if (passant.getPiece() instanceof Pawn && ((Pawn) passant.getPiece()).isEnPassantTarget()) {
-					game.cleanSquare(passant);
+					removePieceOnSquare(game, passant);
 				}
 			}
 		}
@@ -187,7 +192,6 @@ public class ChessEngine {
 	}
 
 	private static void processCastling(ChessGame game, Square moveFrom, Square moveTo, Piece piece) {
-		// There should a check for checkmate
 		if (piece instanceof King) {
 			if (moveFrom.getX() - moveTo.getX() == 2) {
 				Piece rook = game.getSquare(0, piece.getY()).getPiece();
@@ -203,4 +207,40 @@ public class ChessEngine {
 		}
 	}
 
+	private static void processCheck(ChessGame game) {
+		Color currentColor = game.getTurn();
+		List<Piece> pieces;
+		if (currentColor.equals(Color.WHITE)) {
+			pieces = game.getWhitePieces();
+		} else {
+			pieces = game.getBlackPieces();
+		}
+
+		game.setState(State.NORMAL);
+		for (Piece piece : pieces) {
+			for (Square square : piece.getPossibleMoves()) {
+				if (square.getPiece() instanceof King) {
+					game.setState(State.CHECK);
+					return;
+				}
+			}
+		}
+	}
+
+	public static boolean removePieceOnSquare(ChessGame game, Square square) {
+		Piece piece = square.getPiece();
+		if (piece != null) {
+			if (piece instanceof King) {
+				game.setState(State.CHECKMATE);
+				return true;
+			}
+			if (piece.getColor() == Color.WHITE) {
+				game.getWhitePieces().remove(piece);
+			} else {
+				game.getBlackPieces().remove(piece);
+			}
+			square.setPiece(null);
+		}
+		return false;
+	}
 }

@@ -1,6 +1,6 @@
 package chess;
 
-import uci.MovesParser;
+import uci.MoveParser;
 import uci.UCIAdapter;
 import uci.WindowsUCIAdapter;
 
@@ -25,7 +25,11 @@ public class AIPlayer extends Player {
 		// Make your move
 		String moveString = adapter.go(100);
 		System.out.println(color.toString() + " MOVE: " + moveString);
-		MovesParser.parse(moveString, move);
+		MoveParser.parse(moveString, move);
+
+		if (!game.getSquare(move[0], move[1]).getPiece().getColor().equals(color)) {
+			game.setState(ChessEngine.State.CHECKMATE);
+		}
 
 		return move;
 	}

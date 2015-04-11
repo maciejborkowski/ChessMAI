@@ -3,6 +3,8 @@ package chess;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import uci.MoveParser;
+
 public class HumanPlayer extends Player {
 	private int[] move = new int[5];
 	private boolean moved = false;
@@ -13,6 +15,8 @@ public class HumanPlayer extends Player {
 			throw new Exception("THERE IS NO GUI FOR BOARD");
 		}
 		moved = false;
+
+		System.out.println(color + " THINKS");
 
 		while (!moved) {
 			List<MouseEvent> mouseEvents = board.getMouseEvents();
@@ -40,6 +44,7 @@ public class HumanPlayer extends Player {
 				System.out.println("PLAYER THINKING THREAD INTERRUPTED");
 			}
 		}
+		System.out.println(color.toString() + " MOVE: " + MoveParser.parse(move));
 		board.clearMouseEvents();
 		return move;
 	}

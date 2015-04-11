@@ -3,14 +3,12 @@ package chess;
 import java.util.LinkedList;
 import java.util.List;
 
+import chess.ChessEngine.State;
 import chess.pieces.Piece;
 
 public class ChessGame implements Runnable {
-	static enum State {
-		INITIALIZATION, CHECKMATE, NORMAL
-	}
-
-	private State state;
+	private boolean running;
+	private ChessEngine.State state;
 	private Player whitePlayer, blackPlayer;
 	private Thread gameThread = null;
 
@@ -23,12 +21,13 @@ public class ChessGame implements Runnable {
 	private StringBuilder moveHistory = new StringBuilder();
 
 	public ChessGame(final Player white, final Player black, ChessBoard board) {
+		running = true;
 		this.whitePlayer = white;
 		this.blackPlayer = black;
 		this.board = board;
 		board.setGame(this);
 
-		state = State.INITIALIZATION;
+		state = State.INIT;
 		this.gameThread = new Thread(this);
 	}
 
@@ -65,8 +64,12 @@ public class ChessGame implements Runnable {
 		return currentTurn;
 	}
 
-	public State getGameState() {
+	public State getState() {
 		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public StringBuilder getMoveHistory() {
@@ -110,24 +113,27 @@ public class ChessGame implements Runnable {
 		try {
 			gameLoop();
 		} catch (Exception e) {
-			System.out.println("Error: " + e.toString());
+			System.out.println("ERROR: " + e.toString());
 			e.printStackTrace();
 		}
 	}
 
 	private void gameLoop() throws Exception {
-		while (true) {
-			if (state == State.CHECKMATE) {
-				System.out.println("CHECKMATE");
-			} else if (state == State.INITIALIZATION) {
+		while (running) {
+			if (state == State.INIT) {
 				initGame();
-			} else if (state == State.NORMAL && currentTurn.equals(Color.WHITE)) {
+			} else if (currentTurn.equals(Color.WHITE)) {
 				whiteTurn();
-			} else if (state == State.NORMAL && currentTurn.equals(Color.BLACK)) {
+			} else if (currentTurn.equals(Color.BLACK)) {
 				blackTurn();
 			}
 			if (board != null) {
 				board.repaint();
+			}
+
+			if (state == State.CHECKMATE) {
+				System.out.println("CHECKMATE! " + currentTurn.negate() + " WINS!");
+				running = false;
 			}
 		}
 	}
@@ -135,27 +141,13 @@ public class ChessGame implements Runnable {
 	private void whiteTurn() throws Exception {
 		int[] move = whitePlayer.think();
 		ChessEngine.move(this, move);
-		state = State.NORMAL;
 		currentTurn = Color.BLACK;
 	}
 
 	private void blackTurn() throws Exception {
 		int[] move = blackPlayer.think();
 		ChessEngine.move(this, move);
-		state = State.NORMAL;
 		currentTurn = Color.WHITE;
-	}
-
-	public void cleanSquare(Square square) {
-		Piece piece = square.getPiece();
-		if (piece != null) {
-			if (piece.getColor() == Color.WHITE) {
-				whitePieces.remove(piece);
-			} else {
-				blackPieces.remove(piece);
-			}
-			square.setPiece(null);
-		}
 	}
 
 }

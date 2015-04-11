@@ -57,9 +57,9 @@ public class ChessBoard extends JPanel {
 	}
 
 	private void boardDraw(Graphics2D g2d) {
+		g2d.drawImage(assets.getBackground(), 0, 0, null);
+		
 		if (game != null) {
-			g2d.drawImage(assets.getBackground(), 0, 0, null);
-
 			for (Piece piece : game.getWhitePieces()) {
 				drawPiece(piece, g2d);
 			}
