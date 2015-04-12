@@ -81,6 +81,7 @@ public class ChessGame implements Runnable {
 		setActive(null);
 		whitePieces = new LinkedList<Piece>();
 		blackPieces = new LinkedList<Piece>();
+
 		squares = new Square[ChessEngine.SQUARE_WIDTH][ChessEngine.SQUARE_HEIGHT];
 		for (int i = 0; i < ChessEngine.SQUARE_WIDTH; i++) {
 			for (int j = 0; j < ChessEngine.SQUARE_HEIGHT; j++) {
@@ -153,6 +154,14 @@ public class ChessGame implements Runnable {
 
 	public void setWinner(Color color) {
 		winner = color;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 
 }

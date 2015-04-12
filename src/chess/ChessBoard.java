@@ -83,7 +83,6 @@ public class ChessBoard extends JPanel {
 		int pixelX = (int) (piece.getX() * SQUARE_PIXEL_WIDTH);
 		int pixelY = (int) (piece.getY() * SQUARE_PIXEL_HEIGHT);
 		g2d.drawImage(img, pixelX, pixelY, null);
-
 	}
 
 	public List<MouseEvent> getMouseEvents() {

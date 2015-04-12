@@ -3,7 +3,6 @@ package framework;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,8 +30,8 @@ public class PlayerOptionsPanel extends JPanel {
 		this.options = options;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		options.setBlack(new HumanPlayer());
-		options.setWhite(new HumanPlayer());
+		options.setBlackPlayer(HumanPlayer.class);
+		options.setWhitePlayer(HumanPlayer.class);
 		addBlack();
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		addWhite();
@@ -91,16 +90,10 @@ public class PlayerOptionsPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			try {
-				if (color.equals(Color.WHITE)) {
-					options.setWhite(clazz.getConstructor().newInstance());
-				} else {
-					options.setBlack(clazz.getConstructor().newInstance());
-				}
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-				System.out.println("GENERIC CLASS CONSTRUCTOR INVOCATION FAILED MISERABLY");
+			if (color.equals(Color.WHITE)) {
+				options.setWhitePlayer(clazz);
+			} else {
+				options.setBlackPlayer(clazz);
 			}
 		}
 	}

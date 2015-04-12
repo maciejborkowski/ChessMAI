@@ -18,7 +18,7 @@ public class HumanPlayer extends Player {
 
 		System.out.println(color + " THINKS");
 
-		while (!moved) {
+		while (!moved && game.isRunning()) {
 			List<MouseEvent> mouseEvents = board.getMouseEvents();
 			if (mouseEvents.size() > 0) {
 				MouseEvent event = mouseEvents.get(0);

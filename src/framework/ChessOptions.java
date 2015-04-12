@@ -5,9 +5,9 @@ import chess.Player;
 
 public class ChessOptions {
 	private ChessBoard board;
-	private Player white;
-	private Player black;
-
+	private Class<? extends Player> blackPlayer;
+	private Class<? extends Player> whitePlayer;
+	
 	public ChessOptions() {
 	}
 
@@ -19,20 +19,20 @@ public class ChessOptions {
 		this.board = board;
 	}
 
-	public Player getWhite() {
-		return white;
+	public Class<? extends Player> getWhitePlayer() {
+		return whitePlayer;
 	}
 
-	public void setWhite(Player white) {
-		this.white = white;
+	public void setWhitePlayer(Class<? extends Player> whitePlayer) {
+		this.whitePlayer = whitePlayer;
 	}
 
-	public Player getBlack() {
-		return black;
+	public Class<? extends Player> getBlackPlayer() {
+		return blackPlayer;
 	}
 
-	public void setBlack(Player black) {
-		this.black = black;
+	public void setBlackPlayer(Class<? extends Player> blackPlayer) {
+		this.blackPlayer = blackPlayer;
 	}
 
 }
