@@ -10,6 +10,10 @@ import javax.swing.JTabbedPane;
 public class Application {
 	private final static String WINDOW_LABEL = "ChessMAI";
 	private final static String RUN_TAB_LABEL = "Run";
+	private final static String GENETIC_TAB_LABEL = "Genetic";
+	private final static String ANNEALING_TAB_LABEL = "Annealing";
+	private final static String ANT_TAB_LABEL = "Ant";
+
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private JFrame frame;
 
@@ -33,7 +37,6 @@ public class Application {
 	private void initializeApplication() {
 		initFrame();
 		initBoardPanel();
-		initOtherBoard();
 	}
 
 	private void initFrame() {
@@ -45,12 +48,14 @@ public class Application {
 	}
 
 	private void initBoardPanel() {
-		JPanel panel = new RunPanel();
-		tabbedPane.addTab(RUN_TAB_LABEL, panel);
+		JPanel runPanel = new RunPanel();
+		tabbedPane.addTab(RUN_TAB_LABEL, runPanel);
+		JPanel geneticPanel = new GeneticPanel();
+		tabbedPane.addTab(GENETIC_TAB_LABEL, geneticPanel);
+		JPanel annealingPanel = new AnnealingPanel();
+		tabbedPane.addTab(ANNEALING_TAB_LABEL, annealingPanel);
+		JPanel antPanel = new AntPanel();
+		tabbedPane.addTab(ANT_TAB_LABEL, antPanel);
 	}
 
-	private void initOtherBoard() {
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("other", panel);
-	}
 }
