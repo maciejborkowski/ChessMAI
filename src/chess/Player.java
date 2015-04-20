@@ -1,7 +1,7 @@
 package chess;
 
 public abstract class Player {
-	protected Color color;
+	protected ChessColor color;
 	protected ChessGame game;
 
 	public ChessGame getGame() {
@@ -12,11 +12,11 @@ public abstract class Player {
 		this.game = game;
 	}
 
-	public Color getColor() {
+	public ChessColor getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(ChessColor color) {
 		this.color = color;
 	}
 

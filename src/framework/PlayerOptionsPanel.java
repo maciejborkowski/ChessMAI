@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import chess.AIPlayer;
-import chess.Color;
+import chess.ChessColor;
 import chess.HumanPlayer;
 import chess.Player;
 
@@ -41,14 +41,14 @@ public class PlayerOptionsPanel extends JPanel {
 		JLabel playerLabel = new JLabel(BLACK_LABEL);
 		add(playerLabel);
 		JRadioButton ai = new JRadioButton(AI_LABEL);
-		ai.addActionListener(new SelectionActionListener(Color.BLACK, AIPlayer.class));
+		ai.addActionListener(new SelectionActionListener(ChessColor.BLACK, AIPlayer.class));
 		add(ai);
 
 		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
 		add(metaheurestic);
 
 		JRadioButton player = new JRadioButton(HUMAN_LABEL);
-		player.addActionListener(new SelectionActionListener(Color.BLACK, HumanPlayer.class));
+		player.addActionListener(new SelectionActionListener(ChessColor.BLACK, HumanPlayer.class));
 		player.setSelected(true);
 		add(player);
 
@@ -62,14 +62,14 @@ public class PlayerOptionsPanel extends JPanel {
 		JLabel playerLabel = new JLabel(WHITE_LABEL);
 		add(playerLabel);
 		JRadioButton ai = new JRadioButton(AI_LABEL);
-		ai.addActionListener(new SelectionActionListener(Color.WHITE, AIPlayer.class));
+		ai.addActionListener(new SelectionActionListener(ChessColor.WHITE, AIPlayer.class));
 		add(ai);
 
 		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
 		add(metaheurestic);
 
 		JRadioButton player = new JRadioButton(HUMAN_LABEL);
-		player.addActionListener(new SelectionActionListener(Color.WHITE, HumanPlayer.class));
+		player.addActionListener(new SelectionActionListener(ChessColor.WHITE, HumanPlayer.class));
 		player.setSelected(true);
 		add(player);
 
@@ -81,16 +81,16 @@ public class PlayerOptionsPanel extends JPanel {
 
 	private class SelectionActionListener implements ActionListener {
 		private final Class<? extends Player> clazz;
-		private final Color color;
+		private final ChessColor color;
 
-		public SelectionActionListener(final Color color, final Class<? extends Player> clazz) {
+		public SelectionActionListener(final ChessColor color, final Class<? extends Player> clazz) {
 			this.color = color;
 			this.clazz = clazz;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if (color.equals(Color.WHITE)) {
+			if (color.equals(ChessColor.WHITE)) {
 				options.setWhitePlayer(clazz);
 			} else {
 				options.setBlackPlayer(clazz);

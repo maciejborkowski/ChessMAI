@@ -3,16 +3,16 @@ package chess.pieces;
 import java.util.ArrayList;
 
 import chess.ChessGame;
-import chess.Color;
+import chess.ChessColor;
 import chess.Square;
 
 public class Pawn extends Piece {
 	private int ny = 0;
 	private boolean passantTarget = false;
 
-	public Pawn(ChessGame game, Color color, int x, int y) {
+	public Pawn(ChessGame game, ChessColor color, int x, int y) {
 		super(game, color, x, y);
-		if (color.equals(Color.BLACK)) {
+		if (color.equals(ChessColor.BLACK)) {
 			ny = 1;
 		} else {
 			ny = -1;

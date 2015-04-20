@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import chess.ChessEngine;
 import chess.ChessGame;
-import chess.Color;
+import chess.ChessColor;
 import chess.Square;
 
 public final class King extends Piece {
 	int[][] offsets = { { 0, -1 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } };
 
-	public King(ChessGame game, Color color, int x, int y) {
+	public King(ChessGame game, ChessColor color, int x, int y) {
 		super(game, color, x, y);
 	}
 

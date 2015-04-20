@@ -8,8 +8,8 @@ import chess.ChessBoard;
 
 @SuppressWarnings("serial")
 public class ChessBoardPanel extends JPanel {
-	public static final int BOARD_WIDTH = 500;
-	public static final int BOARD_HEIGHT = 500;
+	public static final int BOARD_WIDTH = 600; //500;
+	public static final int BOARD_HEIGHT = 520;
 
 	private ChessBoard chessBoard;
 	private ChessOptions options;

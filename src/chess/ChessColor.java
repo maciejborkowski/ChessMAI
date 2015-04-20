@@ -1,9 +1,9 @@
 package chess;
 
-public enum Color {
+public enum ChessColor {
 	WHITE, BLACK;
 
-	public Color negate() {
+	public ChessColor negate() {
 		if (this.equals(BLACK)) {
 			return WHITE;
 		} else {

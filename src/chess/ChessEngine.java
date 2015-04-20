@@ -29,72 +29,72 @@ public class ChessEngine {
 		List<Piece> blackPieces = game.getBlackPieces();
 
 		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			piece = new Pawn(game, Color.WHITE, i, 6);
+			piece = new Pawn(game, ChessColor.WHITE, i, 6);
 			whitePieces.add(piece);
 			game.getSquare(i, 6).setPiece(piece);
 		}
 
-		piece = new Knight(game, Color.WHITE, 1, 7);
+		piece = new Knight(game, ChessColor.WHITE, 1, 7);
 		game.getSquare(1, 7).setPiece(piece);
 		whitePieces.add(piece);
-		piece = new Knight(game, Color.WHITE, 6, 7);
+		piece = new Knight(game, ChessColor.WHITE, 6, 7);
 		game.getSquare(6, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new Bishop(game, Color.WHITE, 2, 7);
+		piece = new Bishop(game, ChessColor.WHITE, 2, 7);
 		game.getSquare(2, 7).setPiece(piece);
 		whitePieces.add(piece);
-		piece = new Bishop(game, Color.WHITE, 5, 7);
+		piece = new Bishop(game, ChessColor.WHITE, 5, 7);
 		game.getSquare(5, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new Rook(game, Color.WHITE, 0, 7);
+		piece = new Rook(game, ChessColor.WHITE, 0, 7);
 		game.getSquare(0, 7).setPiece(piece);
 		whitePieces.add(piece);
-		piece = new Rook(game, Color.WHITE, 7, 7);
+		piece = new Rook(game, ChessColor.WHITE, 7, 7);
 		game.getSquare(7, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new Queen(game, Color.WHITE, 3, 7);
+		piece = new Queen(game, ChessColor.WHITE, 3, 7);
 		game.getSquare(3, 7).setPiece(piece);
 		whitePieces.add(piece);
 
-		piece = new King(game, Color.WHITE, 4, 7);
+		piece = new King(game, ChessColor.WHITE, 4, 7);
 		game.getSquare(4, 7).setPiece(piece);
 		whitePieces.add(piece);
 
 		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			piece = new Pawn(game, Color.BLACK, i, 1);
+			piece = new Pawn(game, ChessColor.BLACK, i, 1);
 			blackPieces.add(piece);
 			game.getSquare(i, 1).setPiece(piece);
 		}
 
-		piece = new Knight(game, Color.BLACK, 1, 0);
+		piece = new Knight(game, ChessColor.BLACK, 1, 0);
 		game.getSquare(1, 0).setPiece(piece);
 		blackPieces.add(piece);
-		piece = new Knight(game, Color.BLACK, 6, 0);
+		piece = new Knight(game, ChessColor.BLACK, 6, 0);
 		game.getSquare(6, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new Bishop(game, Color.BLACK, 2, 0);
+		piece = new Bishop(game, ChessColor.BLACK, 2, 0);
 		game.getSquare(2, 0).setPiece(piece);
 		blackPieces.add(piece);
-		piece = new Bishop(game, Color.BLACK, 5, 0);
+		piece = new Bishop(game, ChessColor.BLACK, 5, 0);
 		game.getSquare(5, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new Rook(game, Color.BLACK, 0, 0);
+		piece = new Rook(game, ChessColor.BLACK, 0, 0);
 		game.getSquare(0, 0).setPiece(piece);
 		blackPieces.add(piece);
-		piece = new Rook(game, Color.BLACK, 7, 0);
+		piece = new Rook(game, ChessColor.BLACK, 7, 0);
 		game.getSquare(7, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new Queen(game, Color.BLACK, 3, 0);
+		piece = new Queen(game, ChessColor.BLACK, 3, 0);
 		game.getSquare(3, 0).setPiece(piece);
 		blackPieces.add(piece);
 
-		piece = new King(game, Color.BLACK, 4, 0);
+		piece = new King(game, ChessColor.BLACK, 4, 0);
 		game.getSquare(4, 0).setPiece(piece);
 		blackPieces.add(piece);
 	}
@@ -149,7 +149,7 @@ public class ChessEngine {
 				((Pawn) piece).setPassantTarget(true);
 			} else {
 				Square passant;
-				if (piece.getColor().equals(Color.BLACK)) {
+				if (piece.getColor().equals(ChessColor.BLACK)) {
 					passant = game.getSquare(piece.getX(), piece.getY() - 1);
 				} else {
 					passant = game.getSquare(piece.getX(), piece.getY() + 1);
@@ -160,7 +160,7 @@ public class ChessEngine {
 			}
 		}
 		List<Piece> pieces;
-		if (piece.getColor().equals(Color.BLACK)) {
+		if (piece.getColor().equals(ChessColor.BLACK)) {
 			pieces = game.getWhitePieces();
 		} else {
 			pieces = game.getBlackPieces();
@@ -181,14 +181,14 @@ public class ChessEngine {
 	private static void promote(ChessGame game, Piece piece, Class<? extends Piece> clazz) {
 		try {
 			List<Piece> piecesList;
-			if (piece.getColor().equals(Color.WHITE)) {
+			if (piece.getColor().equals(ChessColor.WHITE)) {
 				piecesList = game.getWhitePieces();
 			} else {
 				piecesList = game.getBlackPieces();
 			}
 
 			piecesList.remove(piece);
-			Piece newPiece = clazz.getConstructor(ChessGame.class, Color.class, int.class, int.class).newInstance(game,
+			Piece newPiece = clazz.getConstructor(ChessGame.class, ChessColor.class, int.class, int.class).newInstance(game,
 					piece.getColor(), piece.getX(), piece.getY());
 			game.getSquare(piece.getX(), piece.getY()).setPiece(newPiece);
 			piecesList.add(newPiece);
@@ -216,9 +216,9 @@ public class ChessEngine {
 	}
 
 	private static void processCheck(ChessGame game) {
-		Color currentColor = game.getTurn();
+		ChessColor currentColor = game.getTurn();
 		List<Piece> pieces;
-		if (currentColor.equals(Color.WHITE)) {
+		if (currentColor.equals(ChessColor.WHITE)) {
 			pieces = game.getWhitePieces();
 		} else {
 			pieces = game.getBlackPieces();
@@ -243,7 +243,7 @@ public class ChessEngine {
 				game.setWinner(game.getTurn());
 				return true;
 			}
-			if (piece.getColor() == Color.WHITE) {
+			if (piece.getColor() == ChessColor.WHITE) {
 				game.getWhitePieces().remove(piece);
 			} else {
 				game.getBlackPieces().remove(piece);

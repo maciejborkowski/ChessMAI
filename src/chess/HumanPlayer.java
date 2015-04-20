@@ -52,9 +52,9 @@ public class HumanPlayer extends Player {
 	private void processPromotion() {
 		// There should be a choice of pieces for player, but it has a low
 		// priority in this simulation, so it always creates a Queen
-		if (color.equals(Color.WHITE) && move[3] == 0) {
+		if (color.equals(ChessColor.WHITE) && move[3] == 0) {
 			move[4] = 4;
-		} else if (color.equals(Color.BLACK) && move[3] == 7) {
+		} else if (color.equals(ChessColor.BLACK) && move[3] == 7) {
 			move[4] = 4;
 		}
 	}

@@ -2,9 +2,11 @@ package chess;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,9 @@ import chess.pieces.Piece;
 public class ChessBoard extends JPanel {
 	public static final double SQUARE_PIXEL_WIDTH = 62.25;
 	public static final double SQUARE_PIXEL_HEIGHT = 62.25;
+	public static final int TURN_CHECKER_X = 500;
+	public static final int TURN_CHECKER_Y = 435;
+	public static final int BOARD_MAX = 495;
 
 	private Assets assets;
 	private MouseAction mouse;
@@ -75,6 +80,10 @@ public class ChessBoard extends JPanel {
 					}
 				}
 			}
+			
+			g2d.setColor((ChessColor.BLACK == game.getTurn()) ? Color.BLACK : Color.WHITE);
+			g2d.fill(new Rectangle(TURN_CHECKER_X, TURN_CHECKER_Y, (int)SQUARE_PIXEL_WIDTH, (int)SQUARE_PIXEL_HEIGHT));
+			g2d.drawImage(assets.getActive(), TURN_CHECKER_X, TURN_CHECKER_Y, null);
 		}
 	}
 
@@ -97,7 +106,8 @@ public class ChessBoard extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			mouseEvents.add(e);
+			if (BOARD_MAX > e.getX() && BOARD_MAX > e.getY())
+				mouseEvents.add(e);
 		}
 
 		@Override

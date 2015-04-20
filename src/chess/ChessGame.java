@@ -16,10 +16,10 @@ public class ChessGame implements Runnable {
 	private List<Piece> whitePieces = new LinkedList<>();
 	private List<Piece> blackPieces = new LinkedList<>();
 	private Square active;
-	private Color currentTurn;
+	private ChessColor currentTurn;
 	private ChessBoard board;
 	private StringBuilder moveHistory = new StringBuilder();
-	private Color winner;
+	private ChessColor winner;
 
 	public ChessGame(final Player white, final Player black, ChessBoard board) {
 		running = true;
@@ -61,7 +61,7 @@ public class ChessGame implements Runnable {
 		return blackPieces;
 	}
 
-	public Color getTurn() {
+	public ChessColor getTurn() {
 		return currentTurn;
 	}
 
@@ -89,12 +89,12 @@ public class ChessGame implements Runnable {
 			}
 		}
 		ChessEngine.createPieces(this);
-		currentTurn = Color.WHITE;
+		currentTurn = ChessColor.WHITE;
 
-		whitePlayer.setColor(Color.WHITE);
+		whitePlayer.setColor(ChessColor.WHITE);
 		whitePlayer.setGame(this);
 
-		blackPlayer.setColor(Color.BLACK);
+		blackPlayer.setColor(ChessColor.BLACK);
 		blackPlayer.setGame(this);
 
 		this.state = State.NORMAL;
@@ -124,9 +124,9 @@ public class ChessGame implements Runnable {
 		while (running) {
 			if (state == State.INIT) {
 				initGame();
-			} else if (currentTurn.equals(Color.WHITE)) {
+			} else if (currentTurn.equals(ChessColor.WHITE)) {
 				whiteTurn();
-			} else if (currentTurn.equals(Color.BLACK)) {
+			} else if (currentTurn.equals(ChessColor.BLACK)) {
 				blackTurn();
 			}
 			if (board != null) {
@@ -143,16 +143,16 @@ public class ChessGame implements Runnable {
 	private void whiteTurn() throws Exception {
 		int[] move = whitePlayer.think();
 		ChessEngine.move(this, move);
-		currentTurn = Color.BLACK;
+		currentTurn = ChessColor.BLACK;
 	}
 
 	private void blackTurn() throws Exception {
 		int[] move = blackPlayer.think();
 		ChessEngine.move(this, move);
-		currentTurn = Color.WHITE;
+		currentTurn = ChessColor.WHITE;
 	}
 
-	public void setWinner(Color color) {
+	public void setWinner(ChessColor color) {
 		winner = color;
 	}
 

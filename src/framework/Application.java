@@ -41,7 +41,7 @@ public class Application {
 
 	private void initFrame() {
 		frame = new JFrame(WINDOW_LABEL);
-		frame.setBounds(0, 0, 800, 600);
+		frame.setBounds(0, 0, 800, 620);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.add(tabbedPane);

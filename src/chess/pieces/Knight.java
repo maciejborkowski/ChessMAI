@@ -3,12 +3,12 @@ package chess.pieces;
 import java.util.ArrayList;
 
 import chess.ChessGame;
-import chess.Color;
+import chess.ChessColor;
 import chess.Square;
 
 public final class Knight extends Piece {
 
-	public Knight(ChessGame game, Color color, int x, int y) {
+	public Knight(ChessGame game, ChessColor color, int x, int y) {
 		super(game, color, x, y);
 	}
 

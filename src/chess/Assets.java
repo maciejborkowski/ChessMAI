@@ -77,8 +77,8 @@ public class Assets {
 		return active;
 	}
 
-	public Image getImage(Class<? extends Piece> clazz, Color color) {
-		if (color.equals(Color.WHITE)) {
+	public Image getImage(Class<? extends Piece> clazz, ChessColor color) {
+		if (color.equals(ChessColor.WHITE)) {
 			return images[imageMap.get(clazz)];
 		} else {
 			return images[imageMap.get(clazz) + 6];

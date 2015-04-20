@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import chess.ChessEngine;
 import chess.ChessGame;
-import chess.Color;
+import chess.ChessColor;
 import chess.Square;
 
 public final class Rook extends Piece {
 
-	public Rook(ChessGame game, Color color, int x, int y) {
+	public Rook(ChessGame game, ChessColor color, int x, int y) {
 		super(game, color, x, y);
 	}
 

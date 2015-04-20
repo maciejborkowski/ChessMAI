@@ -3,17 +3,17 @@ package chess.pieces;
 import java.util.List;
 
 import chess.ChessGame;
-import chess.Color;
+import chess.ChessColor;
 import chess.Square;
 
 public abstract class Piece {
 	protected ChessGame game;
 	protected int x, y;
-	protected Color color;
+	protected ChessColor color;
 	protected List<Square> possibleMoves = null;
 	protected boolean moved = false;
 
-	public Piece(ChessGame game, Color color, int x, int y) {
+	public Piece(ChessGame game, ChessColor color, int x, int y) {
 		this.game = game;
 		this.color = color;
 		this.x = x;
@@ -58,9 +58,9 @@ public abstract class Piece {
 	}
 
 	public boolean isOpponent(Piece p) {
-		if (getColor() == Color.WHITE && p.getColor() == Color.BLACK)
+		if (getColor() == ChessColor.WHITE && p.getColor() == ChessColor.BLACK)
 			return true;
-		if (getColor() == Color.BLACK && p.getColor() == Color.WHITE)
+		if (getColor() == ChessColor.BLACK && p.getColor() == ChessColor.WHITE)
 			return true;
 		return false;
 	}
@@ -81,7 +81,7 @@ public abstract class Piece {
 		this.y = y;
 	}
 
-	public Color getColor() {
+	public ChessColor getColor() {
 		return color;
 	}
 
