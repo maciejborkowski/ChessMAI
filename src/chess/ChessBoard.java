@@ -55,6 +55,7 @@ public class ChessBoard extends JPanel {
 		assets.loadAssets();
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
@@ -63,7 +64,7 @@ public class ChessBoard extends JPanel {
 
 	private void boardDraw(Graphics2D g2d) {
 		g2d.drawImage(assets.getBackground(), 0, 0, null);
-		
+
 		if (game != null) {
 			for (Piece piece : game.getWhitePieces()) {
 				drawPiece(piece, g2d);
@@ -80,9 +81,9 @@ public class ChessBoard extends JPanel {
 					}
 				}
 			}
-			
+
 			g2d.setColor((ChessColor.BLACK == game.getTurn()) ? Color.BLACK : Color.WHITE);
-			g2d.fill(new Rectangle(TURN_CHECKER_X, TURN_CHECKER_Y, (int)SQUARE_PIXEL_WIDTH, (int)SQUARE_PIXEL_HEIGHT));
+			g2d.fill(new Rectangle(TURN_CHECKER_X, TURN_CHECKER_Y, (int) SQUARE_PIXEL_WIDTH, (int) SQUARE_PIXEL_HEIGHT));
 			g2d.drawImage(assets.getActive(), TURN_CHECKER_X, TURN_CHECKER_Y, null);
 		}
 	}
@@ -106,8 +107,9 @@ public class ChessBoard extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (BOARD_MAX > e.getX() && BOARD_MAX > e.getY())
+			if (BOARD_MAX > e.getX() && BOARD_MAX > e.getY()) {
 				mouseEvents.add(e);
+			}
 		}
 
 		@Override

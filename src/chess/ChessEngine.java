@@ -173,7 +173,7 @@ public class ChessEngine {
 	}
 
 	private static void processPromotion(ChessGame game, int[] newMove, Piece piece) {
-		if (newMove[4] != 0) {
+		if (newMove[4] != 0 && piece instanceof Pawn) {
 			promote(game, piece, pieceMap.get(newMove[4]));
 		}
 	}
