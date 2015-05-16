@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import chess.ChessBoard;
+import chess.ChessOptions;
 
 @SuppressWarnings("serial")
 public class ChessBoardPanel extends JPanel {

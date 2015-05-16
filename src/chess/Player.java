@@ -21,5 +21,4 @@ public abstract class Player {
 	}
 
 	public abstract int[] think() throws Exception;
-
 }

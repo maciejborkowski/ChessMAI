@@ -11,8 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import uci.AdapterPool;
+import uci.WindowsUCIAdapter;
 import chess.AIPlayer;
 import chess.ChessColor;
+import chess.ChessOptions;
 import chess.HumanPlayer;
 import chess.Player;
 
@@ -35,6 +38,10 @@ public class PlayerOptionsPanel extends JPanel {
 		addBlack();
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		addWhite();
+		AdapterPool adapterPool = new AdapterPool();
+		adapterPool.addAdapter(new WindowsUCIAdapter());
+		adapterPool.addAdapter(new WindowsUCIAdapter());
+		options.setAdapterPool(adapterPool);
 	}
 
 	private void addBlack() {

@@ -39,7 +39,7 @@ public class HumanPlayer extends Player {
 				board.repaint();
 			}
 			try {
-				Thread.sleep(20);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				System.out.println("PLAYER THINKING THREAD INTERRUPTED");
 			}

@@ -1,8 +1,11 @@
 package chess;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+import uci.AdapterPool;
+import uci.UCIAdapter;
 import chess.ChessEngine.State;
 import chess.pieces.Piece;
 
@@ -11,25 +14,56 @@ public class ChessGame implements Runnable {
 	private ChessEngine.State state;
 	private Player whitePlayer, blackPlayer;
 	private Thread gameThread = null;
+	private ChessOptions options;
+	private ChessBoard board;
 
 	private Square[][] squares;
 	private List<Piece> whitePieces = new LinkedList<>();
 	private List<Piece> blackPieces = new LinkedList<>();
 	private Square active;
 	private ChessColor currentTurn;
-	private ChessBoard board;
 	private StringBuilder moveHistory = new StringBuilder();
 	private ChessColor winner;
 
+	@Deprecated
 	public ChessGame(final Player white, final Player black, ChessBoard board) {
 		running = true;
-		this.whitePlayer = white;
-		this.blackPlayer = black;
+		whitePlayer = white;
+		blackPlayer = black;
 		this.board = board;
 		board.setGame(this);
 
 		state = State.INIT;
 		this.gameThread = new Thread(this);
+	}
+
+	public ChessGame(ChessOptions options) {
+		running = true;
+		this.options = options;
+		whitePlayer = createPlayer(options.getWhitePlayer());
+		blackPlayer = createPlayer(options.getBlackPlayer());
+		this.board = options.getBoard();
+		board.setGame(this);
+
+		state = State.INIT;
+		this.gameThread = new Thread(this);
+	}
+
+	private Player createPlayer(Class<? extends Player> clazz) {
+		try {
+			Player player;
+			if (clazz == AIPlayer.class) {
+				player = clazz.getConstructor(AdapterPool.class).newInstance(options.getAdapterPool());
+			} else {
+				player = clazz.getConstructor().newInstance();
+			}
+			return player;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			System.out.println("GENERIC CLASS CONSTRUCTOR INVOCATION FAILED MISERABLY");
+		}
+		return null;
 	}
 
 	public ChessBoard getBoard() {
@@ -135,7 +169,7 @@ public class ChessGame implements Runnable {
 
 			if (state == State.CHECKMATE) {
 				System.out.println("CHECKMATE! " + winner + " WINS!");
-				running = false;
+				setRunning(false);
 			}
 		}
 	}

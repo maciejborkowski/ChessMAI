@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import chess.ChessGame;
+import chess.ChessOptions;
 import chess.Player;
 
 @SuppressWarnings("serial")
@@ -35,17 +36,9 @@ public class RunOptionsPanel extends JPanel {
 			if (game != null && game.isRunning()) {
 				game.setRunning(false);
 			}
-			try {
-				Player white = options.getWhitePlayer().getConstructor().newInstance();
-				Player black = options.getBlackPlayer().getConstructor().newInstance();
-
-				game = new ChessGame(white, black, options.getBoard());
-				game.start();
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-				System.out.println("GENERIC CLASS CONSTRUCTOR INVOCATION FAILED MISERABLY");
-			}
+			
+			game = new ChessGame(options);
+			game.start();
 		}
 	}
 }

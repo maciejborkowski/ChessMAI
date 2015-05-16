@@ -51,6 +51,7 @@ public abstract class UCIAdapter {
 		sendCommand(command);
 		try {
 			process.waitFor();
+			process.destroy();
 		} catch (InterruptedException e) {
 			System.out.println("INTERRUPTED WHILE WAITING FOR PROCESS TO END");
 			e.printStackTrace();

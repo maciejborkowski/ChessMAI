@@ -34,18 +34,22 @@ public class MoveParser {
 		pieceMap.put('b', 2);
 		pieceMap.put('r', 3);
 		pieceMap.put('q', 4);
-		pieceMap.put('\r', 5);
+		//pieceMap.put('\r', 5);
 	}
 
 	public static void parse(final String moveString, final int[] move) {
-		move[0] = columnMap.get(moveString.charAt(0));
-		move[1] = rowMap.get(moveString.charAt(1));
-		move[2] = columnMap.get(moveString.charAt(2));
-		move[3] = rowMap.get(moveString.charAt(3));
-		if (moveString.length() == 5) {
-			move[4] = pieceMap.get(moveString.charAt(4));
+		if(moveString.contains("N")) {
+			move[4] = 5;
 		} else {
-			move[4] = pieceMap.get(' ');
+			move[0] = columnMap.get(moveString.charAt(0));
+			move[1] = rowMap.get(moveString.charAt(1));
+			move[2] = columnMap.get(moveString.charAt(2));
+			move[3] = rowMap.get(moveString.charAt(3));
+			if (moveString.length() == 5) {
+				move[4] = pieceMap.get(moveString.charAt(4));
+			} else {
+				move[4] = pieceMap.get(' ');
+			}
 		}
 	}
 

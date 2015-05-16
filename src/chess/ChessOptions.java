@@ -1,13 +1,13 @@
-package framework;
+package chess;
 
-import chess.ChessBoard;
-import chess.Player;
+import uci.AdapterPool;
 
 public class ChessOptions {
 	private ChessBoard board;
 	private Class<? extends Player> blackPlayer;
 	private Class<? extends Player> whitePlayer;
-	
+	private AdapterPool adapterPool;
+
 	public ChessOptions() {
 	}
 
@@ -33,6 +33,14 @@ public class ChessOptions {
 
 	public void setBlackPlayer(Class<? extends Player> blackPlayer) {
 		this.blackPlayer = blackPlayer;
+	}
+
+	public AdapterPool getAdapterPool() {
+		return adapterPool;
+	}
+
+	public void setAdapterPool(AdapterPool adapterPool) {
+		this.adapterPool = adapterPool;
 	}
 
 }

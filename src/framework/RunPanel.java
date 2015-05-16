@@ -4,9 +4,19 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import chess.ChessOptions;
+
 @SuppressWarnings("serial")
 public class RunPanel extends JPanel {
 	private ChessOptions options;
+
+	public ChessOptions getOptions() {
+		return options;
+	}
+
+	public void setOptions(ChessOptions options) {
+		this.options = options;
+	}
 
 	public RunPanel() {
 		options = new ChessOptions();
