@@ -22,6 +22,7 @@ public abstract class Piece {
 
 	public abstract void createPossibleMoves();
 	
+	// returns true if there is a check or false if there is no check
 	public boolean isCheck()
 	{
 		List<Piece> pieces;

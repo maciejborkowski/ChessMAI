@@ -30,12 +30,12 @@ public final class King extends Piece {
 	// if return 0 then there is no enemy
 	// if return 1 then there is an enemy
 	// if return 2 then there is some Piece on the way and thus there is no need to check another squares
-	private int isEnemyBishop(int x, int y)
+	private int isEnemyBishopOrQueen(int x, int y)
 	{
 		Square nextSquare = game.getSquare(x, y);
 		if(nextSquare != null) {
 			if(nextSquare.getPiece() != null) {
-				if(nextSquare.getPiece() instanceof Bishop)
+				if(nextSquare.getPiece() instanceof Bishop || nextSquare.getPiece() instanceof Queen)
 				{
 					if(nextSquare.getPiece().getColor() != game.getTurn())
 						return 1;
@@ -43,6 +43,8 @@ public final class King extends Piece {
 						return 2;
 				}
 				else
+					if(nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+						return 0;
 					return 2;
 			}
 		}
@@ -65,6 +67,8 @@ public final class King extends Piece {
 						return 2;
 				}
 				else
+					if(nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+						return 0;
 					return 2;
 			}
 		}
@@ -155,9 +159,9 @@ public final class King extends Piece {
 		 {
 			 x++;
 			 y--;
-			 if(isEnemyBishop(x, y) == 1)
+			 if(isEnemyBishopOrQueen(x, y) == 1)
 				 return false;
-			 if(isEnemyBishop(x, y) == 2)
+			 if(isEnemyBishopOrQueen(x, y) == 2)
 				 break;
 		 }
 		 x = square.getX();
@@ -166,9 +170,9 @@ public final class King extends Piece {
 		 {
 			 x--;
 			 y--;
-			 if(isEnemyBishop(x, y) == 1)
+			 if(isEnemyBishopOrQueen(x, y) == 1)
 				 return false;
-			 if(isEnemyBishop(x, y) == 2)
+			 if(isEnemyBishopOrQueen(x, y) == 2)
 				 break;
 		 }
 		 x = square.getX();
@@ -177,9 +181,9 @@ public final class King extends Piece {
 		 {
 			 x--;
 			 y++;
-			 if(isEnemyBishop(x, y) == 1)
+			 if(isEnemyBishopOrQueen(x, y) == 1)
 				 return false;
-			 if(isEnemyBishop(x, y) == 2)
+			 if(isEnemyBishopOrQueen(x, y) == 2)
 				 break;
 		 }
 		 x = square.getX();
@@ -188,9 +192,9 @@ public final class King extends Piece {
 		 {
 			 x++;
 			 y++;
-			 if(isEnemyBishop(x, y) == 1)
+			 if(isEnemyBishopOrQueen(x, y) == 1)
 				 return false;
-			 if(isEnemyBishop(x, y) == 2)
+			 if(isEnemyBishopOrQueen(x, y) == 2)
 				 break;
 		 }
 		 

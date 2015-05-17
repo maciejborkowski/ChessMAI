@@ -7,6 +7,7 @@ import java.util.List;
 import uci.AdapterPool;
 import uci.UCIAdapter;
 import chess.ChessEngine.State;
+import chess.pieces.King;
 import chess.pieces.Piece;
 
 public class ChessGame implements Runnable {
