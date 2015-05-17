@@ -16,7 +16,7 @@ import metaheuristic.antsearch.AntColony;
 @SuppressWarnings("serial")
 public class AntPanel extends JPanel {
 	private static final String TURNS_LABEL = "Number of turns";
-	private static final String TURNS_DEFAULT = "3";
+	private static final String TURNS_DEFAULT = "5";
 	private static final String CONCURRENT_ANTS_LABEL = "Concurrent ants";
 	private static final String CONCURRENT_ANTS_DEFAULT = "1";
 	private static final String START_BUTTON = "Start";

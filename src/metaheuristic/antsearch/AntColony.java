@@ -1,6 +1,7 @@
 package metaheuristic.antsearch;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import metaheuristic.CostFunction;
@@ -15,7 +16,7 @@ import chess.player.AIPlayer;
 public class AntColony implements Runnable {
 	private boolean running = true;
 	private ChessOptions options;
-	private Map<ChessBoard, int[][]> pheromones;
+	private Map<ChessBoard, List<MoveProbability>> pheromones;
 
 	public AntColony(ChessOptions options) {
 		this.options = options;
@@ -61,11 +62,11 @@ public class AntColony implements Runnable {
 
 	}
 
-	public Map<ChessBoard, int[][]> getPheromones() {
+	public Map<ChessBoard, List<MoveProbability>> getPheromones() {
 		return pheromones;
 	}
 
-	public void setPheromones(Map<ChessBoard, int[][]> pheromones) {
+	public void setPheromones(Map<ChessBoard, List<MoveProbability>> pheromones) {
 		this.pheromones = pheromones;
 	}
 

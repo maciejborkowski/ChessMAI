@@ -16,15 +16,44 @@ public class Ant extends Player {
 	@Override
 	public int[] think() throws Exception {
 		int[] move = chooseMove();
-
 		moves.add(MoveParser.parse(move));
 		return move;
 	}
 
 	private int[] chooseMove() {
-		List<int[]> availableMoves = ChessEngine.availableMoves(game);
-		int idx = random.nextInt(availableMoves.size());
-		return availableMoves.get(idx);
+		List<MoveProbability> moves = colony.getPheromones().get(game.getBoard());
+		int[] move;
+		if (moves == null) {
+			List<int[]> availableMoves = ChessEngine.availableMoves(game);
+			moves = createProbabilityMoves(availableMoves);
+			colony.getPheromones().put(game.getBoard(), moves);
+			int idx = random.nextInt(availableMoves.size());
+			move = availableMoves.get(idx);
+		} else {
+			move = chooseRandom(moves);
+		}
+		return move;
+	}
+
+	private List<MoveProbability> createProbabilityMoves(List<int[]> availableMoves) {
+		List<MoveProbability> moves = new LinkedList<>();
+		double probability = 1.0 / (double) availableMoves.size();
+		for (int[] move : availableMoves) {
+			moves.add(new MoveProbability(move, probability));
+		}
+		return moves;
+	}
+
+	private int[] chooseRandom(List<MoveProbability> moves) {
+		double value = random.nextDouble();
+		double cumulativeProbability = 0.0;
+		for (MoveProbability move : moves) {
+			cumulativeProbability += move.getProbability();
+			if (value <= cumulativeProbability) {
+				return move.getMove();
+			}
+		}
+		return null;
 	}
 
 	public void setColony(AntColony antColony) {

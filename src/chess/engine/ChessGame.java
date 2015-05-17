@@ -204,4 +204,8 @@ public class ChessGame implements Runnable {
 		this.whitePlayer = whitePlayer;
 	}
 
+	public ChessBoard getBoard() {
+		return board;
+	}
+
 }
