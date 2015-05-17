@@ -29,17 +29,18 @@ public final class King extends Piece {
 	// if return 1 then there is an enemy
 	// if return 2 then there is some Piece on the way and thus there is no need
 	// to check another squares
-	private int isEnemyBishop(int x, int y) {
+	private int isEnemyBishopOrQueen(int x, int y) {
 		Square nextSquare = game.getSquare(x, y);
 		if (nextSquare != null) {
 			if (nextSquare.getPiece() != null) {
-				if (nextSquare.getPiece() instanceof Bishop) {
+				if (nextSquare.getPiece() instanceof Bishop || nextSquare.getPiece() instanceof Queen) {
 					if (nextSquare.getPiece().getColor() != game.getTurn())
 						return 1;
 					else
 						return 2;
-				} else
-					return 2;
+				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+					return 0;
+				return 2;
 			}
 		}
 		return 0;
@@ -58,8 +59,9 @@ public final class King extends Piece {
 						return 1;
 					else
 						return 2;
-				} else
-					return 2;
+				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+					return 0;
+				return 2;
 			}
 		}
 		return 0;
@@ -139,9 +141,9 @@ public final class King extends Piece {
 		while (x < ChessEngine.SQUARE_WIDTH - 1 && y > 0) {
 			x++;
 			y--;
-			if (isEnemyBishop(x, y) == 1)
+			if (isEnemyBishopOrQueen(x, y) == 1)
 				return false;
-			if (isEnemyBishop(x, y) == 2)
+			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
 		x = square.getX();
@@ -149,9 +151,9 @@ public final class King extends Piece {
 		while (x > 0 && y > 0) {
 			x--;
 			y--;
-			if (isEnemyBishop(x, y) == 1)
+			if (isEnemyBishopOrQueen(x, y) == 1)
 				return false;
-			if (isEnemyBishop(x, y) == 2)
+			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
 		x = square.getX();
@@ -159,9 +161,9 @@ public final class King extends Piece {
 		while (x > 0 && y < ChessEngine.SQUARE_HEIGHT - 1) {
 			x--;
 			y++;
-			if (isEnemyBishop(x, y) == 1)
+			if (isEnemyBishopOrQueen(x, y) == 1)
 				return false;
-			if (isEnemyBishop(x, y) == 2)
+			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
 		x = square.getX();
@@ -169,12 +171,11 @@ public final class King extends Piece {
 		while (x < ChessEngine.SQUARE_WIDTH - 1 && y < ChessEngine.SQUARE_HEIGHT - 1) {
 			x++;
 			y++;
-			if (isEnemyBishop(x, y) == 1)
+			if (isEnemyBishopOrQueen(x, y) == 1)
 				return false;
-			if (isEnemyBishop(x, y) == 2)
+			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
-
 		return true;
 	}
 

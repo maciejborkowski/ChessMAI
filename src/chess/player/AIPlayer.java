@@ -23,7 +23,7 @@ public class AIPlayer extends Player {
 		adapter.isready();
 
 		// Make your move
-		String moveString = adapter.go(100);
+		String moveString = adapter.go(1);
 		pool.releaseAdapter(adapter);
 
 		System.out.println(color.toString() + " MOVE: " + moveString);

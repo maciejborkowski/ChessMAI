@@ -10,9 +10,10 @@ import chess.pieces.*;
 
 public class ChessEngine {
 	public static enum State {
-		INIT, NORMAL, CHECK, CHECKMATE
+		INIT, NORMAL, CHECK_WHITE, CHECK_BLACK, CHECKMATE
 	}
-
+	
+	
 	public static final int SQUARE_WIDTH = 8;
 	public static final int SQUARE_HEIGHT = 8;
 	private static final HashMap<Integer, Class<? extends Piece>> pieceMap = new HashMap<>();
@@ -110,7 +111,7 @@ public class ChessEngine {
 			game.setWinner(game.getTurn().negate());
 			return;
 		}
-
+		
 		if (piece != null && piece.getColor() == game.getTurn()) {
 			if (removePieceOnSquare(game, moveTo)) {
 				return;
@@ -251,7 +252,10 @@ public class ChessEngine {
 		for (Piece piece : pieces) {
 			for (Square square : piece.getPossibleMoves()) {
 				if (square.getPiece() instanceof King) {
-					game.setState(State.CHECK);
+					if(game.getTurn() == ChessColor.WHITE)
+						game.setState(State.CHECK_WHITE);
+					else
+						game.setState(State.CHECK_BLACK);
 					return;
 				}
 			}
