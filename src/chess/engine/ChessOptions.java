@@ -1,21 +1,24 @@
-package chess;
+package chess.engine;
 
+import chess.player.Player;
+import framework.ChessBoardPanel;
 import uci.AdapterPool;
 
 public class ChessOptions {
-	private ChessBoard board;
+	private ChessBoardPanel board;
 	private Class<? extends Player> blackPlayer;
 	private Class<? extends Player> whitePlayer;
 	private AdapterPool adapterPool;
+	private int maxLength = 0;
 
 	public ChessOptions() {
 	}
 
-	public ChessBoard getBoard() {
+	public ChessBoardPanel getBoard() {
 		return board;
 	}
 
-	public void setBoard(ChessBoard board) {
+	public void setBoard(ChessBoardPanel board) {
 		this.board = board;
 	}
 
@@ -41,6 +44,14 @@ public class ChessOptions {
 
 	public void setAdapterPool(AdapterPool adapterPool) {
 		this.adapterPool = adapterPool;
+	}
+
+	public int getMaxLength() {
+		return maxLength;
+	}
+
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
 	}
 
 }

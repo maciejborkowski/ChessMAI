@@ -1,4 +1,4 @@
-package chess;
+package chess.engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

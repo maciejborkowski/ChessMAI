@@ -1,4 +1,4 @@
-package chess;
+package chess.player;
 
 import uci.AdapterPool;
 import uci.MoveParser;

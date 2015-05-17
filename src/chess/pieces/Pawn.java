@@ -2,9 +2,9 @@ package chess.pieces;
 
 import java.util.ArrayList;
 
-import chess.ChessGame;
-import chess.ChessColor;
-import chess.Square;
+import chess.engine.ChessColor;
+import chess.engine.ChessGame;
+import chess.engine.Square;
 
 public class Pawn extends Piece {
 	private int ny = 0;

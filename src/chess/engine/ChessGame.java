@@ -1,52 +1,42 @@
-package chess;
+package chess.engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
 import uci.AdapterPool;
-import uci.UCIAdapter;
-import chess.ChessEngine.State;
+import chess.engine.ChessEngine.State;
 import chess.pieces.Piece;
+import chess.player.AIPlayer;
+import chess.player.Player;
+import framework.ChessBoardPanel;
 
 public class ChessGame implements Runnable {
 	private boolean running;
 	private ChessEngine.State state;
 	private Player whitePlayer, blackPlayer;
-	private Thread gameThread = null;
-	private ChessOptions options;
-	private ChessBoard board;
 
-	private Square[][] squares;
+	private ChessOptions options;
+	private ChessBoardPanel boardPanel;
+
+	private ChessBoard board;
 	private List<Piece> whitePieces = new LinkedList<>();
 	private List<Piece> blackPieces = new LinkedList<>();
 	private Square active;
 	private ChessColor currentTurn;
 	private StringBuilder moveHistory = new StringBuilder();
 	private ChessColor winner;
-
-	@Deprecated
-	public ChessGame(final Player white, final Player black, ChessBoard board) {
-		running = true;
-		whitePlayer = white;
-		blackPlayer = black;
-		this.board = board;
-		board.setGame(this);
-
-		state = State.INIT;
-		this.gameThread = new Thread(this);
-	}
+	private int turnNumber;
 
 	public ChessGame(ChessOptions options) {
 		running = true;
 		this.options = options;
 		whitePlayer = createPlayer(options.getWhitePlayer());
 		blackPlayer = createPlayer(options.getBlackPlayer());
-		this.board = options.getBoard();
-		board.setGame(this);
+		this.boardPanel = options.getBoard();
+		boardPanel.setGame(this);
 
 		state = State.INIT;
-		this.gameThread = new Thread(this);
 	}
 
 	private Player createPlayer(Class<? extends Player> clazz) {
@@ -66,12 +56,12 @@ public class ChessGame implements Runnable {
 		return null;
 	}
 
-	public ChessBoard getBoard() {
-		return board;
+	public ChessBoardPanel getBoardPanel() {
+		return boardPanel;
 	}
 
-	public void setBoard(ChessBoard board) {
-		this.board = board;
+	public void setBoardPanel(ChessBoardPanel board) {
+		this.boardPanel = board;
 	}
 
 	public Square getActive() {
@@ -83,7 +73,7 @@ public class ChessGame implements Runnable {
 	}
 
 	public void setActive(int x, int y) {
-		this.active = squares[x][y];
+		this.active = board.getSquare(x, y);
 
 	}
 
@@ -116,12 +106,8 @@ public class ChessGame implements Runnable {
 		whitePieces = new LinkedList<Piece>();
 		blackPieces = new LinkedList<Piece>();
 
-		squares = new Square[ChessEngine.SQUARE_WIDTH][ChessEngine.SQUARE_HEIGHT];
-		for (int i = 0; i < ChessEngine.SQUARE_WIDTH; i++) {
-			for (int j = 0; j < ChessEngine.SQUARE_HEIGHT; j++) {
-				squares[i][j] = new Square(i, j);
-			}
-		}
+		board = new ChessBoard();
+
 		ChessEngine.createPieces(this);
 		currentTurn = ChessColor.WHITE;
 
@@ -131,17 +117,14 @@ public class ChessGame implements Runnable {
 		blackPlayer.setColor(ChessColor.BLACK);
 		blackPlayer.setGame(this);
 
+		turnNumber = 0;
 		this.state = State.NORMAL;
 	}
 
 	public Square getSquare(int x, int y) {
 		if (x >= 0 && x < ChessEngine.SQUARE_WIDTH && y >= 0 && y < ChessEngine.SQUARE_HEIGHT)
-			return squares[x][y];
+			return board.getSquare(x, y);
 		return null;
-	}
-
-	public void start() {
-		gameThread.start();
 	}
 
 	@Override
@@ -156,6 +139,7 @@ public class ChessGame implements Runnable {
 
 	private void gameLoop() throws Exception {
 		while (running) {
+			turnNumber++;
 			if (state == State.INIT) {
 				initGame();
 			} else if (currentTurn.equals(ChessColor.WHITE)) {
@@ -163,13 +147,17 @@ public class ChessGame implements Runnable {
 			} else if (currentTurn.equals(ChessColor.BLACK)) {
 				blackTurn();
 			}
-			if (board != null) {
-				board.repaint();
+			if (boardPanel != null) {
+				boardPanel.repaint();
 			}
 
+			if (turnNumber >= options.getMaxLength()) {
+				System.out.println("REACHED MAX NUMBER OF TURNS!");
+				stop();
+			}
 			if (state == State.CHECKMATE) {
 				System.out.println("CHECKMATE! " + winner + " WINS!");
-				setRunning(false);
+				stop();
 			}
 		}
 	}
@@ -190,12 +178,28 @@ public class ChessGame implements Runnable {
 		winner = color;
 	}
 
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
 	public boolean isRunning() {
 		return running;
+	}
+
+	public void stop() {
+		running = false;
+	}
+
+	public Player getBlackPlayer() {
+		return blackPlayer;
+	}
+
+	public void setBlackPlayer(Player blackPlayer) {
+		this.blackPlayer = blackPlayer;
+	}
+
+	public Player getWhitePlayer() {
+		return whitePlayer;
+	}
+
+	public void setWhitePlayer(Player whitePlayer) {
+		this.whitePlayer = whitePlayer;
 	}
 
 }

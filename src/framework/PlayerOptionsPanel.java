@@ -13,11 +13,11 @@ import javax.swing.JRadioButton;
 
 import uci.AdapterPool;
 import uci.WindowsUCIAdapter;
-import chess.AIPlayer;
-import chess.ChessColor;
-import chess.ChessOptions;
-import chess.HumanPlayer;
-import chess.Player;
+import chess.engine.ChessColor;
+import chess.engine.ChessOptions;
+import chess.player.AIPlayer;
+import chess.player.HumanPlayer;
+import chess.player.Player;
 
 @SuppressWarnings("serial")
 public class PlayerOptionsPanel extends JPanel {

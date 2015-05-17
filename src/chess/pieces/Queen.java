@@ -2,10 +2,10 @@ package chess.pieces;
 
 import java.util.ArrayList;
 
-import chess.ChessEngine;
-import chess.ChessGame;
-import chess.ChessColor;
-import chess.Square;
+import chess.engine.ChessColor;
+import chess.engine.ChessEngine;
+import chess.engine.ChessGame;
+import chess.engine.Square;
 
 public final class Queen extends Piece {
 

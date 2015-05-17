@@ -2,15 +2,13 @@ package framework;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import chess.ChessGame;
-import chess.ChessOptions;
-import chess.Player;
+import chess.engine.ChessGame;
+import chess.engine.ChessOptions;
 
 @SuppressWarnings("serial")
 public class RunOptionsPanel extends JPanel {
@@ -34,11 +32,12 @@ public class RunOptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (game != null && game.isRunning()) {
-				game.setRunning(false);
+				game.stop();
 			}
-			
+
 			game = new ChessGame(options);
-			game.start();
+			Thread gameThread = new Thread(game);
+			gameThread.start();
 		}
 	}
 }

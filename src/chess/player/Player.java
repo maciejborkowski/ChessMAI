@@ -1,4 +1,7 @@
-package chess;
+package chess.player;
+
+import chess.engine.ChessColor;
+import chess.engine.ChessGame;
 
 public abstract class Player {
 	protected ChessColor color;

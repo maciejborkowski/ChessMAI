@@ -1,8 +1,11 @@
-package chess;
+package chess.player;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import chess.engine.ChessColor;
+import chess.engine.ChessEngine;
+import framework.ChessBoardPanel;
 import uci.MoveParser;
 
 public class HumanPlayer extends Player {
@@ -10,8 +13,8 @@ public class HumanPlayer extends Player {
 	private boolean moved = false;
 
 	public int[] think() throws Exception {
-		ChessBoard board = game.getBoard();
-		if (board == null) {
+		ChessBoardPanel boardPanel = game.getBoardPanel();
+		if (boardPanel == null) {
 			throw new Exception("THERE IS NO GUI FOR BOARD");
 		}
 		moved = false;
@@ -19,11 +22,11 @@ public class HumanPlayer extends Player {
 		System.out.println(color + " THINKS");
 
 		while (!moved && game.isRunning()) {
-			List<MouseEvent> mouseEvents = board.getMouseEvents();
+			List<MouseEvent> mouseEvents = boardPanel.getMouseEvents();
 			if (mouseEvents.size() > 0) {
 				MouseEvent event = mouseEvents.get(0);
-				int x = event.getX() / (int) ChessBoard.SQUARE_PIXEL_WIDTH;
-				int y = event.getY() / (int) ChessBoard.SQUARE_PIXEL_HEIGHT;
+				int x = event.getX() / (int) ChessBoardPanel.SQUARE_PIXEL_WIDTH;
+				int y = event.getY() / (int) ChessBoardPanel.SQUARE_PIXEL_HEIGHT;
 				if (isMovablePieceActive() && ChessEngine.canMove(game, x, y)) {
 					move[0] = game.getActive().getX();
 					move[1] = game.getActive().getY();
@@ -36,7 +39,7 @@ public class HumanPlayer extends Player {
 					game.setActive(x, y);
 				}
 				mouseEvents.remove(event);
-				board.repaint();
+				boardPanel.repaint();
 			}
 			try {
 				Thread.sleep(1);
@@ -45,7 +48,7 @@ public class HumanPlayer extends Player {
 			}
 		}
 		System.out.println(color.toString() + " MOVE: " + MoveParser.parse(move));
-		board.clearMouseEvents();
+		boardPanel.clearMouseEvents();
 		return move;
 	}
 

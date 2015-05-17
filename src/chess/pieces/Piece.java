@@ -2,9 +2,9 @@ package chess.pieces;
 
 import java.util.List;
 
-import chess.ChessGame;
-import chess.ChessColor;
-import chess.Square;
+import chess.engine.ChessColor;
+import chess.engine.ChessGame;
+import chess.engine.Square;
 
 public abstract class Piece {
 	protected ChessGame game;
@@ -91,6 +91,22 @@ public abstract class Piece {
 
 	public boolean getMoved() {
 		return moved;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Piece other = (Piece) obj;
+
+		if (x == other.x && y == other.y && color == other.color && this.getClass() == other.getClass()) {
+			return true;
+		}
+		return false;
 	}
 
 }

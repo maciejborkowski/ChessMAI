@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import chess.ChessOptions;
+import chess.engine.ChessOptions;
 
 @SuppressWarnings("serial")
 public class RunPanel extends JPanel {

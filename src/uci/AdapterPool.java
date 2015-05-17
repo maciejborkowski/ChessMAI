@@ -13,7 +13,7 @@ public class AdapterPool {
 		adapter.isready();
 	}
 
-	public UCIAdapter bindAdapter() throws Exception {
+	public synchronized UCIAdapter bindAdapter() throws Exception {
 		if (!alive) {
 			throw new Exception("Dead pool");
 		}
@@ -35,7 +35,7 @@ public class AdapterPool {
 		return adapter;
 	}
 
-	public void releaseAdapter(UCIAdapter adapter) {
+	public synchronized void releaseAdapter(UCIAdapter adapter) {
 		if (!alive) {
 			adapter.quit();
 		}
@@ -43,7 +43,7 @@ public class AdapterPool {
 		unused.add(adapter);
 	}
 
-	public void kill() {
+	public synchronized void kill() {
 		alive = false;
 		for (UCIAdapter adapter : unused) {
 			adapter.quit();
