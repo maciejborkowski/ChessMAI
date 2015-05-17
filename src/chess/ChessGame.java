@@ -197,5 +197,4 @@ public class ChessGame implements Runnable {
 	public boolean isRunning() {
 		return running;
 	}
-
 }

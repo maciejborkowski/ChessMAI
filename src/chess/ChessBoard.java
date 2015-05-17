@@ -76,6 +76,7 @@ public class ChessBoard extends JPanel {
 				g2d.drawImage(assets.getActive(), getSquareX(game.getActive()), getSquareY(game.getActive()), null);
 				if (game.getActive().getPiece() != null) {
 					List<Square> possibleMoves = game.getActive().getPiece().getPossibleMoves();
+					if(possibleMoves != null)
 					for (Square square : possibleMoves) {
 						g2d.drawImage(assets.getActive(), getSquareX(square), getSquareY(square), null);
 					}

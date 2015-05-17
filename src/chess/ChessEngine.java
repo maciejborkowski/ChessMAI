@@ -119,6 +119,8 @@ public class ChessEngine {
 			moveFrom.setPiece(null);
 			moveTo.setPiece(piece);
 			piece.setMoved(true);
+			if(piece instanceof Pawn)
+				((Pawn)piece).setPassantTarget(false);
 			processEnPassant(game, moveFrom, moveTo, piece);
 			processPromotion(game, newMove, piece);
 			processCastling(game, moveFrom, moveTo, piece);
