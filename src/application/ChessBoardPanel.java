@@ -1,4 +1,4 @@
-package framework;
+package application;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;

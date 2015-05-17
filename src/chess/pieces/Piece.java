@@ -22,18 +22,38 @@ public abstract class Piece {
 
 	public abstract void createPossibleMoves();
 
+	public boolean isCheck() {
+		List<Piece> pieces;
+		if (game.getTurn() == ChessColor.WHITE)
+			pieces = game.getWhitePieces();
+		else
+			pieces = game.getBlackPieces();
+		for (Piece pic : pieces) {
+			if (pic instanceof King) {
+				Square square = game.getSquare(pic.getX(), pic.getY());
+				if (!((King) pic).checkAttackedSquare(square)) {
+					System.out.println("Jest atakowany");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public List<Square> getPossibleMoves() {
+		possibleMoves = null;
 		createPossibleMoves();
 		return possibleMoves;
 	}
 
 	public boolean canMove(int x, int y) {
+		possibleMoves = null;
 		Square ms = game.getSquare(x, y);
-
 		createPossibleMoves();
-		if (possibleMoves.contains(ms)) {
-			return true;
-		}
+		if (possibleMoves != null)
+			if (possibleMoves.contains(ms)) {
+				return true;
+			}
 
 		return false;
 	}

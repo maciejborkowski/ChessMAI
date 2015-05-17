@@ -3,9 +3,9 @@ package chess.player;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import application.ChessBoardPanel;
 import chess.engine.ChessColor;
 import chess.engine.ChessEngine;
-import framework.ChessBoardPanel;
 import uci.MoveParser;
 
 public class HumanPlayer extends Player {

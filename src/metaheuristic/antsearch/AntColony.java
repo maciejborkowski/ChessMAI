@@ -17,16 +17,16 @@ public class AntColony implements Runnable {
 	private ChessOptions options;
 	private Map<ChessBoard, int[][]> pheromones;
 
-	public AntColony(int turns) {
-		options = new ChessOptions();
+	public AntColony(ChessOptions options) {
+		this.options = options;
 
-		AdapterPool pool = new AdapterPool();
-		pool.addAdapter(new WindowsUCIAdapter());
-		pool.addAdapter(new WindowsUCIAdapter());
-		options.setAdapterPool(pool);
+		AdapterPool pool = options.getAdapterPool();
+		if (pool.size() < 2) {
+			pool.addAdapter(new WindowsUCIAdapter());
+			pool.addAdapter(new WindowsUCIAdapter());
+		}
 		options.setBlackPlayer(AIPlayer.class);
 		options.setWhitePlayer(Ant.class);
-		options.setMaxLength(turns);
 		options.setBoard(null);
 
 		pheromones = new HashMap<>();
@@ -53,7 +53,7 @@ public class AntColony implements Runnable {
 		saveSolution();
 	}
 
-	public void updatePheromones() {
+	private void updatePheromones() {
 
 	}
 

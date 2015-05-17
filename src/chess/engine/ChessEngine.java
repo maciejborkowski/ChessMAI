@@ -2,6 +2,7 @@ package chess.engine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import uci.MoveParser;
@@ -130,6 +131,28 @@ public class ChessEngine {
 
 	}
 
+	public static List<int[]> availableMoves(ChessGame game) {
+		List<Piece> pieces;
+		if (game.getTurn() == ChessColor.WHITE) {
+			pieces = game.getWhitePieces();
+		} else {
+			pieces = game.getBlackPieces();
+		}
+
+		List<int[]> moves = new LinkedList<>();
+		for (Piece piece : pieces) {
+			for (Square target : piece.getPossibleMoves()) {
+				int move[] = new int[5];
+				move[0] = piece.getX();
+				move[1] = piece.getY();
+				move[2] = target.getX();
+				move[3] = target.getY();
+				moves.add(move);
+			}
+		}
+		return moves;
+	}
+
 	public static boolean canMove(ChessGame game, int x, int y) {
 		if (game.getActive() == null) {
 			return false;
@@ -188,8 +211,8 @@ public class ChessEngine {
 			}
 
 			piecesList.remove(piece);
-			Piece newPiece = clazz.getConstructor(ChessGame.class, ChessColor.class, int.class, int.class).newInstance(game,
-					piece.getColor(), piece.getX(), piece.getY());
+			Piece newPiece = clazz.getConstructor(ChessGame.class, ChessColor.class, int.class, int.class).newInstance(
+					game, piece.getColor(), piece.getX(), piece.getY());
 			game.getSquare(piece.getX(), piece.getY()).setPiece(newPiece);
 			piecesList.add(newPiece);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

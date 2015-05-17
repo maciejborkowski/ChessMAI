@@ -1,4 +1,4 @@
-package framework;
+package application;
 
 import javax.swing.JPanel;
 

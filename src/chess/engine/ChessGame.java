@@ -4,12 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+import application.ChessBoardPanel;
 import uci.AdapterPool;
 import chess.engine.ChessEngine.State;
 import chess.pieces.Piece;
 import chess.player.AIPlayer;
 import chess.player.Player;
-import framework.ChessBoardPanel;
 
 public class ChessGame implements Runnable {
 	private boolean running;
@@ -34,7 +34,9 @@ public class ChessGame implements Runnable {
 		whitePlayer = createPlayer(options.getWhitePlayer());
 		blackPlayer = createPlayer(options.getBlackPlayer());
 		this.boardPanel = options.getBoard();
-		boardPanel.setGame(this);
+		if (null != boardPanel) {
+			boardPanel.setGame(this);
+		}
 
 		state = State.INIT;
 	}
@@ -139,10 +141,10 @@ public class ChessGame implements Runnable {
 
 	private void gameLoop() throws Exception {
 		while (running) {
-			turnNumber++;
 			if (state == State.INIT) {
 				initGame();
 			} else if (currentTurn.equals(ChessColor.WHITE)) {
+				turnNumber++;
 				whiteTurn();
 			} else if (currentTurn.equals(ChessColor.BLACK)) {
 				blackTurn();
@@ -151,7 +153,7 @@ public class ChessGame implements Runnable {
 				boardPanel.repaint();
 			}
 
-			if (turnNumber >= options.getMaxLength()) {
+			if (options.getMaxLength() != 0 && turnNumber >= options.getMaxLength()) {
 				System.out.println("REACHED MAX NUMBER OF TURNS!");
 				stop();
 			}

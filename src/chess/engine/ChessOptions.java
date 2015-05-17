@@ -1,7 +1,7 @@
 package chess.engine;
 
+import application.ChessBoardPanel;
 import chess.player.Player;
-import framework.ChessBoardPanel;
 import uci.AdapterPool;
 
 public class ChessOptions {

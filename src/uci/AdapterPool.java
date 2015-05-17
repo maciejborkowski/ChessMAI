@@ -49,4 +49,8 @@ public class AdapterPool {
 			adapter.quit();
 		}
 	}
+
+	public int size() {
+		return used.size() + unused.size();
+	}
 }

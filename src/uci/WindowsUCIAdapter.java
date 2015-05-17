@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class WindowsUCIAdapter extends UCIAdapter {
-	//private String processName = "stockfish-6-64.exe";
-	//private String processName = "komodo6-64bit.exe";
 	private String processName = "Firenzina.exe";
 	byte[] buffer = new byte[1000];
 	private Scanner scanner;
