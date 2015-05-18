@@ -4,33 +4,36 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import uci.MoveParser;
 import chess.engine.ChessEngine;
 import chess.player.Player;
 
 public class Ant extends Player {
 	private AntColony colony;
-	private List<String> moves = new LinkedList<>();
+	private List<Integer> boardsHashes = new LinkedList<>();
+	private List<int[]> moves = new LinkedList<>();
 	private Random random = new Random();
 
 	@Override
 	public int[] think() throws Exception {
 		int[] move = chooseMove();
-		moves.add(MoveParser.parse(move));
+		moves.add(move);
 		return move;
 	}
 
 	private int[] chooseMove() {
-		List<MoveProbability> moves = colony.getPheromones().get(game.getBoard());
+		Integer boardHash = game.getBoard().hashCode();
+		boardsHashes.add(boardHash);
+		List<MoveProbability> probabilityMoves = colony.getPheromones().get(boardHash);
 		int[] move;
-		if (moves == null) {
+
+		if (probabilityMoves == null) {
 			List<int[]> availableMoves = ChessEngine.availableMoves(game);
-			moves = createProbabilityMoves(availableMoves);
-			colony.getPheromones().put(game.getBoard(), moves);
+			probabilityMoves = createProbabilityMoves(availableMoves);
+			colony.getPheromones().put(boardHash, probabilityMoves);
 			int idx = random.nextInt(availableMoves.size());
 			move = availableMoves.get(idx);
 		} else {
-			move = chooseRandom(moves);
+			move = chooseRandom(probabilityMoves);
 		}
 		return move;
 	}
@@ -58,6 +61,14 @@ public class Ant extends Player {
 
 	public void setColony(AntColony antColony) {
 		colony = antColony;
+	}
+
+	public List<int[]> getMoves() {
+		return moves;
+	}
+	
+	public List<Integer> getBoardHashes() {
+		return boardsHashes;
 	}
 
 }

@@ -1,5 +1,7 @@
 package chess.engine;
 
+import java.util.Arrays;
+
 public class ChessBoard {
 	private Square[][] board;
 
@@ -47,4 +49,10 @@ public class ChessBoard {
 		}
 		return true;
 	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.deepHashCode(board);
+	}
+
 }

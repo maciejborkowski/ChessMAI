@@ -57,4 +57,12 @@ public class Square {
 		}
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		if (piece == null) {
+			return 0;
+		}
+		return x + y + piece.getClass().hashCode();
+	}
 }

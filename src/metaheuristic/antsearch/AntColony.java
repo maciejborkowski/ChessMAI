@@ -7,7 +7,6 @@ import java.util.Map;
 import metaheuristic.CostFunction;
 import uci.AdapterPool;
 import uci.WindowsUCIAdapter;
-import chess.engine.ChessBoard;
 import chess.engine.ChessColor;
 import chess.engine.ChessGame;
 import chess.engine.ChessOptions;
@@ -16,7 +15,7 @@ import chess.player.AIPlayer;
 public class AntColony implements Runnable {
 	private boolean running = true;
 	private ChessOptions options;
-	private Map<ChessBoard, List<MoveProbability>> pheromones;
+	private Map<Integer, List<MoveProbability>> pheromones;
 
 	public AntColony(ChessOptions options) {
 		this.options = options;
@@ -45,7 +44,9 @@ public class AntColony implements Runnable {
 				gameThread.join();
 
 				double cost = CostFunction.weightedPieces(game, ChessColor.WHITE);
-				updatePheromones();
+				List<int[]> moves = ((Ant) game.getWhitePlayer()).getMoves();
+				List<Integer> boardHashes = ((Ant) game.getWhitePlayer()).getBoardHashes();
+				updatePheromones(cost, boardHashes, moves);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -54,7 +55,7 @@ public class AntColony implements Runnable {
 		saveSolution();
 	}
 
-	private void updatePheromones() {
+	private void updatePheromones(double cost, List<Integer> boardHashes, List<int[]> moves) {
 
 	}
 
@@ -62,11 +63,11 @@ public class AntColony implements Runnable {
 
 	}
 
-	public Map<ChessBoard, List<MoveProbability>> getPheromones() {
+	public Map<Integer, List<MoveProbability>> getPheromones() {
 		return pheromones;
 	}
 
-	public void setPheromones(Map<ChessBoard, List<MoveProbability>> pheromones) {
+	public void setPheromones(Map<Integer, List<MoveProbability>> pheromones) {
 		this.pheromones = pheromones;
 	}
 
