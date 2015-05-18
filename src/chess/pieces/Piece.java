@@ -22,16 +22,17 @@ public abstract class Piece {
 
 	public abstract void createPossibleMoves();
 
+	@Deprecated
 	public boolean isCheck() {
 		List<Piece> pieces;
 		if (game.getTurn() == ChessColor.WHITE)
 			pieces = game.getWhitePieces();
 		else
 			pieces = game.getBlackPieces();
-		for (Piece pic : pieces) {
-			if (pic instanceof King) {
-				Square square = game.getSquare(pic.getX(), pic.getY());
-				if (!((King) pic).checkAttackedSquare(square)) {
+		for (Piece piece : pieces) {
+			if (piece instanceof King) {
+				Square square = game.getSquare(piece.getX(), piece.getY());
+				if (((King) piece).checkAttackedSquare(square)) {
 					System.out.println("Jest atakowany");
 					return true;
 				}
@@ -70,18 +71,21 @@ public abstract class Piece {
 	protected boolean checkAttackableSquare(Square square) {
 		if (square != null) {
 			if (square.getPiece() != null) {
-				if (isOpponent(square.getPiece()))
+				if (isOpponent(square.getPiece())) {
 					return true;
+				}
 			}
 		}
 		return false;
 	}
 
 	public boolean isOpponent(Piece p) {
-		if (getColor() == ChessColor.WHITE && p.getColor() == ChessColor.BLACK)
+		if (getColor() == ChessColor.WHITE && p.getColor() == ChessColor.BLACK) {
 			return true;
-		if (getColor() == ChessColor.BLACK && p.getColor() == ChessColor.WHITE)
+		}
+		if (getColor() == ChessColor.BLACK && p.getColor() == ChessColor.WHITE) {
 			return true;
+		}
 		return false;
 	}
 

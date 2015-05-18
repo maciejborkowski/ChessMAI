@@ -19,7 +19,7 @@ public final class King extends Piece {
 			Square nextSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
 			if (nextSquare != null)
 				if (nextSquare.getPiece() != null)
-					if (nextSquare.getPiece() instanceof Pawn && nextSquare.getPiece().getColor() != game.getTurn())
+					if (nextSquare.getPiece() instanceof Pawn && nextSquare.getPiece().getColor() != color)
 						return true;
 		}
 		return false;
@@ -34,11 +34,11 @@ public final class King extends Piece {
 		if (nextSquare != null) {
 			if (nextSquare.getPiece() != null) {
 				if (nextSquare.getPiece() instanceof Bishop || nextSquare.getPiece() instanceof Queen) {
-					if (nextSquare.getPiece().getColor() != game.getTurn())
+					if (nextSquare.getPiece().getColor() != color)
 						return 1;
 					else
 						return 2;
-				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == color)
 					return 0;
 				return 2;
 			}
@@ -55,11 +55,11 @@ public final class King extends Piece {
 		if (nextSquare != null) {
 			if (nextSquare.getPiece() != null) {
 				if (nextSquare.getPiece() instanceof Queen || nextSquare.getPiece() instanceof Rook) {
-					if (nextSquare.getPiece().getColor() != game.getTurn())
+					if (nextSquare.getPiece().getColor() != color)
 						return 1;
 					else
 						return 2;
-				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == game.getTurn())
+				} else if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() == color)
 					return 0;
 				return 2;
 			}
@@ -67,7 +67,7 @@ public final class King extends Piece {
 		return 0;
 	}
 
-	// returns false if square is attacked or true if square is not attacked
+	// returns true if square is attacked or false if square is not attacked
 	public boolean checkAttackedSquare(Square square) {
 		int[][] offsets = { { -2, 1 }, { -1, 2 }, { 1, 2 }, { 2, 1 }, { 2, -1 }, { 1, -2 }, { -1, -2 }, { -2, -1 } };
 		Square nextSquare = null;
@@ -76,8 +76,8 @@ public final class King extends Piece {
 			nextSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
 			if (nextSquare != null)
 				if (nextSquare.getPiece() != null)
-					if (nextSquare.getPiece() instanceof Knight && nextSquare.getPiece().getColor() != game.getTurn())
-						return false;
+					if (nextSquare.getPiece() instanceof Knight && nextSquare.getPiece().getColor() != color)
+						return true;
 		}
 
 		// check if is there enemy King
@@ -86,19 +86,19 @@ public final class King extends Piece {
 			nextSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
 			if (nextSquare != null)
 				if (nextSquare.getPiece() != null)
-					if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() != game.getTurn())
-						return false;
+					if (nextSquare.getPiece() instanceof King && nextSquare.getPiece().getColor() != color)
+						return true;
 		}
 
 		// check if is there enemy Pawn
 		if (game.getTurn() == ChessColor.WHITE) {
 			int[][] offsets4White = { { -1, -1 }, { 1, -1 } };
 			if (isEnemyPawn(offsets4White, square))
-				return false;
+				return true;
 		} else {
 			int[][] offsets4Black = { { -1, 1 }, { 1, 1 } };
 			if (isEnemyPawn(offsets4Black, square))
-				return false;
+				return true;
 		}
 
 		// check if is there enemy Queen or Rook
@@ -107,7 +107,7 @@ public final class King extends Piece {
 		while (x < ChessEngine.SQUARE_WIDTH - 1) {
 			x++;
 			if (isEnemyQueenOrRook(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyQueenOrRook(x, y) == 2)
 				break;
 		}
@@ -115,7 +115,7 @@ public final class King extends Piece {
 		while (x > 0) {
 			x--;
 			if (isEnemyQueenOrRook(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyQueenOrRook(x, y) == 2)
 				break;
 		}
@@ -123,7 +123,7 @@ public final class King extends Piece {
 		while (y < ChessEngine.SQUARE_HEIGHT - 1) {
 			y++;
 			if (isEnemyQueenOrRook(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyQueenOrRook(x, y) == 2)
 				break;
 		}
@@ -131,7 +131,7 @@ public final class King extends Piece {
 		while (y > 0) {
 			y--;
 			if (isEnemyQueenOrRook(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyQueenOrRook(x, y) == 2)
 				break;
 		}
@@ -142,7 +142,7 @@ public final class King extends Piece {
 			x++;
 			y--;
 			if (isEnemyBishopOrQueen(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
@@ -152,7 +152,7 @@ public final class King extends Piece {
 			x--;
 			y--;
 			if (isEnemyBishopOrQueen(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
@@ -162,7 +162,7 @@ public final class King extends Piece {
 			x--;
 			y++;
 			if (isEnemyBishopOrQueen(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
@@ -172,11 +172,11 @@ public final class King extends Piece {
 			x++;
 			y++;
 			if (isEnemyBishopOrQueen(x, y) == 1)
-				return false;
+				return true;
 			if (isEnemyBishopOrQueen(x, y) == 2)
 				break;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -186,7 +186,7 @@ public final class King extends Piece {
 		for (int[] dir : offsets) {
 			Square square = game.getSquare(x + dir[0], y + dir[1]);
 			if (checkMovableSquare(square) || checkAttackableSquare(square)) {
-				if (checkAttackedSquare(square))
+				if (!checkAttackedSquare(square))
 					possibleMoves.add(square);
 			}
 		}

@@ -10,10 +10,9 @@ import chess.pieces.*;
 
 public class ChessEngine {
 	public static enum State {
-		INIT, NORMAL, CHECK_WHITE, CHECK_BLACK, CHECKMATE
+		INIT, NORMAL, CHECKMATE, CHECK
 	}
-	
-	
+
 	public static final int SQUARE_WIDTH = 8;
 	public static final int SQUARE_HEIGHT = 8;
 	private static final HashMap<Integer, Class<? extends Piece>> pieceMap = new HashMap<>();
@@ -111,7 +110,7 @@ public class ChessEngine {
 			game.setWinner(game.getTurn().negate());
 			return;
 		}
-		
+
 		if (piece != null && piece.getColor() == game.getTurn()) {
 			if (removePieceOnSquare(game, moveTo)) {
 				return;
@@ -124,7 +123,14 @@ public class ChessEngine {
 			processEnPassant(game, moveFrom, moveTo, piece);
 			processPromotion(game, newMove, piece);
 			processCastling(game, moveFrom, moveTo, piece);
-			processCheck(game);
+			if (findCheck(game, game.getTurn())) {
+				game.setState(ChessEngine.State.CHECKMATE);
+				game.setWinner(game.getTurn().negate());
+			} else if (findCheck(game, game.getTurn().negate())) {
+				game.setState(State.CHECK);
+			} else {
+				game.setState(State.NORMAL);
+			}
 
 			game.getMoveHistory().append(MoveParser.parse(newMove) + " ");
 			game.setActive(null);
@@ -239,27 +245,20 @@ public class ChessEngine {
 		}
 	}
 
-	private static void processCheck(ChessGame game) {
-		ChessColor currentColor = game.getTurn();
+	public static boolean findCheck(ChessGame game, ChessColor color) {
 		List<Piece> pieces;
-		if (currentColor.equals(ChessColor.WHITE)) {
+		if (color.equals(ChessColor.WHITE)) {
 			pieces = game.getWhitePieces();
 		} else {
 			pieces = game.getBlackPieces();
 		}
 
-		game.setState(State.NORMAL);
 		for (Piece piece : pieces) {
-			for (Square square : piece.getPossibleMoves()) {
-				if (square.getPiece() instanceof King) {
-					if(game.getTurn() == ChessColor.WHITE)
-						game.setState(State.CHECK_WHITE);
-					else
-						game.setState(State.CHECK_BLACK);
-					return;
-				}
+			if (piece instanceof King && ((King) piece).checkAttackedSquare(game.getSquare(piece.getX(), piece.getY()))) {
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public static boolean removePieceOnSquare(ChessGame game, Square square) {
@@ -279,4 +278,5 @@ public class ChessEngine {
 		}
 		return false;
 	}
+
 }
