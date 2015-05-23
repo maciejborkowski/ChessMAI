@@ -17,6 +17,7 @@ import chess.engine.ChessGame;
 import chess.engine.ChessOptions;
 import chess.player.AIPlayer;
 import chess.player.AntPlayer;
+import chess.player.MetaheuristicPlayer;
 
 public class AntColony implements Runnable {
 	private boolean running = true;
@@ -44,6 +45,7 @@ public class AntColony implements Runnable {
 			try {
 				ChessGame game = new ChessGame(options);
 				((AntPlayer) game.getWhitePlayer()).setPheromones(pheromones);
+				((AntPlayer) game.getWhitePlayer()).setMode(MetaheuristicPlayer.Mode.ADVENTUROUS);
 
 				Thread gameThread = new Thread(game);
 				gameThread.start();
@@ -69,13 +71,14 @@ public class AntColony implements Runnable {
 		for (int i = 0; i < boardStrings.size(); i++) {
 			List<MoveProbability> pheromone = pheromones.get(boardStrings.get(i));
 			dissipate(pheromone);
-			for (MoveProbability moveProbability : pheromone) {
-				if (moveProbability.getMove().equals(moves.get(i))) {
-					moveProbability.setProbability(moveProbability.getProbability() + cost);
-					if (moveProbability.getProbability() <= 0.0) {
-						moveProbability.setProbability(0.01);
+			double value = cost / pheromone.size();
+			for (int j = 0; j < pheromone.size(); j++) {
+				if (pheromone.get(j).getMove().equals(moves.get(i))) {
+					pheromone.get(j).setProbability(pheromone.get(j).getProbability() + value * (j + 1));
+					if (pheromone.get(j).getProbability() <= 0.0) {
+						pheromone.get(j).setProbability(0.01);
 					}
-
+					break;
 				}
 			}
 			normalize(pheromone);
@@ -83,7 +86,7 @@ public class AntColony implements Runnable {
 	}
 
 	private void dissipate(List<MoveProbability> pheromone) {
-		double value = 0.002 / (double) pheromone.size();
+		double value = 0.00002 / (double) pheromone.size();
 		for (MoveProbability moveProbability : pheromone) {
 			moveProbability.setProbability(moveProbability.getProbability() + value);
 		}

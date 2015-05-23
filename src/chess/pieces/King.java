@@ -71,7 +71,7 @@ public final class King extends Piece {
 	public boolean checkAttackedSquare(Square square) {
 		int[][] offsets = { { -2, 1 }, { -1, 2 }, { 1, 2 }, { 2, 1 }, { 2, -1 }, { 1, -2 }, { -1, -2 }, { -2, -1 } };
 		Square nextSquare = null;
-		// check if is there enemy Knight
+		// check if there is enemy Knight
 		for (int[] dir : offsets) {
 			nextSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
 			if (nextSquare != null)
@@ -80,7 +80,7 @@ public final class King extends Piece {
 						return true;
 		}
 
-		// check if is there enemy King
+		// check if there is enemy King
 		int[][] offsets4King = { { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, 1 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { -1, -1 } };
 		for (int[] dir : offsets4King) {
 			nextSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
@@ -90,8 +90,8 @@ public final class King extends Piece {
 						return true;
 		}
 
-		// check if is there enemy Pawn
-		if (game.getTurn() == ChessColor.WHITE) {
+		// check if there is enemy Pawn
+		if (color == ChessColor.WHITE) {
 			int[][] offsets4White = { { -1, -1 }, { 1, -1 } };
 			if (isEnemyPawn(offsets4White, square))
 				return true;
@@ -101,7 +101,7 @@ public final class King extends Piece {
 				return true;
 		}
 
-		// check if is there enemy Queen or Rook
+		// check if there is enemy Queen or Rook
 		int x = square.getX();
 		int y = square.getY();
 		while (x < ChessEngine.SQUARE_WIDTH - 1) {
@@ -137,7 +137,7 @@ public final class King extends Piece {
 		}
 		y = square.getY();
 
-		// check if is there enemy Bishop
+		// check if there is enemy Bishop
 		while (x < ChessEngine.SQUARE_WIDTH - 1 && y > 0) {
 			x++;
 			y--;
@@ -192,7 +192,7 @@ public final class King extends Piece {
 		}
 
 		// Castling
-		if (game.getState().equals(ChessEngine.State.NORMAL) && !moved) {
+		if (game.getState() == ChessEngine.State.NORMAL && !moved) {
 			if ((game.getSquare(x + 3, y).getPiece() != null) && !game.getSquare(x + 3, y).getPiece().getMoved()) {
 				Square square1 = game.getSquare(x + 1, y);
 				Square square2 = game.getSquare(x + 2, y);

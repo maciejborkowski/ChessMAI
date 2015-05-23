@@ -28,12 +28,31 @@ public class AntPlayer extends MetaheuristicPlayer {
 
 	@Override
 	public int[] think() throws Exception {
-		int[] move = chooseMove();
+		if (mode == Mode.GREEDY) {
+			return greedyMove();
+		} else {
+			return adventurousMove();
+		}
+	}
+
+	private int[] greedyMove() {
+		String boardString = game.getBoard().toString();
+		boardsStrings.add(boardString);
+		List<MoveProbability> probabilityMoves = pheromones.get(boardString);
+		int[] move;
+
+		if (probabilityMoves == null) {
+			List<int[]> availableMoves = ChessEngine.availableMoves(game);
+			int idx = random.nextInt(availableMoves.size());
+			move = availableMoves.get(idx);
+		} else {
+			move = chooseBest(probabilityMoves);
+		}
 		moves.add(move);
 		return move;
 	}
 
-	private int[] chooseMove() {
+	private int[] adventurousMove() {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
 		List<MoveProbability> probabilityMoves = pheromones.get(boardString);
@@ -49,6 +68,7 @@ public class AntPlayer extends MetaheuristicPlayer {
 			move = chooseRandom(probabilityMoves);
 		}
 		// System.out.println("CHOSEN MOVE: " + MoveParser.parse(move));
+		moves.add(move);
 		return move;
 	}
 
@@ -61,16 +81,26 @@ public class AntPlayer extends MetaheuristicPlayer {
 		return moves;
 	}
 
-	private int[] chooseRandom(List<MoveProbability> moves) {
+	private int[] chooseRandom(List<MoveProbability> probabilityMoves) {
 		double value = random.nextDouble();
 		double cumulativeProbability = 0.0;
-		for (MoveProbability move : moves) {
+		for (MoveProbability move : probabilityMoves) {
 			cumulativeProbability += move.getProbability();
 			if (value <= cumulativeProbability) {
 				return move.getMove();
 			}
 		}
 		return null;
+	}
+
+	private int[] chooseBest(List<MoveProbability> probabilityMoves) {
+		MoveProbability best = probabilityMoves.get(0);
+		for (MoveProbability move : probabilityMoves) {
+			if (move.getProbability() > best.getProbability()) {
+				best = move;
+			}
+		}
+		return best.getMove();
 	}
 
 	private void loadSolution(File file) throws IOException {

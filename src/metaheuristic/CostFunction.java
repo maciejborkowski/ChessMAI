@@ -28,9 +28,9 @@ public class CostFunction {
 	public static double weightedPieces(ChessGame game, ChessColor color) {
 		if (game.getState() == ChessEngine.State.CHECKMATE) {
 			if (game.getWinner() == color) {
-				return 100.0;
+				return 1000.0;
 			} else {
-				return -100.0;
+				return -1000.0;
 			}
 		}
 		double cost = 0.0;
