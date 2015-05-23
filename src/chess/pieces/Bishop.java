@@ -51,4 +51,5 @@ public final class Bishop extends Piece {
 		}
 		return true;
 	}
+
 }

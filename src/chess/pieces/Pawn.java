@@ -62,4 +62,5 @@ public class Pawn extends Piece {
 	public void setPassantTarget(boolean target) {
 		passantTarget = target;
 	}
+
 }

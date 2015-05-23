@@ -33,7 +33,6 @@ public abstract class Piece {
 			if (piece instanceof King) {
 				Square square = game.getSquare(piece.getX(), piece.getY());
 				if (((King) piece).checkAttackedSquare(square)) {
-					System.out.println("Jest atakowany");
 					return true;
 				}
 			}
@@ -132,5 +131,5 @@ public abstract class Piece {
 		}
 		return false;
 	}
-
+	
 }

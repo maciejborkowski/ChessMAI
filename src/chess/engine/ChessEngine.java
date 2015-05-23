@@ -154,6 +154,7 @@ public class ChessEngine {
 				move[1] = piece.getY();
 				move[2] = target.getX();
 				move[3] = target.getY();
+				move[4] = 0;
 				moves.add(move);
 			}
 		}

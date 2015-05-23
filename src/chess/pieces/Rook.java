@@ -51,5 +51,4 @@ public final class Rook extends Piece {
 		}
 		return true;
 	}
-
 }

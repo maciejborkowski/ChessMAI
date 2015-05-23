@@ -1,5 +1,6 @@
 package chess.engine;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,7 @@ import uci.AdapterPool;
 import chess.engine.ChessEngine.State;
 import chess.pieces.Piece;
 import chess.player.AIPlayer;
+import chess.player.MetaheuristicPlayer;
 import chess.player.Player;
 
 public class ChessGame implements Runnable {
@@ -31,31 +33,14 @@ public class ChessGame implements Runnable {
 	public ChessGame(ChessOptions options) {
 		running = true;
 		this.options = options;
-		whitePlayer = createPlayer(options.getWhitePlayer());
-		blackPlayer = createPlayer(options.getBlackPlayer());
 		this.boardPanel = options.getBoard();
 		if (null != boardPanel) {
 			boardPanel.setGame(this);
 		}
+		whitePlayer = createPlayer(options, ChessColor.WHITE);
+		blackPlayer = createPlayer(options, ChessColor.BLACK);
 
 		state = State.INIT;
-	}
-
-	private Player createPlayer(Class<? extends Player> clazz) {
-		try {
-			Player player;
-			if (clazz == AIPlayer.class) {
-				player = clazz.getConstructor(AdapterPool.class).newInstance(options.getAdapterPool());
-			} else {
-				player = clazz.getConstructor().newInstance();
-			}
-			return player;
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-			System.out.println("GENERIC CLASS CONSTRUCTOR INVOCATION FAILED MISERABLY");
-		}
-		return null;
 	}
 
 	public ChessBoardPanel getBoardPanel() {
@@ -113,14 +98,39 @@ public class ChessGame implements Runnable {
 		ChessEngine.createPieces(this);
 		currentTurn = ChessColor.WHITE;
 
-		whitePlayer.setColor(ChessColor.WHITE);
-		whitePlayer.setGame(this);
-
-		blackPlayer.setColor(ChessColor.BLACK);
-		blackPlayer.setGame(this);
-
 		turnNumber = 0;
 		this.state = State.NORMAL;
+	}
+
+	private Player createPlayer(ChessOptions options, ChessColor color) {
+		try {
+			Class<? extends Player> clazz;
+			Player player;
+			if (color == ChessColor.WHITE) {
+				clazz = options.getPlayerWhite();
+			} else {
+				clazz = options.getPlayerBlack();
+			}
+			if (clazz == AIPlayer.class) {
+				player = clazz.getConstructor(AdapterPool.class).newInstance(options.getAdapterPool());
+			} else if (MetaheuristicPlayer.class.isAssignableFrom(clazz)) {
+				if (color == ChessColor.WHITE) {
+					player = clazz.getConstructor(File.class).newInstance(options.getMetaheuristicSolutionWhite());
+				} else {
+					player = clazz.getConstructor(File.class).newInstance(options.getMetaheuristicSolutionBlack());
+				}
+			} else {
+				player = clazz.getConstructor().newInstance();
+			}
+			player.setColor(color);
+			player.setGame(this);
+			return player;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			System.out.println("GENERIC CLASS CONSTRUCTOR INVOCATION FAILED MISERABLY");
+		}
+		return null;
 	}
 
 	public Square getSquare(int x, int y) {
@@ -206,6 +216,10 @@ public class ChessGame implements Runnable {
 
 	public ChessBoard getBoard() {
 		return board;
+	}
+
+	public ChessColor getWinner() {
+		return winner;
 	}
 
 }

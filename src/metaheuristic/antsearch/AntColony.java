@@ -1,8 +1,13 @@
 package metaheuristic.antsearch;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import metaheuristic.CostFunction;
 import uci.AdapterPool;
@@ -11,11 +16,12 @@ import chess.engine.ChessColor;
 import chess.engine.ChessGame;
 import chess.engine.ChessOptions;
 import chess.player.AIPlayer;
+import chess.player.AntPlayer;
 
 public class AntColony implements Runnable {
 	private boolean running = true;
 	private ChessOptions options;
-	private Map<Integer, List<MoveProbability>> pheromones;
+	private final Map<String, List<MoveProbability>> pheromones;
 
 	public AntColony(ChessOptions options) {
 		this.options = options;
@@ -25,8 +31,8 @@ public class AntColony implements Runnable {
 			pool.addAdapter(new WindowsUCIAdapter());
 			pool.addAdapter(new WindowsUCIAdapter());
 		}
-		options.setBlackPlayer(AIPlayer.class);
-		options.setWhitePlayer(Ant.class);
+		options.setPlayerBlack(AIPlayer.class);
+		options.setPlayerWhite(AntPlayer.class);
 		options.setBoard(null);
 
 		pheromones = new HashMap<>();
@@ -37,38 +43,86 @@ public class AntColony implements Runnable {
 		while (running) {
 			try {
 				ChessGame game = new ChessGame(options);
-				((Ant) game.getWhitePlayer()).setColony(this);
+				((AntPlayer) game.getWhitePlayer()).setPheromones(pheromones);
 
 				Thread gameThread = new Thread(game);
 				gameThread.start();
 				gameThread.join();
 
 				double cost = CostFunction.weightedPieces(game, ChessColor.WHITE);
-				List<int[]> moves = ((Ant) game.getWhitePlayer()).getMoves();
-				List<Integer> boardHashes = ((Ant) game.getWhitePlayer()).getBoardHashes();
-				updatePheromones(cost, boardHashes, moves);
+				List<int[]> moves = ((AntPlayer) game.getWhitePlayer()).getMoves();
+				List<String> boardStrings = ((AntPlayer) game.getWhitePlayer()).getBoardHashes();
+				updatePheromones(cost, boardStrings, moves);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 
-		saveSolution();
+		try {
+			saveSolution(new File("antresult.txt"));
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void updatePheromones(double cost, List<Integer> boardHashes, List<int[]> moves) {
+	private void updatePheromones(double cost, List<String> boardStrings, List<int[]> moves) {
+		for (int i = 0; i < boardStrings.size(); i++) {
+			List<MoveProbability> pheromone = pheromones.get(boardStrings.get(i));
+			dissipate(pheromone);
+			for (MoveProbability moveProbability : pheromone) {
+				if (moveProbability.getMove().equals(moves.get(i))) {
+					moveProbability.setProbability(moveProbability.getProbability() + cost);
+					if (moveProbability.getProbability() <= 0.0) {
+						moveProbability.setProbability(0.01);
+					}
 
+				}
+			}
+			normalize(pheromone);
+		}
 	}
 
-	private void saveSolution() {
-
+	private void dissipate(List<MoveProbability> pheromone) {
+		double value = 0.002 / (double) pheromone.size();
+		for (MoveProbability moveProbability : pheromone) {
+			moveProbability.setProbability(moveProbability.getProbability() + value);
+		}
 	}
 
-	public Map<Integer, List<MoveProbability>> getPheromones() {
+	private void normalize(List<MoveProbability> pheromone) {
+		double sum = sumProbability(pheromone);
+		for (MoveProbability moveProbability : pheromone) {
+			moveProbability.setProbability(moveProbability.getProbability() / sum);
+		}
+	}
+
+	private double sumProbability(List<MoveProbability> pheromone) {
+		double sum = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			sum += moveProbability.getProbability();
+		}
+		return sum;
+	}
+
+	@SuppressWarnings("resource")
+	private void saveSolution(File file) throws FileNotFoundException, UnsupportedEncodingException {
+		file.delete();
+		PrintWriter writer = new PrintWriter(file, "UTF-8");
+		for (Entry<String, List<MoveProbability>> pheromoneEntry : pheromones.entrySet()) {
+			String string = pheromoneEntry.getKey();
+			writer.write(string);
+			writer.write("\n");
+			for (MoveProbability moveProbability : pheromoneEntry.getValue()) {
+				writer.write(moveProbability.toString());
+			}
+			writer.write("\n");
+		}
+		writer.flush();
+		System.out.println("SAVED TO FILE " + file.getAbsolutePath());
+	}
+
+	public Map<String, List<MoveProbability>> getPheromones() {
 		return pheromones;
-	}
-
-	public void setPheromones(Map<Integer, List<MoveProbability>> pheromones) {
-		this.pheromones = pheromones;
 	}
 
 	public ChessOptions getOptions() {

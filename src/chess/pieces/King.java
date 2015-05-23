@@ -196,7 +196,8 @@ public final class King extends Piece {
 			if ((game.getSquare(x + 3, y).getPiece() != null) && !game.getSquare(x + 3, y).getPiece().getMoved()) {
 				Square square1 = game.getSquare(x + 1, y);
 				Square square2 = game.getSquare(x + 2, y);
-				if (checkMovableSquare(square1) && checkMovableSquare(square2)) {
+				if (checkMovableSquare(square1) && !checkAttackedSquare(square1) && checkMovableSquare(square2)
+						&& !checkAttackedSquare(square2)) {
 					possibleMoves.add(square2);
 				}
 			}
@@ -204,7 +205,9 @@ public final class King extends Piece {
 				Square square1 = game.getSquare(x - 1, y);
 				Square square2 = game.getSquare(x - 2, y);
 				Square square3 = game.getSquare(x - 3, y);
-				if (checkMovableSquare(square1) && checkMovableSquare(square2) && checkMovableSquare(square3)) {
+				if (checkMovableSquare(square1) && !checkAttackedSquare(square1) && checkMovableSquare(square2)
+						&& !checkAttackedSquare(square2) && checkMovableSquare(square3)
+						&& !checkAttackedSquare(square3)) {
 					possibleMoves.add(square2);
 				}
 			}
@@ -236,4 +239,5 @@ public final class King extends Piece {
 		}
 		return false;
 	}
+
 }

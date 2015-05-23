@@ -6,7 +6,6 @@ import java.util.List;
 import application.ChessBoardPanel;
 import chess.engine.ChessColor;
 import chess.engine.ChessEngine;
-import uci.MoveParser;
 
 public class HumanPlayer extends Player {
 	private int[] move = new int[5];
@@ -19,7 +18,7 @@ public class HumanPlayer extends Player {
 		}
 		moved = false;
 
-		System.out.println(color + " THINKS");
+		// System.out.println(color + " THINKS");
 
 		while (!moved && game.isRunning()) {
 			List<MouseEvent> mouseEvents = boardPanel.getMouseEvents();
@@ -47,7 +46,8 @@ public class HumanPlayer extends Player {
 				System.out.println("PLAYER THINKING THREAD INTERRUPTED");
 			}
 		}
-		System.out.println(color.toString() + " MOVE: " + MoveParser.parse(move));
+		// System.out.println(color.toString() + " MOVE: " +
+		// MoveParser.parse(move));
 		boardPanel.clearMouseEvents();
 		return move;
 	}

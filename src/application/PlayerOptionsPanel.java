@@ -3,10 +3,13 @@ package application;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -16,6 +19,9 @@ import uci.WindowsUCIAdapter;
 import chess.engine.ChessColor;
 import chess.engine.ChessOptions;
 import chess.player.AIPlayer;
+import chess.player.AnnealingPlayer;
+import chess.player.AntPlayer;
+import chess.player.GeneticPlayer;
 import chess.player.HumanPlayer;
 import chess.player.Player;
 
@@ -24,8 +30,13 @@ public class PlayerOptionsPanel extends JPanel {
 	private static final String BLACK_LABEL = "Black: ";
 	private static final String WHITE_LABEL = "White: ";
 	private static final String AI_LABEL = "AI";
-	private static final String METAHEURESTIC_LABEL = "Metaheuristic";
 	private static final String HUMAN_LABEL = "Human";
+	private static final String ANT_LABEL = "Ant Colony";
+	private static final String GENETIC_LABEL = "Genetic";
+	private static final String ANNEALING_LABEL = "Simulated Annealing";
+	private static final String CHOOSE_FILE_LABEL = "File";
+
+	private static final JFileChooser fileChooser = new JFileChooser();
 
 	private ChessOptions options;
 
@@ -33,56 +44,56 @@ public class PlayerOptionsPanel extends JPanel {
 		this.options = options;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		options.setBlackPlayer(HumanPlayer.class);
-		options.setWhitePlayer(HumanPlayer.class);
-		addBlack();
+		options.setPlayerBlack(HumanPlayer.class);
+		options.setPlayerWhite(HumanPlayer.class);
+		addPlayer(ChessColor.BLACK);
 		add(Box.createRigidArea(new Dimension(0, 50)));
-		addWhite();
+		addPlayer(ChessColor.WHITE);
 		AdapterPool adapterPool = new AdapterPool();
 		adapterPool.addAdapter(new WindowsUCIAdapter());
 		adapterPool.addAdapter(new WindowsUCIAdapter());
 		options.setAdapterPool(adapterPool);
 	}
 
-	private void addBlack() {
-		JLabel playerLabel = new JLabel(BLACK_LABEL);
-		add(playerLabel);
+	private void addPlayer(ChessColor color) {
+		if (color == ChessColor.BLACK) {
+			JLabel playerLabel = new JLabel(BLACK_LABEL);
+			add(playerLabel);
+		} else {
+			JLabel playerLabel = new JLabel(WHITE_LABEL);
+			add(playerLabel);
+		}
+
 		JRadioButton ai = new JRadioButton(AI_LABEL);
-		ai.addActionListener(new SelectionActionListener(ChessColor.BLACK, AIPlayer.class));
+		ai.addActionListener(new SelectionActionListener(color, AIPlayer.class));
 		add(ai);
 
-		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
-		add(metaheurestic);
+		JRadioButton genetic = new JRadioButton(GENETIC_LABEL);
+		genetic.addActionListener(new SelectionActionListener(color, GeneticPlayer.class));
+		add(genetic);
+
+		JRadioButton ant = new JRadioButton(ANT_LABEL);
+		ant.addActionListener(new SelectionActionListener(color, AntPlayer.class));
+		add(ant);
+
+		JRadioButton annealing = new JRadioButton(ANNEALING_LABEL);
+		annealing.addActionListener(new SelectionActionListener(color, AnnealingPlayer.class));
+		add(annealing);
 
 		JRadioButton player = new JRadioButton(HUMAN_LABEL);
-		player.addActionListener(new SelectionActionListener(ChessColor.BLACK, HumanPlayer.class));
+		player.addActionListener(new SelectionActionListener(color, HumanPlayer.class));
 		player.setSelected(true);
 		add(player);
 
-		ButtonGroup group = new ButtonGroup();
-		group.add(ai);
-		group.add(metaheurestic);
-		group.add(player);
-	}
-
-	private void addWhite() {
-		JLabel playerLabel = new JLabel(WHITE_LABEL);
-		add(playerLabel);
-		JRadioButton ai = new JRadioButton(AI_LABEL);
-		ai.addActionListener(new SelectionActionListener(ChessColor.WHITE, AIPlayer.class));
-		add(ai);
-
-		JRadioButton metaheurestic = new JRadioButton(METAHEURESTIC_LABEL);
-		add(metaheurestic);
-
-		JRadioButton player = new JRadioButton(HUMAN_LABEL);
-		player.addActionListener(new SelectionActionListener(ChessColor.WHITE, HumanPlayer.class));
-		player.setSelected(true);
-		add(player);
+		JButton fileButton = new JButton(CHOOSE_FILE_LABEL);
+		fileButton.addActionListener(new FileChooserListener(color));
+		add(fileButton);
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(ai);
-		group.add(metaheurestic);
+		group.add(genetic);
+		group.add(ant);
+		group.add(annealing);
 		group.add(player);
 	}
 
@@ -97,10 +108,32 @@ public class PlayerOptionsPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if (color.equals(ChessColor.WHITE)) {
-				options.setWhitePlayer(clazz);
+			if (color == ChessColor.WHITE) {
+				options.setPlayerWhite(clazz);
 			} else {
-				options.setBlackPlayer(clazz);
+				options.setPlayerBlack(clazz);
+			}
+		}
+	}
+
+	private class FileChooserListener implements ActionListener {
+		private final ChessColor color;
+
+		public FileChooserListener(ChessColor color) {
+			this.color = color;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+
+			int returnVal = fileChooser.showOpenDialog(PlayerOptionsPanel.this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				if (color == ChessColor.WHITE) {
+					options.setMetaheuristicSolutionWhite(file);
+				} else {
+					options.setMetaheuristicSolutionBlack(file);
+				}
 			}
 		}
 	}

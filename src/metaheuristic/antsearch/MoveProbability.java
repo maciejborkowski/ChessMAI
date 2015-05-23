@@ -24,4 +24,16 @@ public class MoveProbability {
 	public void setMove(int[] move) {
 		this.move = move;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int val : move) {
+			builder.append(val);
+			builder.append(" ");
+		}
+		builder.append(probability);
+		builder.append(" ");
+		return builder.toString();
+	}
 }

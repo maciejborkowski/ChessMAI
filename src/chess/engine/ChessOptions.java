@@ -1,13 +1,17 @@
 package chess.engine;
 
+import java.io.File;
+
 import application.ChessBoardPanel;
 import chess.player.Player;
 import uci.AdapterPool;
 
 public class ChessOptions {
 	private ChessBoardPanel board;
-	private Class<? extends Player> blackPlayer;
-	private Class<? extends Player> whitePlayer;
+	private Class<? extends Player> playerBlack;
+	private Class<? extends Player> playerWhite;
+	private File metaheuristicSolutionBlack;
+	private File metaheuristicSolutionWhite;
 	private AdapterPool adapterPool;
 	private int maxLength = 0;
 
@@ -22,20 +26,20 @@ public class ChessOptions {
 		this.board = board;
 	}
 
-	public Class<? extends Player> getWhitePlayer() {
-		return whitePlayer;
+	public Class<? extends Player> getPlayerWhite() {
+		return playerWhite;
 	}
 
-	public void setWhitePlayer(Class<? extends Player> whitePlayer) {
-		this.whitePlayer = whitePlayer;
+	public void setPlayerWhite(Class<? extends Player> playerWhite) {
+		this.playerWhite = playerWhite;
 	}
 
-	public Class<? extends Player> getBlackPlayer() {
-		return blackPlayer;
+	public Class<? extends Player> getPlayerBlack() {
+		return playerBlack;
 	}
 
-	public void setBlackPlayer(Class<? extends Player> blackPlayer) {
-		this.blackPlayer = blackPlayer;
+	public void setPlayerBlack(Class<? extends Player> playerBlack) {
+		this.playerBlack = playerBlack;
 	}
 
 	public AdapterPool getAdapterPool() {
@@ -52,6 +56,22 @@ public class ChessOptions {
 
 	public void setMaxLength(int maxLength) {
 		this.maxLength = maxLength;
+	}
+
+	public File getMetaheuristicSolutionBlack() {
+		return metaheuristicSolutionBlack;
+	}
+
+	public void setMetaheuristicSolutionBlack(File metaheuristicSolutionBlack) {
+		this.metaheuristicSolutionBlack = metaheuristicSolutionBlack;
+	}
+
+	public File getMetaheuristicSolutionWhite() {
+		return metaheuristicSolutionWhite;
+	}
+
+	public void setMetaheuristicSolutionWhite(File metaheuristicSolutionWhite) {
+		this.metaheuristicSolutionWhite = metaheuristicSolutionWhite;
 	}
 
 }

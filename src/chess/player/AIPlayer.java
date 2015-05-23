@@ -14,7 +14,7 @@ public class AIPlayer extends Player {
 
 	@Override
 	public int[] think() throws Exception {
-		System.out.println(color + " THINKS");
+		// System.out.println(color + " THINKS");
 
 		// Tell engine what moves have already happened
 		UCIAdapter adapter = pool.bindAdapter();
@@ -23,10 +23,10 @@ public class AIPlayer extends Player {
 		adapter.isready();
 
 		// Make your move
-		String moveString = adapter.go(2);
+		String moveString = adapter.go(1);
 		pool.releaseAdapter(adapter);
 
-		System.out.println(color.toString() + " MOVE: " + moveString);
+		// System.out.println(color.toString() + " MOVE: " + moveString);
 		MoveParser.parse(moveString, move);
 
 		return move;

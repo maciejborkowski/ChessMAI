@@ -1,8 +1,26 @@
 package chess.engine;
 
-import java.util.Arrays;
+import java.util.HashMap;
+
+import chess.pieces.Bishop;
+import chess.pieces.King;
+import chess.pieces.Knight;
+import chess.pieces.Pawn;
+import chess.pieces.Piece;
+import chess.pieces.Queen;
+import chess.pieces.Rook;
 
 public class ChessBoard {
+	private static final HashMap<Class<? extends Piece>, Character> values = new HashMap<>();
+
+	static {
+		values.put(Bishop.class, 'b');
+		values.put(King.class, 'k');
+		values.put(Knight.class, 'n');
+		values.put(Pawn.class, 'p');
+		values.put(Queen.class, 'q');
+		values.put(Rook.class, 'r');
+	}
 	private Square[][] board;
 
 	public ChessBoard() {
@@ -50,9 +68,17 @@ public class ChessBoard {
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		return Arrays.deepHashCode(board);
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < ChessEngine.SQUARE_WIDTH; i++) {
+			for (int j = 0; j < ChessEngine.SQUARE_HEIGHT; j++) {
+				if (board[j][i].getPiece() == null) {
+					builder.append('#');
+				} else {
+					builder.append(values.get(board[j][i].getPiece().getClass()));
+				}
+			}
+		}
+		return builder.toString();
 	}
-
 }
