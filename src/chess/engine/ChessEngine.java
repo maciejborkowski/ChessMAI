@@ -213,7 +213,10 @@ public class ChessEngine {
 	}
 
 	private static void processPromotion(ChessGame game, int[] newMove, Piece piece) {
-		if (newMove[4] != 0 && piece instanceof Pawn) {
+		if (piece instanceof Pawn) {
+			if (newMove[4] == 0) {
+				newMove[4] = 4;
+			}
 			promote(game, piece, pieceMap.get(newMove[4]));
 		}
 	}
