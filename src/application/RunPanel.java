@@ -33,7 +33,6 @@ public class RunPanel extends JPanel {
 	private void addChessBoard() {
 		ChessBoardPanel panel = new ChessBoardPanel(chessOptions);
 		add(panel, BorderLayout.CENTER);
-
 	}
 
 	private void addPlayerOptions() {

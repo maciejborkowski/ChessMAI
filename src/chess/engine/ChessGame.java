@@ -7,6 +7,7 @@ import java.util.List;
 
 import application.ChessBoardPanel;
 import uci.AdapterPool;
+import uci.MoveParser;
 import chess.engine.ChessEngine.State;
 import chess.pieces.Piece;
 import chess.player.AIPlayer;
@@ -98,8 +99,24 @@ public class ChessGame implements Runnable {
 		ChessEngine.createPieces(this);
 		currentTurn = ChessColor.WHITE;
 
+		if (options.getMoveHistory() != null) {
+			moveHistory.append(options.getMoveHistory());
+			goToHistory(options.getMoveHistory());
+		}
+
 		turnNumber = 0;
 		this.state = State.NORMAL;
+	}
+
+	private void goToHistory(String moveHistory) {
+		for (String moveString : moveHistory.split(" ")) {
+			if (!moveString.equals("")) {
+				int[] move = new int[5];
+				MoveParser.parse(moveString, move);
+				ChessEngine.move(this, move);
+				currentTurn = currentTurn.negate();
+			}
+		}
 	}
 
 	private Player createPlayer(ChessOptions options, ChessColor color) {
@@ -156,8 +173,10 @@ public class ChessGame implements Runnable {
 			} else if (currentTurn.equals(ChessColor.WHITE)) {
 				turnNumber++;
 				whiteTurn();
+				currentTurn = currentTurn.negate();
 			} else if (currentTurn.equals(ChessColor.BLACK)) {
 				blackTurn();
+				currentTurn = currentTurn.negate();
 			}
 			if (boardPanel != null) {
 				boardPanel.repaint();
@@ -177,13 +196,11 @@ public class ChessGame implements Runnable {
 	private void whiteTurn() throws Exception {
 		int[] move = whitePlayer.think();
 		ChessEngine.move(this, move);
-		currentTurn = ChessColor.BLACK;
 	}
 
 	private void blackTurn() throws Exception {
 		int[] move = blackPlayer.think();
 		ChessEngine.move(this, move);
-		currentTurn = ChessColor.WHITE;
 	}
 
 	public void setWinner(ChessColor color) {

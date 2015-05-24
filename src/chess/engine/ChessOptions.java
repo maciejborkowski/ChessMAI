@@ -14,6 +14,7 @@ public class ChessOptions {
 	private File metaheuristicSolutionWhite;
 	private AdapterPool adapterPool;
 	private int maxLength = 0;
+	private String moveHistory;
 
 	public ChessOptions() {
 	}
@@ -72,6 +73,14 @@ public class ChessOptions {
 
 	public void setMetaheuristicSolutionWhite(File metaheuristicSolutionWhite) {
 		this.metaheuristicSolutionWhite = metaheuristicSolutionWhite;
+	}
+
+	public String getMoveHistory() {
+		return moveHistory;
+	}
+
+	public void setMoveHistory(String moveHistory) {
+		this.moveHistory = moveHistory;
 	}
 
 }

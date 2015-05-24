@@ -34,11 +34,11 @@ public class MoveParser {
 		pieceMap.put('b', 2);
 		pieceMap.put('r', 3);
 		pieceMap.put('q', 4);
-		//pieceMap.put('\r', 5);
+		// pieceMap.put('\r', 5);
 	}
 
 	public static void parse(final String moveString, final int[] move) {
-		if(moveString.contains("N")) {
+		if (moveString.contains("N")) {
 			move[4] = 5;
 		} else {
 			move[0] = columnMap.get(moveString.charAt(0));
