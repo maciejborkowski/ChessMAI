@@ -13,7 +13,6 @@ public class ChessOptions {
 	private File metaheuristicSolutionBlack;
 	private File metaheuristicSolutionWhite;
 	private AdapterPool adapterPool;
-	private int maxLength = 0;
 	private String moveHistory;
 
 	public ChessOptions() {
@@ -49,14 +48,6 @@ public class ChessOptions {
 
 	public void setAdapterPool(AdapterPool adapterPool) {
 		this.adapterPool = adapterPool;
-	}
-
-	public int getMaxLength() {
-		return maxLength;
-	}
-
-	public void setMaxLength(int maxLength) {
-		this.maxLength = maxLength;
 	}
 
 	public File getMetaheuristicSolutionBlack() {

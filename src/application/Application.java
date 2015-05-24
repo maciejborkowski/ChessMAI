@@ -76,7 +76,7 @@ public class Application {
 
 			if (result == JOptionPane.YES_OPTION) {
 				runPanel.getChessOptions().getAdapterPool().kill();
-				antPanel.getChessOptions().getAdapterPool().kill();
+				antPanel.getColonyOptions().getChessOptions().getAdapterPool().kill();
 				if (null != antPanel.getAntColony()) {
 					antPanel.getAntColony().stop();
 				}

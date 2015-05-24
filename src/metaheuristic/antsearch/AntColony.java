@@ -14,27 +14,26 @@ import uci.AdapterPool;
 import uci.WindowsUCIAdapter;
 import chess.engine.ChessColor;
 import chess.engine.ChessGame;
-import chess.engine.ChessOptions;
 import chess.player.AIPlayer;
 import chess.player.AntPlayer;
 import chess.player.MetaheuristicPlayer;
 
 public class AntColony implements Runnable {
 	private boolean running = true;
-	private ChessOptions options;
+	private ColonyOptions colonyOptions;
 	private final Map<String, List<MoveProbability>> pheromones;
 
-	public AntColony(ChessOptions options) {
-		this.options = options;
+	public AntColony(ColonyOptions colonyOptions) {
+		this.colonyOptions = colonyOptions;
 
-		AdapterPool pool = options.getAdapterPool();
+		AdapterPool pool = colonyOptions.getChessOptions().getAdapterPool();
 		if (pool.size() < 2) {
 			pool.addAdapter(new WindowsUCIAdapter());
 			pool.addAdapter(new WindowsUCIAdapter());
 		}
-		options.setPlayerBlack(AIPlayer.class);
-		options.setPlayerWhite(AntPlayer.class);
-		options.setBoard(null);
+		colonyOptions.getChessOptions().setPlayerBlack(AIPlayer.class);
+		colonyOptions.getChessOptions().setPlayerWhite(AntPlayer.class);
+		colonyOptions.getChessOptions().setBoard(null);
 
 		pheromones = new HashMap<>();
 	}
@@ -43,7 +42,8 @@ public class AntColony implements Runnable {
 	public void run() {
 		while (running) {
 			try {
-				ChessGame game = new ChessGame(options);
+				ChessGame game = new ChessGame(colonyOptions.getChessOptions());
+				game.setMaxTurns(colonyOptions.getMaxLength());
 				((AntPlayer) game.getWhitePlayer()).setPheromones(pheromones);
 				((AntPlayer) game.getWhitePlayer()).setMode(MetaheuristicPlayer.Mode.ADVENTUROUS);
 
@@ -86,7 +86,7 @@ public class AntColony implements Runnable {
 	}
 
 	private void dissipate(List<MoveProbability> pheromone) {
-		double value = 0.00002 / (double) pheromone.size();
+		double value = colonyOptions.getDissipation() / (double) pheromone.size();
 		for (MoveProbability moveProbability : pheromone) {
 			moveProbability.setProbability(moveProbability.getProbability() + value);
 		}
@@ -126,14 +126,6 @@ public class AntColony implements Runnable {
 
 	public Map<String, List<MoveProbability>> getPheromones() {
 		return pheromones;
-	}
-
-	public ChessOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(ChessOptions options) {
-		this.options = options;
 	}
 
 	public void stop() {

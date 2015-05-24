@@ -30,6 +30,7 @@ public class ChessGame implements Runnable {
 	private StringBuilder moveHistory = new StringBuilder();
 	private ChessColor winner;
 	private int turnNumber;
+	private int turnMax = 0;
 
 	public ChessGame(ChessOptions options) {
 		running = true;
@@ -42,51 +43,6 @@ public class ChessGame implements Runnable {
 		blackPlayer = createPlayer(options, ChessColor.BLACK);
 
 		state = State.INIT;
-	}
-
-	public ChessBoardPanel getBoardPanel() {
-		return boardPanel;
-	}
-
-	public void setBoardPanel(ChessBoardPanel board) {
-		this.boardPanel = board;
-	}
-
-	public Square getActive() {
-		return active;
-	}
-
-	public void setActive(Square active) {
-		this.active = active;
-	}
-
-	public void setActive(int x, int y) {
-		this.active = board.getSquare(x, y);
-
-	}
-
-	public List<Piece> getWhitePieces() {
-		return whitePieces;
-	}
-
-	public List<Piece> getBlackPieces() {
-		return blackPieces;
-	}
-
-	public ChessColor getTurn() {
-		return currentTurn;
-	}
-
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	public StringBuilder getMoveHistory() {
-		return moveHistory;
 	}
 
 	public void initGame() {
@@ -182,7 +138,7 @@ public class ChessGame implements Runnable {
 				boardPanel.repaint();
 			}
 
-			if (options.getMaxLength() != 0 && turnNumber >= options.getMaxLength()) {
+			if (turnMax != 0 && turnNumber >= turnMax) {
 				System.out.println("REACHED MAX NUMBER OF TURNS!");
 				stop();
 			}
@@ -237,6 +193,55 @@ public class ChessGame implements Runnable {
 
 	public ChessColor getWinner() {
 		return winner;
+	}
+
+	public void setMaxTurns(int turnMax) {
+		this.turnMax = turnMax;
+	}
+
+	public ChessBoardPanel getBoardPanel() {
+		return boardPanel;
+	}
+
+	public void setBoardPanel(ChessBoardPanel board) {
+		this.boardPanel = board;
+	}
+
+	public Square getActive() {
+		return active;
+	}
+
+	public void setActive(Square active) {
+		this.active = active;
+	}
+
+	public void setActive(int x, int y) {
+		this.active = board.getSquare(x, y);
+
+	}
+
+	public List<Piece> getWhitePieces() {
+		return whitePieces;
+	}
+
+	public List<Piece> getBlackPieces() {
+		return blackPieces;
+	}
+
+	public ChessColor getTurn() {
+		return currentTurn;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	public StringBuilder getMoveHistory() {
+		return moveHistory;
 	}
 
 }
