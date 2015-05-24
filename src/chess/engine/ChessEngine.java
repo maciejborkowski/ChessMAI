@@ -116,7 +116,7 @@ public class ChessEngine {
 
 		if (newMove[4] == 5) {
 			game.setState(ChessEngine.State.CHECKMATE);
-			game.setWinner(game.getTurn().negate());
+			game.setWinner(game.getTurn());
 			return;
 		}
 
