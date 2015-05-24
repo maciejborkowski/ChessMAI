@@ -186,8 +186,7 @@ public final class King extends Piece {
 		for (int[] dir : offsets) {
 			Square square = game.getSquare(x + dir[0], y + dir[1]);
 			if (checkMovableSquare(square) || checkAttackableSquare(square)) {
-				if (!checkAttackedSquare(square))
-					possibleMoves.add(square);
+				possibleMoves.add(square);
 			}
 		}
 

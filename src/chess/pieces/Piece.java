@@ -1,5 +1,6 @@
 package chess.pieces;
 
+import java.util.Iterator;
 import java.util.List;
 
 import chess.engine.ChessColor;
@@ -22,39 +23,27 @@ public abstract class Piece {
 
 	public abstract void createPossibleMoves();
 
-	@Deprecated
-	public boolean isCheck() {
-		List<Piece> pieces;
-		if (game.getTurn() == ChessColor.WHITE)
-			pieces = game.getWhitePieces();
-		else
-			pieces = game.getBlackPieces();
-		for (Piece piece : pieces) {
-			if (piece instanceof King) {
-				Square square = game.getSquare(piece.getX(), piece.getY());
-				if (((King) piece).checkAttackedSquare(square)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	public List<Square> getPossibleMoves() {
 		possibleMoves = null;
 		createPossibleMoves();
+
+		for (Iterator<Square> iter = possibleMoves.listIterator(); iter.hasNext();) {
+			Square move = iter.next();
+			if (checkKingAttackedAfterMove(move)) {
+				iter.remove();
+			}
+		}
 		return possibleMoves;
 	}
 
 	public boolean canMove(int x, int y) {
 		possibleMoves = null;
 		Square ms = game.getSquare(x, y);
-		createPossibleMoves();
+		getPossibleMoves();
 		if (possibleMoves != null)
 			if (possibleMoves.contains(ms)) {
 				return true;
 			}
-
 		return false;
 	}
 
@@ -73,6 +62,47 @@ public abstract class Piece {
 				if (isOpponent(square.getPiece())) {
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+
+	public boolean checkKingAttackedAfterMove(Square moveTo) {
+		Square moveFrom = game.getSquare(x, y);
+		Piece attackedPiece = moveTo.getPiece();
+
+		// Simulate move
+		int oldX = x;
+		int oldY = y;
+		x = moveTo.getX();
+		y = moveTo.getY();
+		moveFrom.setPiece(null);
+		moveTo.setPiece(this);
+
+		boolean isCheck = isCheck();
+
+		// Return to previous state
+		x = oldX;
+		y = oldY;
+		moveTo.setPiece(attackedPiece);
+		moveFrom.setPiece(this);
+
+		return isCheck;
+	}
+
+	private boolean isCheck() {
+		List<Piece> pieces;
+		if (game.getTurn() == ChessColor.WHITE)
+			pieces = game.getWhitePieces();
+		else
+			pieces = game.getBlackPieces();
+		for (Piece piece : pieces) {
+			if (piece instanceof King) {
+				Square square = game.getSquare(piece.getX(), piece.getY());
+				if (((King) piece).checkAttackedSquare(square)) {
+					return true;
+				}
+				return false;
 			}
 		}
 		return false;
@@ -131,5 +161,5 @@ public abstract class Piece {
 		}
 		return false;
 	}
-	
+
 }
