@@ -214,10 +214,13 @@ public class ChessEngine {
 
 	private static void processPromotion(ChessGame game, int[] newMove, Piece piece) {
 		if (piece instanceof Pawn) {
-			if (newMove[4] == 0) {
+			if (newMove[4] != 0) {
+				promote(game, piece, pieceMap.get(newMove[4]));
+			} else if (piece.getColor().equals(ChessColor.WHITE) && newMove[3] == 0) {
+				newMove[4] = 4;
+			} else if (piece.getColor().equals(ChessColor.BLACK) && newMove[3] == 7) {
 				newMove[4] = 4;
 			}
-			promote(game, piece, pieceMap.get(newMove[4]));
 		}
 	}
 
