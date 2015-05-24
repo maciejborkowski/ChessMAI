@@ -39,12 +39,14 @@ public class AntPlayer extends MetaheuristicPlayer {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
 		List<MoveProbability> probabilityMoves = pheromones.get(boardString);
-		int[] move;
+		int[] move = null;
 
 		if (probabilityMoves == null) {
 			List<int[]> availableMoves = ChessEngine.availableMoves(game);
-			int idx = random.nextInt(availableMoves.size());
-			move = availableMoves.get(idx);
+			if (availableMoves.size() > 0) {
+				int idx = random.nextInt(availableMoves.size());
+				move = availableMoves.get(idx);
+			}
 		} else {
 			move = chooseBest(probabilityMoves);
 		}
@@ -116,15 +118,17 @@ public class AntPlayer extends MetaheuristicPlayer {
 			String hash = lines.get(i);
 			List<MoveProbability> list = new ArrayList<>();
 			String[] values = lines.get(i + 1).split(" ");
-			for (int j = 0; j < values.length; j += 6) {
-				int[] move = new int[5];
-				move[0] = Integer.parseInt(values[j]);
-				move[1] = Integer.parseInt(values[j + 1]);
-				move[2] = Integer.parseInt(values[j + 2]);
-				move[3] = Integer.parseInt(values[j + 3]);
-				move[4] = Integer.parseInt(values[j + 4]);
-				double probability = Double.parseDouble(values[j + 5]);
-				list.add(new MoveProbability(move, probability));
+			if (values.length > 1) {
+				for (int j = 0; j < values.length; j += 6) {
+					int[] move = new int[5];
+					move[0] = Integer.parseInt(values[j]);
+					move[1] = Integer.parseInt(values[j + 1]);
+					move[2] = Integer.parseInt(values[j + 2]);
+					move[3] = Integer.parseInt(values[j + 3]);
+					move[4] = Integer.parseInt(values[j + 4]);
+					double probability = Double.parseDouble(values[j + 5]);
+					list.add(new MoveProbability(move, probability));
+				}
 			}
 			pheromones.put(hash, list);
 		}
