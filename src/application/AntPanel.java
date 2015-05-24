@@ -131,7 +131,6 @@ public class AntPanel extends JPanel {
 				runButton.setText(START_BUTTON);
 			}
 		}
-
 	}
 
 	public ColonyOptions getColonyOptions() {

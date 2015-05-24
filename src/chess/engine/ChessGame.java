@@ -56,7 +56,6 @@ public class ChessGame implements Runnable {
 		currentTurn = ChessColor.WHITE;
 
 		if (options.getMoveHistory() != null) {
-			moveHistory.append(options.getMoveHistory());
 			goToHistory(options.getMoveHistory());
 		}
 
@@ -144,6 +143,9 @@ public class ChessGame implements Runnable {
 			}
 			if (state == State.CHECKMATE) {
 				System.out.println("CHECKMATE! " + winner + " WINS!");
+				stop();
+			} else if (state == State.PAT) {
+				System.out.println("PAT! NOBODY WINS");
 				stop();
 			}
 		}

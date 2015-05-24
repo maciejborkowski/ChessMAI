@@ -10,7 +10,7 @@ import chess.pieces.*;
 
 public class ChessEngine {
 	public static enum State {
-		INIT, NORMAL, CHECKMATE, CHECK
+		INIT, NORMAL, CHECKMATE, CHECK, PAT
 	}
 
 	public static final int SQUARE_WIDTH = 8;
@@ -101,6 +101,15 @@ public class ChessEngine {
 	}
 
 	public static void move(ChessGame game, int[] newMove) {
+		if (newMove == null) {
+			if (game.getState() == ChessEngine.State.CHECK) {
+				game.setState(ChessEngine.State.CHECKMATE);
+				game.setWinner(game.getTurn().negate());
+			} else {
+				game.setState(ChessEngine.State.PAT);
+			}
+			return;
+		}
 		Square moveFrom = game.getSquare(newMove[0], newMove[1]);
 		Square moveTo = game.getSquare(newMove[2], newMove[3]);
 		Piece piece = moveFrom.getPiece();

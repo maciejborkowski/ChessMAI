@@ -26,7 +26,7 @@ public class WindowsUCIAdapter extends UCIAdapter {
 		try {
 			processInput.write((command + "\n").getBytes());
 			processInput.flush();
-			System.out.println("SENT: \t\t" + command);
+			// System.out.println("SENT: \t\t" + command);
 		} catch (IOException e) {
 			System.out.println("COULD NOT SEND COMMAND TO UCI");
 			e.printStackTrace();

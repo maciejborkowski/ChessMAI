@@ -56,19 +56,24 @@ public class AntPlayer extends MetaheuristicPlayer {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
 		List<MoveProbability> probabilityMoves = pheromones.get(boardString);
-		int[] move;
+		int[] move = null;
 
 		if (probabilityMoves == null) {
 			List<int[]> availableMoves = ChessEngine.availableMoves(game);
 			probabilityMoves = createProbabilityMoves(availableMoves);
 			pheromones.put(boardString, probabilityMoves);
-			int idx = random.nextInt(availableMoves.size());
-			move = availableMoves.get(idx);
+			if (availableMoves.size() > 0) {
+				int idx = random.nextInt(availableMoves.size());
+				move = availableMoves.get(idx);
+			}
 		} else {
 			move = chooseRandom(probabilityMoves);
 		}
 		// System.out.println("CHOSEN MOVE: " + MoveParser.parse(move));
 		moves.add(move);
+		if (move == null) {
+			System.out.println();
+		}
 		return move;
 	}
 
