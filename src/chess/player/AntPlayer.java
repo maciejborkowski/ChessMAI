@@ -69,27 +69,35 @@ public class AntPlayer extends MetaheuristicPlayer {
 				move = availableMoves.get(idx);
 			}
 		} else {
-			move = chooseRandom(probabilityMoves);
+			List<MoveProbability> moves = removeLocalMaxima(probabilityMoves);
+			move = chooseRandom(moves);
 		}
 		// System.out.println("CHOSEN MOVE: " + MoveParser.parse(move));
 		moves.add(move);
-		if (move == null) {
-			System.out.println();
-		}
 		return move;
 	}
 
 	private List<MoveProbability> createProbabilityMoves(List<int[]> availableMoves) {
 		List<MoveProbability> moves = new ArrayList<>();
-		double probability = 1.0 / (double) availableMoves.size();
+		double probability = 1.0;
 		for (int[] move : availableMoves) {
 			moves.add(new MoveProbability(move, probability));
 		}
 		return moves;
 	}
 
+	private List<MoveProbability> removeLocalMaxima(List<MoveProbability> source) {
+		List<MoveProbability> target = new ArrayList<>();
+		for (MoveProbability moveProbability : source) {
+			if (moveProbability.getProbability() < 10) {
+				target.add(moveProbability);
+			}
+		}
+		return target;
+	}
+
 	private int[] chooseRandom(List<MoveProbability> probabilityMoves) {
-		double value = random.nextDouble();
+		double value = random.nextDouble() * sumPheromone(probabilityMoves);
 		double cumulativeProbability = 0.0;
 		for (MoveProbability move : probabilityMoves) {
 			cumulativeProbability += move.getProbability();
@@ -98,6 +106,14 @@ public class AntPlayer extends MetaheuristicPlayer {
 			}
 		}
 		return null;
+	}
+
+	public double sumPheromone(List<MoveProbability> pheromone) {
+		double sum = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			sum += moveProbability.getProbability();
+		}
+		return sum;
 	}
 
 	private int[] chooseBest(List<MoveProbability> probabilityMoves) {

@@ -116,7 +116,7 @@ public class ChessEngine {
 
 		if (newMove[4] == 5) {
 			game.setState(ChessEngine.State.CHECKMATE);
-			game.setWinner(game.getTurn());
+			game.setWinner(game.getTurn().negate());
 			return;
 		}
 
@@ -218,8 +218,10 @@ public class ChessEngine {
 				promote(game, piece, pieceMap.get(newMove[4]));
 			} else if (piece.getColor().equals(ChessColor.WHITE) && newMove[3] == 0) {
 				newMove[4] = 4;
+				promote(game, piece, pieceMap.get(newMove[4]));
 			} else if (piece.getColor().equals(ChessColor.BLACK) && newMove[3] == 7) {
 				newMove[4] = 4;
+				promote(game, piece, pieceMap.get(newMove[4]));
 			}
 		}
 	}

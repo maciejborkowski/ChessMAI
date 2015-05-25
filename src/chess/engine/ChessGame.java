@@ -39,13 +39,14 @@ public class ChessGame implements Runnable {
 		if (null != boardPanel) {
 			boardPanel.setGame(this);
 		}
-		whitePlayer = createPlayer(options, ChessColor.WHITE);
-		blackPlayer = createPlayer(options, ChessColor.BLACK);
 
-		state = State.INIT;
+		initGame();
 	}
 
 	public void initGame() {
+		whitePlayer = createPlayer(options, ChessColor.WHITE);
+		blackPlayer = createPlayer(options, ChessColor.BLACK);
+
 		setActive(null);
 		whitePieces = new LinkedList<Piece>();
 		blackPieces = new LinkedList<Piece>();
@@ -123,9 +124,7 @@ public class ChessGame implements Runnable {
 
 	private void gameLoop() throws Exception {
 		while (running) {
-			if (state == State.INIT) {
-				initGame();
-			} else if (currentTurn.equals(ChessColor.WHITE)) {
+			if (currentTurn.equals(ChessColor.WHITE)) {
 				turnNumber++;
 				whiteTurn();
 				currentTurn = currentTurn.negate();
@@ -140,8 +139,7 @@ public class ChessGame implements Runnable {
 			if (turnMax != 0 && turnNumber >= turnMax) {
 				System.out.println("REACHED MAX NUMBER OF TURNS!");
 				stop();
-			}
-			if (state == State.CHECKMATE) {
+			} else if (state == State.CHECKMATE) {
 				System.out.println("CHECKMATE! " + winner + " WINS!");
 				stop();
 			} else if (state == State.PAT) {

@@ -46,12 +46,13 @@ public class AntColony implements Runnable {
 				game.setMaxTurns(colonyOptions.getMaxLength());
 				((AntPlayer) game.getWhitePlayer()).setPheromones(pheromones);
 				((AntPlayer) game.getWhitePlayer()).setMode(MetaheuristicPlayer.Mode.ADVENTUROUS);
-
+				double initialCost = CostFunction.weightedPieces(game, ChessColor.WHITE);
 				Thread gameThread = new Thread(game);
 				gameThread.start();
 				gameThread.join();
 
 				double cost = CostFunction.weightedPieces(game, ChessColor.WHITE);
+				cost = cost - initialCost;
 				List<int[]> moves = ((AntPlayer) game.getWhitePlayer()).getMoves();
 				List<String> boardStrings = ((AntPlayer) game.getWhitePlayer()).getBoardHashes();
 				updatePheromones(cost, boardStrings, moves);
@@ -70,41 +71,24 @@ public class AntColony implements Runnable {
 	private void updatePheromones(double cost, List<String> boardStrings, List<int[]> moves) {
 		for (int i = 0; i < boardStrings.size(); i++) {
 			List<MoveProbability> pheromone = pheromones.get(boardStrings.get(i));
-			dissipate(pheromone);
-			double value = cost / pheromone.size();
+			double value = cost;
 			for (int j = 0; j < pheromone.size(); j++) {
 				if (pheromone.get(j).getMove().equals(moves.get(i))) {
 					pheromone.get(j).setProbability(pheromone.get(j).getProbability() + value * (j + 1));
-					if (pheromone.get(j).getProbability() <= 0.0) {
-						pheromone.get(j).setProbability(0.01);
-					}
-					break;
 				}
 			}
-			normalize(pheromone);
+			dissipate(pheromone);
 		}
 	}
 
 	private void dissipate(List<MoveProbability> pheromone) {
-		double value = colonyOptions.getDissipation() / (double) pheromone.size();
+		double value = 1.0 - colonyOptions.getDissipation();
 		for (MoveProbability moveProbability : pheromone) {
-			moveProbability.setProbability(moveProbability.getProbability() + value);
+			moveProbability.setProbability(moveProbability.getProbability() * value);
+			if (moveProbability.getProbability() <= 0.01) {
+				moveProbability.setProbability(0.01);
+			}
 		}
-	}
-
-	private void normalize(List<MoveProbability> pheromone) {
-		double sum = sumProbability(pheromone);
-		for (MoveProbability moveProbability : pheromone) {
-			moveProbability.setProbability(moveProbability.getProbability() / sum);
-		}
-	}
-
-	private double sumProbability(List<MoveProbability> pheromone) {
-		double sum = 0.0;
-		for (MoveProbability moveProbability : pheromone) {
-			sum += moveProbability.getProbability();
-		}
-		return sum;
 	}
 
 	@SuppressWarnings("resource")
