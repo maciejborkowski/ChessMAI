@@ -205,8 +205,7 @@ public final class King extends Piece {
 				Square square2 = game.getSquare(x - 2, y);
 				Square square3 = game.getSquare(x - 3, y);
 				if (checkMovableSquare(square1) && !checkAttackedSquare(square1) && checkMovableSquare(square2)
-						&& !checkAttackedSquare(square2) && checkMovableSquare(square3)
-						&& !checkAttackedSquare(square3)) {
+						&& !checkAttackedSquare(square2) && checkMovableSquare(square3) && !checkAttackedSquare(square3)) {
 					possibleMoves.add(square2);
 				}
 			}
@@ -230,8 +229,7 @@ public final class King extends Piece {
 	private boolean nearOpponentKing(Square square) {
 		for (int[] dir : offsets) {
 			Square tempSquare = game.getSquare(square.getX() + dir[0], square.getY() + dir[1]);
-			if (tempSquare != null && tempSquare.getPiece() instanceof King
-					&& tempSquare.getPiece().getColor() != color) {
+			if (tempSquare != null && tempSquare.getPiece() instanceof King && tempSquare.getPiece().getColor() != color) {
 				return true;
 			}
 

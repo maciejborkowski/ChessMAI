@@ -13,7 +13,8 @@ public class ChessOptions {
 	private File metaheuristicSolutionBlack;
 	private File metaheuristicSolutionWhite;
 	private AdapterPool adapterPool;
-	private String moveHistory;
+	private String initialMoveHistory;
+	private HistoryContainer moveHistoryContainer;
 
 	public ChessOptions() {
 	}
@@ -66,12 +67,20 @@ public class ChessOptions {
 		this.metaheuristicSolutionWhite = metaheuristicSolutionWhite;
 	}
 
-	public String getMoveHistory() {
-		return moveHistory;
+	public String getInitialMoveHistory() {
+		return initialMoveHistory;
 	}
 
-	public void setMoveHistory(String moveHistory) {
-		this.moveHistory = moveHistory;
+	public void setInitialMoveHistory(String initialMoveHistory) {
+		this.initialMoveHistory = initialMoveHistory;
+	}
+
+	public HistoryContainer getMoveHistoryContainer() {
+		return moveHistoryContainer;
+	}
+
+	public void setMoveHistoryContainer(HistoryContainer moveHistoryContainer) {
+		this.moveHistoryContainer = moveHistoryContainer;
 	}
 
 }

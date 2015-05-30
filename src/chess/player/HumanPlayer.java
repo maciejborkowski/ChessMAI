@@ -12,7 +12,7 @@ public class HumanPlayer extends Player {
 	private boolean moved = false;
 
 	public int[] think() throws Exception {
-		ChessBoardPanel boardPanel = game.getBoardPanel();
+		ChessBoardPanel boardPanel = game.getOptions().getBoard();
 		if (boardPanel == null) {
 			throw new Exception("THERE IS NO GUI FOR BOARD");
 		}
@@ -63,8 +63,7 @@ public class HumanPlayer extends Player {
 	}
 
 	private boolean isMovablePieceActive() {
-		return game.getActive() != null && game.getActive().getPiece() != null
-				&& game.getActive().getPiece().getColor() == color;
+		return game.getActive() != null && game.getActive().getPiece() != null && game.getActive().getPiece().getColor() == color;
 	}
 
 }

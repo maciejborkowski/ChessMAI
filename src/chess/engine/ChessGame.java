@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import application.ChessBoardPanel;
 import uci.AdapterPool;
 import uci.MoveParser;
 import chess.engine.ChessEngine.State;
@@ -20,14 +19,13 @@ public class ChessGame implements Runnable {
 	private Player whitePlayer, blackPlayer;
 
 	private ChessOptions options;
-	private ChessBoardPanel boardPanel;
 
 	private ChessBoard board;
 	private List<Piece> whitePieces = new LinkedList<>();
 	private List<Piece> blackPieces = new LinkedList<>();
 	private Square active;
 	private ChessColor currentTurn;
-	private StringBuilder moveHistory = new StringBuilder();
+	private StringBuilder moveHistory;
 	private ChessColor winner;
 	private int turnNumber;
 	private int turnMax = 0;
@@ -35,17 +33,17 @@ public class ChessGame implements Runnable {
 	public ChessGame(ChessOptions options) {
 		running = true;
 		this.options = options;
-		this.boardPanel = options.getBoard();
-		if (null != boardPanel) {
-			boardPanel.setGame(this);
+		if (null != options.getBoard()) {
+			options.getBoard().setGame(this);
 		}
+
+		whitePlayer = createPlayer(options, ChessColor.WHITE);
+		blackPlayer = createPlayer(options, ChessColor.BLACK);
 
 		initGame();
 	}
 
 	public void initGame() {
-		whitePlayer = createPlayer(options, ChessColor.WHITE);
-		blackPlayer = createPlayer(options, ChessColor.BLACK);
 
 		setActive(null);
 		whitePieces = new LinkedList<Piece>();
@@ -56,12 +54,14 @@ public class ChessGame implements Runnable {
 		ChessEngine.createPieces(this);
 		currentTurn = ChessColor.WHITE;
 
-		if (options.getMoveHistory() != null) {
-			goToHistory(options.getMoveHistory());
+		moveHistory = new StringBuilder();
+		if (options.getInitialMoveHistory() != null) {
+			goToHistory(options.getInitialMoveHistory());
 		}
 
 		turnNumber = 0;
 		this.state = State.NORMAL;
+		updateGUI();
 	}
 
 	private void goToHistory(String moveHistory) {
@@ -106,12 +106,6 @@ public class ChessGame implements Runnable {
 		return null;
 	}
 
-	public Square getSquare(int x, int y) {
-		if (x >= 0 && x < ChessEngine.SQUARE_WIDTH && y >= 0 && y < ChessEngine.SQUARE_HEIGHT)
-			return board.getSquare(x, y);
-		return null;
-	}
-
 	@Override
 	public void run() {
 		try {
@@ -122,41 +116,64 @@ public class ChessGame implements Runnable {
 		}
 	}
 
-	private void gameLoop() throws Exception {
+	private void gameLoop() {
 		while (running) {
-			if (currentTurn.equals(ChessColor.WHITE)) {
-				turnNumber++;
-				whiteTurn();
-				currentTurn = currentTurn.negate();
-			} else if (currentTurn.equals(ChessColor.BLACK)) {
-				blackTurn();
-				currentTurn = currentTurn.negate();
-			}
-			if (boardPanel != null) {
-				boardPanel.repaint();
-			}
-
-			if (turnMax != 0 && turnNumber >= turnMax) {
-				System.out.println("REACHED MAX NUMBER OF TURNS!");
-				stop();
-			} else if (state == State.CHECKMATE) {
-				System.out.println("CHECKMATE! " + winner + " WINS!");
-				stop();
-			} else if (state == State.PAT) {
-				System.out.println("PAT! NOBODY WINS");
-				stop();
-			}
+			makeMove();
+			updateGUI();
+			checkEndgameConditions();
 		}
 	}
 
-	private void whiteTurn() throws Exception {
-		int[] move = whitePlayer.think();
-		ChessEngine.move(this, move);
+	private void makeMove() {
+		try {
+			int[] move = null;
+			if (currentTurn.equals(ChessColor.WHITE)) {
+				turnNumber++;
+				move = whitePlayer.think();
+			} else if (currentTurn.equals(ChessColor.BLACK)) {
+				move = blackPlayer.think();
+			}
+			ChessEngine.move(this, move);
+			currentTurn = currentTurn.negate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void blackTurn() throws Exception {
-		int[] move = blackPlayer.think();
-		ChessEngine.move(this, move);
+	private void updateGUI() {
+		if (options.getBoard() != null) {
+			options.getBoard().repaint();
+		}
+		if (options.getMoveHistoryContainer() != null) {
+			options.getMoveHistoryContainer().rewrite(moveHistory.toString());
+		}
+	}
+
+	private void checkEndgameConditions() {
+		if (turnMax != 0 && turnNumber >= turnMax) {
+			System.out.println("REACHED MAX NUMBER OF TURNS!");
+			stop();
+		}
+		if (state == State.CHECKMATE) {
+			System.out.println("CHECKMATE! " + winner + " WINS!");
+			stop();
+		}
+		if (state == State.PAT) {
+			System.out.println("PAT! NOBODY WINS");
+			stop();
+		}
+	}
+
+	public void reset() {
+		winner = null;
+		running = true;
+		initGame();
+	}
+
+	public Square getSquare(int x, int y) {
+		if (x >= 0 && x < ChessEngine.SQUARE_WIDTH && y >= 0 && y < ChessEngine.SQUARE_HEIGHT)
+			return board.getSquare(x, y);
+		return null;
 	}
 
 	public void setWinner(ChessColor color) {
@@ -199,14 +216,6 @@ public class ChessGame implements Runnable {
 		this.turnMax = turnMax;
 	}
 
-	public ChessBoardPanel getBoardPanel() {
-		return boardPanel;
-	}
-
-	public void setBoardPanel(ChessBoardPanel board) {
-		this.boardPanel = board;
-	}
-
 	public Square getActive() {
 		return active;
 	}
@@ -242,6 +251,10 @@ public class ChessGame implements Runnable {
 
 	public StringBuilder getMoveHistory() {
 		return moveHistory;
+	}
+
+	public ChessOptions getOptions() {
+		return options;
 	}
 
 }

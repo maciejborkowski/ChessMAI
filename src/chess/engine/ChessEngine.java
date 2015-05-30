@@ -236,8 +236,8 @@ public class ChessEngine {
 			}
 
 			piecesList.remove(piece);
-			Piece newPiece = clazz.getConstructor(ChessGame.class, ChessColor.class, int.class, int.class).newInstance(
-					game, piece.getColor(), piece.getX(), piece.getY());
+			Piece newPiece = clazz.getConstructor(ChessGame.class, ChessColor.class, int.class, int.class).newInstance(game,
+					piece.getColor(), piece.getX(), piece.getY());
 			game.getSquare(piece.getX(), piece.getY()).setPiece(newPiece);
 			piecesList.add(newPiece);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

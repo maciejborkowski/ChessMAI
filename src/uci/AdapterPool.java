@@ -1,6 +1,7 @@
 package uci;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class AdapterPool {
 	boolean alive = true;
@@ -17,17 +18,16 @@ public class AdapterPool {
 		if (!alive) {
 			throw new Exception("Dead pool");
 		}
-		UCIAdapter adapter = unused.getFirst();
+		UCIAdapter adapter = null;
 		while (adapter == null) {
 			try {
+				adapter = unused.getFirst();
+			} catch (NoSuchElementException e) {
 				if (used.isEmpty()) {
 					throw new Exception("Empty pool");
 				}
 				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
-			adapter = unused.getFirst();
 		}
 
 		unused.remove(adapter);

@@ -1,5 +1,10 @@
 package application;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,20 +25,40 @@ public class RunOptionsPanel extends JPanel {
 	private ChessOptions options;
 	private ChessGame game = null;
 	private JTextField historyField;
+	private HistoryContainerPanel historyContainer;
 
 	public RunOptionsPanel(ChessOptions options) {
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
 		this.options = options;
+		/*
+		 * constraints.weightx = 0.5; constraints.gridx = 0; constraints.gridy =
+		 * 0; JLabel historyLabel = new JLabel(HISTORY_LABEL);
+		 * add(historyLabel);
+		 */
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		constraints.gridy = 0;
+		historyField = new JTextField(200);
+		add(historyField, constraints);
 
-		JLabel historyLabel = new JLabel(HISTORY_LABEL);
-		add(historyLabel);
-		historyField = new JTextField("");
-		add(historyField);
-
+		constraints.weightx = 0.1;
+		constraints.gridx = 0;
+		constraints.gridwidth = 1;
+		constraints.gridy = 1;
 		JButton button = new JButton(RUN_LABEL);
 		button.addActionListener(new RunActionListener());
-		add(button);
+		add(button, constraints);
+
+		constraints.weightx = 0.5;
+		constraints.gridx = 1;
+		constraints.gridheight = 2;
+		constraints.gridy = 1;
+		historyContainer = new HistoryContainerPanel();
+		add(historyContainer, constraints);
+
 	}
 
 	private class RunActionListener implements ActionListener {
@@ -44,7 +69,8 @@ public class RunOptionsPanel extends JPanel {
 				game.stop();
 			}
 
-			options.setMoveHistory(historyField.getText());
+			options.setInitialMoveHistory(historyField.getText());
+			options.setMoveHistoryContainer(historyContainer);
 			game = new ChessGame(options);
 			Thread gameThread = new Thread(game);
 			gameThread.start();

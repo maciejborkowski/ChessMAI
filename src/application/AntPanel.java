@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,6 +14,13 @@ import javax.swing.JTextField;
 
 import uci.AdapterPool;
 import chess.engine.ChessOptions;
+import chess.pieces.Bishop;
+import chess.pieces.King;
+import chess.pieces.Knight;
+import chess.pieces.Pawn;
+import chess.pieces.Piece;
+import chess.pieces.Queen;
+import chess.pieces.Rook;
 import metaheuristic.antsearch.AntColony;
 import metaheuristic.antsearch.ColonyOptions;
 
@@ -119,8 +127,16 @@ public class AntPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (runButton.getText() == START_BUTTON) {
 				colonyOptions.setMaxLength(Integer.parseInt(turnsField.getText()));
-				colonyOptions.getChessOptions().setMoveHistory(historyField.getText());
+				colonyOptions.getChessOptions().setInitialMoveHistory(historyField.getText());
 				colonyOptions.setDissipation(Double.parseDouble(dissipationField.getText()));
+				HashMap<Class<? extends Piece>, Double> pieceCostMap = new HashMap<>();
+				pieceCostMap.put(Bishop.class, 3.0);
+				pieceCostMap.put(King.class, 100.0);
+				pieceCostMap.put(Knight.class, 3.0);
+				pieceCostMap.put(Pawn.class, 1.0);
+				pieceCostMap.put(Queen.class, 10.0);
+				pieceCostMap.put(Rook.class, 5.0);
+				colonyOptions.setPieceCostMap(pieceCostMap);
 				antColony = new AntColony(colonyOptions);
 				Thread antColonyThread = new Thread(antColony);
 				antColonyThread.start();

@@ -47,7 +47,7 @@ public class Application {
 
 	private void initFrame() {
 		frame = new JFrame(WINDOW_LABEL);
-		frame.setBounds(0, 0, 800, 620);
+		frame.setBounds(0, 0, 800, 680);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new ApplicationWindowAdapter());
 		frame.getContentPane().setLayout(new BorderLayout());
@@ -71,8 +71,8 @@ public class Application {
 		public void windowClosing(WindowEvent e) {
 			JFrame frame = (JFrame) e.getSource();
 
-			int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit the application?",
-					"Exit Application", JOptionPane.YES_NO_OPTION);
+			int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit the application?", "Exit Application",
+					JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
 				runPanel.getChessOptions().getAdapterPool().kill();
