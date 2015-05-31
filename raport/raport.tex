@@ -1,0 +1,122 @@
+\RequirePackage{ifpdf}
+	\ifpdf	
+		\documentclass[pdftex]{article}
+		%\usepackage[colorlinks, linkcolor=black, pdftex, plainpages=false, hyperindex, %pdfview=FitBH]{hyperref}
+		\RequirePackage{color} 
+	\else
+		\documentclass[10pt]{article} 
+		\usepackage{nohyperref}		
+	\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[left=1.5cm, top=1.3cm, textwidth=18.6cm, textheight=27cm]{geometry}
+\geometry{paper=a4paper}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{abstract}
+\usepackage{fancyhdr}
+
+\lhead{} \chead{} \rhead{}
+\lfoot{\emph{Research Skills and Methodology, 2014/2015}} \cfoot{} \rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\pagestyle{fancy}
+
+\posttitle{\par\end{center}}
+\preauthor{\begin{center} \large \begin{tabular}[t]{c}}
+\postauthor{\end{tabular}\par\end{center}}
+\predate{} \postdate{}
+\date{}
+
+\pretitle{\includegraphics[width=.55\textwidth]{eka-pl.png}\par\vspace{1ex}\begin{center}\huge}
+
+\newcommand{\eng}[1]{(ang.\ \emph{#1})}
+
+\title{Metaheuristic Chess Artificial Intelligence}
+\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl \and Paweł Pałus\\ zzzzzz@student.pwr.edu.pl}
+
+\begin{document}
+\thispagestyle{empty}
+\twocolumn[
+	\maketitle
+	\begin{abstract}
+	{
+		\begin{description} 
+		\item[Index Terms:] \emph{chess, metaheuristics, artificial intelligence, ant colony, genetic, simulated annealing}
+		\end{description}
+	}
+	\end{abstract}
+	\vspace{2em}
+]
+
+\section{Introduction}
+\label{sec:introduction}
+
+Hello
+
+\section{Optimization Problem}
+\label{sec:problem}
+
+The problem describes a standard game of chess, with a square board of 64 fields. Two players have to consecutively move a piece the board onto another field according to complex, well-defined rules. Our task is to find the series of movements in a game of chess that gives the best chance of winning the game in the end. The starting position of pieces can be arbitrary.
+
+\subsection{Mathematical model}
+\label{sec:model}
+
+From card, expand on it
+
+\section{Experimentation system}
+\label{sec:project}
+
+About the application
+
+\subsection{UCI}
+\label{sec:uci}
+
+\subsubsection{Firenzina}
+\label{sec:firenzina}
+
+\subsection{GUI}
+\label{sec:uci}
+
+About the GUI
+
+\section{Algorithms}
+\label{sec:project}
+
+\subsection{Ant colony}
+\label{sec:ant}
+
+\subsubsection{what?}
+\subsubsection{gui/experiment}
+\subsubsection{result}
+
+\subsection{Genetic algorithm}
+\label{sec:genetic}
+
+\subsubsection{what?}
+\subsubsection{gui/experiment}
+\subsubsection{result}
+
+\subsection{Simulated Annealing}
+\label{sec:annealing}
+
+\subsubsection{what?}
+\subsubsection{gui/experiment}
+\subsubsection{result}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+It was fun / not fun.
+
+\begin{thebibliography}{99}
+
+\bibitem{comparison} \textsc{Vecek, N. ; Crepinsek, M. ; Mernik, M. ; Hrncic, D.}, A comparison between different chess rating systems for ranking evolutionary algorithms 
+\bibitem{ant} \textsc{Dorigo, M. ; Maniezzo, V. ; Colorni, A.}, Ant system: optimization by a colony of cooperating agents 
+\bibitem{genetic} \textsc{David, O.E. ; van den Herik, H.J. ; Koppel, M. ; Netanyahu, N.S. }, Genetic Algorithms for Evolving Computer Chess Programs 
+\bibitem{annealing} \textsc{S. Kirkpatrick; C. D. Gelatt; M. P. Vecchi.}, Optimization by Simulated Annealing 
+\bibitem{uci} \textsc{R. Huber, S. Meyer-Kahlen}, Universal Chess Interface, http://www.shredderchess.com/chess-info/features/uci-universal-chess-interface.html, 2015/06/01
+
+\end{thebibliography}
+\end{document}
