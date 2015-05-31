@@ -19,10 +19,12 @@ public class AIPlayer extends Player {
 		// Tell engine what moves have already happened
 		UCIAdapter adapter = pool.bindAdapter();
 		adapter.ucinewgame();
-		System.out.println("Sending history: " + game.getMoveHistory().toString());
+		// System.out.println("Sending history: " +
+		// game.getMoveHistory().toString());
 		adapter.position(game.getMoveHistory().toString());
 		adapter.isready();
-		System.out.println("Accepted history: " + game.getMoveHistory().toString());
+		// System.out.println("Accepted history: " +
+		// game.getMoveHistory().toString());
 
 		// Make your move
 		String moveString = adapter.go(1);
