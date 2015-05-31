@@ -38,13 +38,14 @@ public class AntPanel extends JPanel {
 
 	private static final String TURNS_DEFAULT = "10";
 	private static final String CONCURRENT_ANTS_DEFAULT = "4";
-	private static final String DISSIPATION_DEFAULT = "0.1";
-	private static final String KING_DEFAULT = "1000";
+	private static final String DISSIPATION_DEFAULT = "0.01";
+	private static final String KING_DEFAULT = "100";
 	private static final String QUEEN_DEFAULT = "10";
 	private static final String PAWN_DEFAULT = "1";
 	private static final String ROOK_DEFAULT = "5";
 	private static final String KNIGHT_DEFAULT = "3";
 	private static final String BISHOP_DEFAULT = "3";
+	private static final String HISTORY_DEFAULT = "g1f3  g8f6  b1c3  b8c6  d2d4  d7d5  c1f4  c8f5  e2e3  e7e6  f1d3  f8d6  e1g1  e8g8  d3f5  e6f5  d1d3  d6f4  e3f4  d8d7  f3e5  d7e6  c3b5  f8c8  e5f3  f6e4  d3e3  a7a6  b5c3  c6b4  f1c1  c8e8  a2a3  b4c6  c1e1  f7f6  f3d2  e6d6  g2g3  d6d7  d2e4  f5e4  a1b1  c6e7  e3e2  e7f5  b1d1  c7c6  c3a4  d7c7  a4c5  e4e3  e2d3  e3f2  g1f2  f5d6  f2g2  f6f5  d3b3  b7b6  c5d3  d6e4  c2c4  a8d8  d3e5  e8e6  c4d5  c6d5  g3g4  d8c8  b3d5  c7d6  d5b3  g7g6  g4f5  g6f5  e1e4  d6e7  e4e3  b6b5  b3d3  e6f6  d4d5  g8h8  e3g3  e7d6  d1e1  b5b4  a3a4  a6a5  h2h4  d6c7  d5d6  c7b7  g2h3  c8f8  d6d7  b7a8  d3c4  a8d8  c4d5  d8c7  e5f7  f8f7";
 
 	private static final String START_BUTTON = "Start";
 	private static final String STOP_BUTTON = "Stop";
@@ -58,7 +59,7 @@ public class AntPanel extends JPanel {
 	private JTextField rookField = new JTextField(ROOK_DEFAULT);
 	private JTextField knightField = new JTextField(KNIGHT_DEFAULT);
 	private JTextField bishopField = new JTextField(BISHOP_DEFAULT);
-	private JTextField historyField = new JTextField();
+	private JTextField historyField = new JTextField(HISTORY_DEFAULT);
 
 	private JButton runButton;
 

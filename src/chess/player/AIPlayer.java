@@ -15,7 +15,6 @@ public class AIPlayer extends Player {
 	@Override
 	public int[] think() throws Exception {
 		// System.out.println(color + " THINKS");
-
 		// Tell engine what moves have already happened
 		UCIAdapter adapter = pool.bindAdapter();
 		adapter.ucinewgame();

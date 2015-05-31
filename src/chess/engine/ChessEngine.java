@@ -10,7 +10,7 @@ import chess.pieces.*;
 
 public class ChessEngine {
 	public static enum State {
-		INIT, NORMAL, CHECKMATE, CHECK, PAT
+		NORMAL, CHECKMATE, CHECK, PAT
 	}
 
 	public static final int SQUARE_WIDTH = 8;

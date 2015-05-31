@@ -56,6 +56,7 @@ public class AntColony implements Runnable {
 			startGames();
 			waitForGames();
 			updatePheromones(initCost);
+			dissipatePheromones();
 			resetGames();
 		}
 		saveSolution(new File("antresult.txt"));
@@ -64,6 +65,7 @@ public class AntColony implements Runnable {
 	private void resetGames() {
 		for (ChessGame game : games) {
 			game.reset();
+			((AntPlayer) game.getWhitePlayer()).reset();
 		}
 	}
 
@@ -116,15 +118,24 @@ public class AntColony implements Runnable {
 		List<int[]> moves = ((AntPlayer) game.getWhitePlayer()).getMoves();
 		List<String> boardStrings = ((AntPlayer) game.getWhitePlayer()).getBoardHashes();
 
+		double value = cost / ((double) boardStrings.size() + 1.0);
 		for (int i = 0; i < boardStrings.size(); i++) {
 			List<MoveProbability> pheromone = pheromones.get(boardStrings.get(i));
-			double value = cost / ((double) pheromone.size() + 1.0);
 			for (int j = 0; j < pheromone.size(); j++) {
 				if (pheromone.get(j).getMove().equals(moves.get(i))) {
 					pheromone.get(j).setProbability(pheromone.get(j).getProbability() + value * (j + 1.0));
 				}
 			}
-			dissipate(pheromone);
+		}
+	}
+
+	private void dissipatePheromones() {
+		Set<String> boards = new HashSet<>();
+		for (ChessGame game : games) {
+			boards.addAll(((AntPlayer) game.getWhitePlayer()).getBoardHashes());
+		}
+		for (String board : boards) {
+			dissipate(pheromones.get(board));
 		}
 	}
 
@@ -132,9 +143,6 @@ public class AntColony implements Runnable {
 		double value = 1.0 - colonyOptions.getDissipation();
 		for (MoveProbability moveProbability : pheromone) {
 			moveProbability.setProbability(moveProbability.getProbability() * value);
-			if (moveProbability.getProbability() <= 0.01) {
-				moveProbability.setProbability(0.01);
-			}
 		}
 	}
 

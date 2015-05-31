@@ -18,12 +18,13 @@ public class AntPlayer extends MetaheuristicPlayer {
 	private Map<String, List<MoveProbability>> pheromones;
 	private List<String> boardsStrings = new ArrayList<>();
 	private List<int[]> moves = new ArrayList<>();
-	private Random random = new Random();
+	private Random random;
 
 	public AntPlayer(File solutionFile) throws IOException {
 		if (solutionFile != null) {
 			loadSolution(solutionFile);
 		}
+		random = new Random();
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class AntPlayer extends MetaheuristicPlayer {
 		return move;
 	}
 
-	private int[] adventurousMove() {
+	private int[] adventurousMove() throws Exception {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
 		List<MoveProbability> probabilityMoves = pheromones.get(boardString);
@@ -69,8 +70,11 @@ public class AntPlayer extends MetaheuristicPlayer {
 				move = availableMoves.get(idx);
 			}
 		} else {
-			List<MoveProbability> moves = removeLocalMaxima(probabilityMoves);
-			move = chooseRandom(moves);
+			// List<MoveProbability> moves =
+			// removeLocalMaxima(probabilityMoves);
+			if (probabilityMoves.size() > 0) {
+				move = chooseRandom(probabilityMoves);
+			}
 		}
 		// System.out.println("CHOSEN MOVE: " + MoveParser.parse(move));
 		moves.add(move);
@@ -79,7 +83,7 @@ public class AntPlayer extends MetaheuristicPlayer {
 
 	private List<MoveProbability> createProbabilityMoves(List<int[]> availableMoves) {
 		List<MoveProbability> moves = new ArrayList<>();
-		double probability = 1.0;
+		double probability = 0.0;
 		for (int[] move : availableMoves) {
 			moves.add(new MoveProbability(move, probability));
 		}
@@ -89,30 +93,42 @@ public class AntPlayer extends MetaheuristicPlayer {
 	private List<MoveProbability> removeLocalMaxima(List<MoveProbability> source) {
 		List<MoveProbability> target = new ArrayList<>();
 		for (MoveProbability moveProbability : source) {
-			if (moveProbability.getProbability() < 10) {
+			if (moveProbability.getProbability() < 100.0) {
 				target.add(moveProbability);
 			}
 		}
 		return target;
 	}
 
-	private int[] chooseRandom(List<MoveProbability> probabilityMoves) {
-		double value = random.nextDouble() * sumPheromone(probabilityMoves);
+	private int[] chooseRandom(List<MoveProbability> probabilityMoves) throws Exception {
+		double min = Math.abs(minPheromone(probabilityMoves));
+		double value = random.nextDouble() * sumPheromone(probabilityMoves, min);
 		double cumulativeProbability = 0.0;
 		for (MoveProbability move : probabilityMoves) {
-			cumulativeProbability += move.getProbability();
+			cumulativeProbability += move.getProbability() + min;
 			if (value <= cumulativeProbability) {
 				return move.getMove();
 			}
 		}
-		return null;
+		throw new Exception("PROBABILITY ERROR");
 	}
 
-	public double sumPheromone(List<MoveProbability> pheromone) {
+	private double minPheromone(List<MoveProbability> pheromone) {
+		double min = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			if (moveProbability.getProbability() < min) {
+				min = moveProbability.getProbability();
+			}
+		}
+		return min;
+	}
+
+	public double sumPheromone(List<MoveProbability> pheromone, double min) {
 		double sum = 0.0;
 		for (MoveProbability moveProbability : pheromone) {
 			sum += moveProbability.getProbability();
 		}
+		sum += min * pheromone.size();
 		return sum;
 	}
 
@@ -161,6 +177,11 @@ public class AntPlayer extends MetaheuristicPlayer {
 
 	public void setPheromones(Map<String, List<MoveProbability>> pheromones) {
 		this.pheromones = pheromones;
+	}
+
+	public void reset() {
+		boardsStrings = new ArrayList<>();
+		moves = new ArrayList<>();
 	}
 
 }
