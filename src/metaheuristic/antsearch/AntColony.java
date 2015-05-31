@@ -118,10 +118,10 @@ public class AntColony implements Runnable {
 
 		for (int i = 0; i < boardStrings.size(); i++) {
 			List<MoveProbability> pheromone = pheromones.get(boardStrings.get(i));
-			double value = 0.001 * cost;
+			double value = cost / ((double) pheromone.size() + 1.0);
 			for (int j = 0; j < pheromone.size(); j++) {
 				if (pheromone.get(j).getMove().equals(moves.get(i))) {
-					pheromone.get(j).setProbability(pheromone.get(j).getProbability() + value * (j + 1));
+					pheromone.get(j).setProbability(pheromone.get(j).getProbability() + value * (j + 1.0));
 				}
 			}
 			dissipate(pheromone);
