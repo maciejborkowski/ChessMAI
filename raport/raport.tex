@@ -16,6 +16,7 @@
 \usepackage{titling}
 \usepackage{abstract}
 \usepackage{fancyhdr}
+\usepackage{framed}
 
 \lhead{} \chead{} \rhead{}
 \lfoot{\emph{Research Skills and Methodology, 2014/2015}} \cfoot{} \rfoot{\thepage}
@@ -87,9 +88,44 @@ About the GUI
 \subsection{Ant colony}
 \label{sec:ant}
 
-\subsubsection{what?}
-\subsubsection{gui/experiment}
-\subsubsection{result}
+\subsubsection{Idea}
+For ant colony search algorithm a mapping is created between a placement of chess pieces on a chess board and a list of possible moves the current player is able to do, when provided such board. Each move on this list is additionally annotated with a real value, which describes the fitness of the move. Moves with higher fitness ought to yield us better results. Such mapping is called a pheromone and a set of them pheromones.
+
+//pheromone graphic here
+
+Ant is defined here as a chess player, that uses pheromones to choose when its it's time to make a choice of movement. Ant can be a part of a colony, in which case the colony provides the pheromones or it can be independent (used for Greedy Mode). Pheromones can be saved to and loaded from a file. When an ant finds itself on a board that has not yet been added to pheromones a new pheromone is created (possible moves for the board are computed and assigned equal real values).
+
+ Ant can work in one of two modes: 
+\begin{itemize}
+ 	\item Adventurous Mode \hfill \\
+		Used for learning. In this case the ant works for the betterment of its colony. It chooses moves randomly, according to the values of pheromones. This strategy improves the pheromones, by visiting a wide range of possible boards, which results in frequent updates and addition of new pheromones.
+		// How to choose randomly
+	\item Greedy Mode \hfill \\
+		Used for testing and real games. In this case the ant plays for the best end result in its game. Ant chooses a move from the pheromone with the highest value to choose the best move in each turn.
+\end{itemize}
+
+The process of learning consists of many iterations of ants in Adventurous Mode working as a colony. Each iteration amounts to a few phases:
+\begin{enumerate}
+ 	\item Start new games and wait for them to end \hfill \\
+		Each ant plays one game of chess and remembers all boards it has run across, all moves it has chosen to do and the
+the cost function of the series of movements (value of cost function for last board).
+	\item Update pheromones \hfill \\
+		For each ant the pheromones connected to visited boards are updated by a fraction of the value of cost function of the whole series of movements.
+		//Update formula here
+	\item Dissipate pheromones \hfill \\
+		Pheromone for each of the boards that has been visited at least once by any ant in this game is decreased by multiplying the value by a parameter
+		//Dissipation formula here 
+\end{enumerate}
+
+Pheromones can be saved to a file. The file consists of a list of pheromones, each is described with two lines:
+\begin{enumerate}
+ 	\item String representation of a board, left to right, bottom to up, where \# means no chessman, upper case letters mean white chessmen and lower case letters mean black chessmen \hfill \\
+	\item A list of moves. Each move is described by five integer values. First two are the coordinates of chessman to move, third and fourth where to move the chessman to, the fifth is a special value used for promotion (when a pawn becomes another chess piece) and the sixth a real value of pheromone describing its effectiveness. \hfill \\
+\end{enumerate}
+
+
+\subsubsection{Experiments}
+\subsubsection{Result}
 
 \subsection{Genetic algorithm}
 \label{sec:genetic}

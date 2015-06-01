@@ -38,7 +38,7 @@ public class AntPanel extends JPanel {
 
 	private static final String TURNS_DEFAULT = "10";
 	private static final String CONCURRENT_ANTS_DEFAULT = "4";
-	private static final String DISSIPATION_DEFAULT = "0.01";
+	private static final String DISSIPATION_DEFAULT = "0.1";
 	private static final String KING_DEFAULT = "100";
 	private static final String QUEEN_DEFAULT = "10";
 	private static final String PAWN_DEFAULT = "1";
