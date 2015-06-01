@@ -42,6 +42,7 @@
 \twocolumn[
 	\maketitle
 	\begin{abstract}
+something something something something something something something something something something something something something something something something something something something 
 	{
 		\begin{description} 
 		\item[Index Terms:] \emph{chess, metaheuristics, artificial intelligence, ant colony, genetic, simulated annealing}
@@ -85,11 +86,11 @@ About the GUI
 \section{Algorithms}
 \label{sec:project}
 
-\subsection{Ant colony}
+\subsection{Ant colony (Maciej Borkowski)}
 \label{sec:ant}
 
 \subsubsection{Idea}
-For ant colony search algorithm a mapping is created between a placement of chess pieces on a chess board and a list of possible moves the current player is able to do, when provided such board. Each move on this list is additionally annotated with a real value, which describes the fitness of the move. Moves with higher fitness ought to yield us better results. Such mapping is called a pheromone and a set of them pheromones.
+For ant colony search algorithm a mapping is created between a placement of chess pieces on a chessboard and a list of possible moves the current player is able to do, when provided such board. Each move on this list is additionally annotated with a real value, which describes the fitness of the move. Moves with higher fitness ought to yield us better results. Such mapping is called a pheromone and a set of them pheromones.
 
 //pheromone graphic here
 
@@ -98,8 +99,10 @@ Ant is defined here as a chess player, that uses pheromones to choose when its i
  Ant can work in one of two modes: 
 \begin{itemize}
  	\item Adventurous Mode \hfill \\
-		Used for learning. In this case the ant works for the betterment of its colony. It chooses moves randomly, according to the values of pheromones. This strategy improves the pheromones, by visiting a wide range of possible boards, which results in frequent updates and addition of new pheromones.
-		// How to choose randomly
+		Used for learning. In this case the ant works for the betterment of its colony. It chooses moves randomly, according to the values of pheromones. This strategy improves the pheromones, by visiting a wide range of possible boards, which results in frequent updates and addition of new pheromones. The probability of choosing move M (with real value v):
+$$P(M) = \frac{v_m + |min(V)|}{\sum V + n|(min(V))|}, $$
+where~$V$ are all values in a given pheromone,~$v_m$ the value for move and~$n$ is the length of~$V$.
+
 	\item Greedy Mode \hfill \\
 		Used for testing and real games. In this case the ant plays for the best end result in its game. Ant chooses a move from the pheromone with the highest value to choose the best move in each turn.
 \end{itemize}
@@ -111,10 +114,13 @@ The process of learning consists of many iterations of ants in Adventurous Mode 
 the cost function of the series of movements (value of cost function for last board).
 	\item Update pheromones \hfill \\
 		For each ant the pheromones connected to visited boards are updated by a fraction of the value of cost function of the whole series of movements.
-		//Update formula here
+$$v_{new} = v_{old} + \frac{i}{m} cost,$$
+where~$v_{new}$ is the new value, ~$v_{old}$ is the old value,~$i$ is the index of the movement in this series of movements and ~$m$ is the length of the series of movements.
 	\item Dissipate pheromones \hfill \\
-		Pheromone for each of the boards that has been visited at least once by any ant in this game is decreased by multiplying the value by a parameter
-		//Dissipation formula here 
+		Pheromone for each of the boards that has been visited at least once by any ant in this game is decreased by multiplying the value by a parameter.
+$$v_{new} =  v_{old} *  (1 - dissipation),$$
+where~$v_{new}$ is the new value, ~$v_{old}$ is the old value and~$dissipation$ is a parameter. 
+
 \end{enumerate}
 
 Pheromones can be saved to a file. The file consists of a list of pheromones, each is described with two lines:
@@ -123,8 +129,8 @@ Pheromones can be saved to a file. The file consists of a list of pheromones, ea
 	\item A list of moves. Each move is described by five integer values. First two are the coordinates of chessman to move, third and fourth where to move the chessman to, the fifth is a special value used for promotion (when a pawn becomes another chess piece) and the sixth a real value of pheromone describing its effectiveness. \hfill \\
 \end{enumerate}
 
-
 \subsubsection{Experiments}
+
 \subsubsection{Result}
 
 \subsection{Genetic algorithm}
