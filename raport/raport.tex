@@ -90,9 +90,14 @@ About the GUI
 \label{sec:ant}
 
 \subsubsection{Idea}
-For ant colony search algorithm a mapping is created between a placement of chess pieces on a chessboard and a list of possible moves the current player is able to do, when provided such board. Each move on this list is additionally annotated with a real value, which describes the fitness of the move. Moves with higher fitness ought to yield us better results. Such mapping is called a pheromone and a set of them pheromones.
+For ant colony search algorithm a mapping is created between a placement of chess pieces on a chessboard and a list of possible moves the current player is able to do, when provided such board. Each move on this list is additionally annotated with a real value, which describes the fitness of the move. Moves with higher fitness ought to yield us better results. Such mapping is called a pheromone and a set of them pheromones (Figure \ref{fig:pheromones}).
 
-//pheromone graphic here
+\begin{figure*}[!htb]
+	\centering
+	\includegraphics[width=1\textwidth]{ant/pheromones.png} 
+	\caption{Diagram of the implemented ant colony search algorithm with visualisation of pheromones for one iteration with one ant}
+	\label{fig:pheromones}
+\end{figure*}
 
 Ant is defined here as a chess player, that uses pheromones to choose when its it's time to make a choice of movement. Ant can be a part of a colony, in which case the colony provides the pheromones or it can be independent (used for Greedy Mode). Pheromones can be saved to and loaded from a file. When an ant finds itself on a board that has not yet been added to pheromones a new pheromone is created (possible moves for the board are computed and assigned equal real values).
 
@@ -100,7 +105,9 @@ Ant is defined here as a chess player, that uses pheromones to choose when its i
 \begin{itemize}
  	\item Adventurous Mode \hfill \\
 		Used for learning. In this case the ant works for the betterment of its colony. It chooses moves randomly, according to the values of pheromones. This strategy improves the pheromones, by visiting a wide range of possible boards, which results in frequent updates and addition of new pheromones. The probability of choosing move M (with real value v):
-$$P(M) = \frac{v_m + |min(V)|}{\sum V + n|(min(V))|}, $$
+\begin{equation}
+	P(M) = \frac{v_m + |min(V)|}{\sum V + n|(min(V))|}
+\end{equation}
 where~$V$ are all values in a given pheromone,~$v_m$ the value for move and~$n$ is the length of~$V$.
 
 	\item Greedy Mode \hfill \\
@@ -114,11 +121,16 @@ The process of learning consists of many iterations of ants in Adventurous Mode 
 the cost function of the series of movements (value of cost function for last board).
 	\item Update pheromones \hfill \\
 		For each ant the pheromones connected to visited boards are updated by a fraction of the value of cost function of the whole series of movements.
-$$v_{new} = v_{old} + \frac{i}{m} cost,$$
-where~$v_{new}$ is the new value, ~$v_{old}$ is the old value,~$i$ is the index of the movement in this series of movements and ~$m$ is the length of the series of movements.
+\begin{equation}
+	v_{new} = v_{old} + \frac{i}{m} cost
+\end{equation}
+where~$v_{new}$ is the new value, ~$v_{old}$ is the old value,~$i$ is the index of the movement in this series of movements, ~$m$ is the length of the series of movements and~$cost$ ist the value of cost function.
 	\item Dissipate pheromones \hfill \\
 		Pheromone for each of the boards that has been visited at least once by any ant in this game is decreased by multiplying the value by a parameter.
-$$v_{new} =  v_{old} *  (1 - dissipation),$$
+\begin{equation}
+\label{eq:dissipationequation}
+	v_{new} =  v_{old} *  (1 - dissipation)
+\end{equation}
 where~$v_{new}$ is the new value, ~$v_{old}$ is the old value and~$dissipation$ is a parameter. 
 
 \end{enumerate}
@@ -130,6 +142,34 @@ Pheromones can be saved to a file. The file consists of a list of pheromones, ea
 \end{enumerate}
 
 \subsubsection{Experiments}
+
+Firstly, it has to be accentuated that chess is a complex game, the number of possible boards that have to be remembered in pheromones is huge and for each ant move another move has to be done by external Artificial Intelligence. Because of these reasons the learning phase of this metaheuristic takes a very long time. To get results appearing significantly different from completely random ones, hours have to be spent on learning. This makes it very difficult and time-consuming to experiment with parameters properly.
+
+For the experiments the parametrization of many ant search specific variables has been put into dialog boxes in the application(Figure \ref{fig:antapplication}). This way user can change these values easily and create his own colonies. The user-available parameters are as follows:
+
+\begin{itemize}
+ 	\item Number of turns \hfill \\
+The number of turns for each iteration. Each iteration consists of an all concurrent ants playing one game of chance up to a win, lose, draw or the artificial end of game, when it takes too long. This parameter should be kept low if we want the learning phase to take less time and if we want ants to have more broad "knowledge" of possible moves in the beggining of the game. 
+	\item Concurrent ants \hfill \\
+The number of ants playing a game in each iteration. The more of them the longer each iteration takes.
+ 	\item Dissipation level \hfill \\
+The dissipation parameter of ant search algorithm dissipation equation (Equation~\ref{eq:dissipationequation}).
+	\item Piece weight \hfill \\
+Each piece has its own weight used in cost function (Equation~\ref{eq:costfunction})
+	\item Move history \hfill \\
+This parameter lets start the game from any point, provided a valid chess move history. Each ant in each iteration starts its game from this point and plays up until the end of the game (including the end of maximum number of turns defined as another parameter)
+\end{itemize}
+
+The more obvious rules had to be applied to get to the point of metaheuristic being better than a random algorithm and able to win one game out of hundreds when playing against the artificial intelligence. Most importantly the weight of king should far bigger than other figures, the number of turns small, and a move history provided that gives a possibility of winning in a few turns. Increasing the number of concurrent ants and, at the same time, the dissipation level makes the results possibly even better but by a very small margin at the cost of a longer learning phase (making it difficult to test).
+
+Meddling in all of these parameters proved to be insufficient in obtaining better results. 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{ant/antapplication.png} 
+	\caption{Ant colony dialog boxes}
+	\label{fig:antapplication}
+\end{figure}
 
 \subsubsection{Result}
 
