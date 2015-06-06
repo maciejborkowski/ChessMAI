@@ -165,7 +165,7 @@ The dissipation parameter of ant search algorithm dissipation equation (Equation
 	\item Piece weight \hfill \\
 Each piece has its own weight used in cost function (Equation~\ref{eq:costfunction})
 	\item Move history \hfill \\
-This parameter sets the starting po start the game from any point, provided a valid chess move history. Each ant in each iteration starts its game from this point and plays up until the end of the game (including the end of maximum number of turns defined as another parameter)
+This parameter sets the starting position of the game from any point, provided a valid chess move history. Each ant in each iteration starts its game from this point and plays up until the end of the game (including the end of maximum number of turns defined as another parameter)
 \end{itemize}
 
 The more obvious rules had to be applied to get to the point of metaheuristic being better than a random algorithm and able to win one game out of hundreds when playing against the artificial intelligence. Most importantly the weight of king should far bigger than other figures, the number of turns small, and a move history provided that gives a possibility of winning in a few turns. Increasing the number of concurrent ants and, at the same time, the dissipation level makes the results possibly even better but by a very small margin at the cost of a longer learning phase (making it difficult to test).
