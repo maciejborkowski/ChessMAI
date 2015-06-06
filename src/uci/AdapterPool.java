@@ -14,14 +14,14 @@ public class AdapterPool {
 		adapter.isready();
 	}
 
-	public synchronized UCIAdapter bindAdapter() throws Exception {
+	public UCIAdapter bindAdapter() throws Exception {
 		if (!alive) {
 			throw new Exception("Dead pool");
 		}
 		UCIAdapter adapter = null;
 		while (adapter == null) {
 			try {
-				adapter = unused.getFirst();
+				adapter = getAdapter();
 			} catch (NoSuchElementException e) {
 				if (used.isEmpty()) {
 					throw new Exception("Empty pool");
@@ -29,7 +29,11 @@ public class AdapterPool {
 				Thread.sleep(100);
 			}
 		}
+		return adapter;
+	}
 
+	private synchronized UCIAdapter getAdapter() throws Exception {
+		UCIAdapter adapter = unused.getFirst();
 		unused.remove(adapter);
 		used.add(adapter);
 		return adapter;

@@ -115,6 +115,7 @@ public class AntPanel extends JPanel {
 				colonyOptions.setMaxLength(Integer.parseInt(turnsField.getText()));
 				colonyOptions.getChessOptions().setInitialMoveHistory(historyField.getText());
 				colonyOptions.setDissipation(Double.parseDouble(dissipationField.getText()));
+				colonyOptions.setConcurrentAnts(Integer.parseInt(concurrentAntsField.getText()));
 				HashMap<Class<? extends Piece>, Double> pieceCostMap = new HashMap<>();
 				pieceCostMap.put(King.class, Double.parseDouble(kingField.getText()));
 				pieceCostMap.put(Queen.class, Double.parseDouble(queenField.getText()));

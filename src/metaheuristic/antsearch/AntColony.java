@@ -67,6 +67,7 @@ public class AntColony implements Runnable {
 			game.reset();
 			((AntPlayer) game.getWhitePlayer()).reset();
 		}
+		threads.clear();
 	}
 
 	private void startGames() {
@@ -88,7 +89,7 @@ public class AntColony implements Runnable {
 	}
 
 	private void initGames() {
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < colonyOptions.getConcurrentAnts(); i++) {
 			ChessGame game = initGame();
 			games.add(game);
 		}
