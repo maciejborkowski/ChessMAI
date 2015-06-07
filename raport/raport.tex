@@ -35,7 +35,7 @@
 \newcommand{\eng}[1]{(ang.\ \emph{#1})}
 
 \title{Metaheuristic Chess Artificial Intelligence}
-\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl \and Paweł Pałus\\ zzzzzz@student.pwr.edu.pl}
+\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl \and Paweł Pałus\\ 197004@student.pwr.edu.pl}
 
 \begin{document}
 \thispagestyle{empty}
@@ -64,8 +64,21 @@ The problem describes a standard game of chess, with a square board of 64 fields
 
 \subsection{Mathematical model}
 \label{sec:model}
+Given:
+\begin{itemize}
+ 	\item $t \in N$ - initial game turn 
+ 	\item $n \in N$ - maximum number of game turns intended by for playing 
+ 	\item $i,j \in \{1,2,3,4,5,6,7,8\}$ - number of rows and columns
+ 	\item $B_{8,8,t}$ - fields on the board taking values $v_{i,j,t}\in R$ describing the field on board(e.g. the chessmen standing on field) during turn t
+ 	\item f($B_{8,8,t},v_{i,j,t}$) - takes negatives values for bad situations on the field $v_{i,j,t}$ (e.g. an opponent's piece) positive for good situations (e.g. player's piece)
+\end{itemize}
+To find:
+\newline
+a series of movements starting from $B_{8,8,t}$ and ending in $B_{8,8,t+n}$ according to rules of chess
+\newline
+such that
 
-From card, expand on it
+$\sum_{i,j} f(B_{8,8,t+n},v_{i,j,t+n}$) is maximised
 
 \section{Experimentation system}
 \label{sec:project}
@@ -180,17 +193,110 @@ Meddling in all of these parameters proved to be insufficient in obtaining bette
 \subsubsection{gui/experiment}
 \subsubsection{result}
 
-\subsection{Simulated Annealing}
+\subsection{Simulated Annealing (Paweł Pałus)}
 \label{sec:annealing}
 
-\subsubsection{what?}
-\subsubsection{gui/experiment}
-\subsubsection{result}
+\subsubsection{Idea}
+Simulated annealing is a method for finding a good (not necessarily optimal) solution to an optimization problem.
+There are many optimization algorithms, including ant search, genetic algorithms, tabu search, and more. Simulated annealing's advantage is that it avoids getting caught at local minimums solutions that are better than any others nearby, but are not the best.
 
+\begin{figure*}[!htb]
+	\centering
+	\includegraphics[width=1\textwidth]{annealing/annealingSchema.png} 
+	\caption{Diagram of the implemented simululated annealing algorithm}
+	\label{fig:annealingSchema}
+\end{figure*}
+
+in the first game the Algorithm chooses random possible moves, all moves performed by AI and the algorithm are saved. In the end of the game cost function is calculated and saved. Then the algorithm simulate another game (iteration) in which chooses a saved moves, or a random possible moves and it depends on temperature. If the algorithm choosed random move, opponent move is performed by AI, but if saved move was choosed then opponent move is also a saved move. Not always saved move can be performed therefore in case of one cannot make a saved move, a random move is performed. If there is checkmate or maximum number of turns is achived game ends and cost function is calculated if this cost function is greater than previous one then old saved moves and cost function are exchanged for present. There can occour a situation in which game ends before achieving maximum number of turns (for example if there is a checkmate) and its cost function is greater than previous one. Then in the next simulated game the algorithm will have less saved moves for example 4 and when this number is exceeded random moves are performed in metaheuristic's turns and AI moves in opponent turns. The cost function base only on weights of chess pieces. Weights for chess pieces are as follows:
+
+pawn - 1
+
+knight - 5
+
+bishop - 5
+
+rook - 7
+
+queen - 10
+
+king - 1000
+
+Weights are positive for own pieces and negetive for opponent pieces.
+It is important to assign a weight to the king instead of giving hight (in absolute value) value for checkmate, because then it is possible to consider better and worse situations for games that has no max number of turns. without that the algorithm would have all the time the same sequence of saved moves expect very unlikly situation that metaheuristics wins, then the sequence would change only once.
+
+\subsubsection{GUI}
+GUI is depicted in figure 4.
+\begin{figure*}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{annealing/GUI.png} 
+	\caption{Simulated annealing dialog boxes}
+	\label{fig:annealingTab}
+\end{figure*}
+
+\begin{itemize}
+ 	\item Steps \hfill \\
+Here is a place to input sequence of moves, after that one can display all or a part of a game in a way that every another move is displayed after pressing  a button
+
+	\item Initial temperature \hfill \\
+A decimal number in a range from 0 to 1.0. The greater the temperature the greater the chance of choosing a random move. Temperature decreases after every iteration of algorithm.
+ 	\item Drop in temperature \hfill \\
+A value by which the temperature drops after each iteration.
+	\item Max number of turns \hfill \\
+An integer number that says how many turns at most can be performed in one game. A turn is defined as two moves, but to simplify number of turns increases after every black player move.
+	\item number of internal iterations \hfill \\
+An integer number that says how many times the algorithm should repeat an action of searching better solution.
+\end{itemize}
+
+\subsubsection{eqperiments}
+It is hard to tell what parameters should be to abtain the best results due to big randomness of the algorithm work. As good parameters have been choosed:
+\begin{itemize}
+	\item Initial temperature = 0.8 \hfill \\
+
+ 	\item Drop in temperature = $\frac{Initial \: temperature}{number \: of \: internal \: iterations} \cdot 0.9$ \hfill \\
+ 	
+in this case the temperature for the last iteration equals $10\%$ of the initial temperature. that means $7.2\%$
+\end{itemize}
+Of course the greater number of the "number of internal iterations" parameter the greater the chance to achieve better solution. Experiments was made in a range from 10 to 20000 for "number of internal iterations" parameter parameter.
+Experiments was made most often for value of 10 for "Max number of turns" parameter. There were considered 2 kinds of initial board, standard initial situation for chess and situation depicted in figure 5.
+
+\begin{figure*}[!htb]
+	\centering
+	\includegraphics[width=1.0\textwidth]{annealing/board.png} 
+	\caption{initial board}
+	\label{fig:annealingTab}
+\end{figure*}
+\clearpage
+
+For above board metaheuristic player is white and there is actually its turn.
+ 
+\subsubsection{result}
+Unfortunetelly checkmate was not achived. The best result for standard initial chess board was cost function: 21.0 for parameters:
+
+- internal iteration number: 10000
+
+- max turn number: 10
+
+- initial temperature: 0.8
+
+- drop in temperature: $\frac{0.8}{10000} \cdot 0.9 = 0.000072$
+
+in time: 1485 seconds
+
+and for initial situation depicted in figure 5 the best result was cost function equals 31.0 for parameters:
+
+- internal iteration number: 20000
+
+- max turn number: 10
+
+- initial temperature: 0.8
+
+- drop in temperature: $\frac{0.8}{20000} \cdot 0.9 = 0.000031$
+
+in time: 3734 sekund
 \section{Conclusion}
 \label{sec:conclusion}
 
-It was fun / not fun.
+It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
 
 \begin{thebibliography}{99}
 
