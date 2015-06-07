@@ -35,11 +35,7 @@
 \newcommand{\eng}[1]{(ang.\ \emph{#1})}
 
 \title{Metaheuristic Chess Artificial Intelligence}
-<<<<<<< HEAD
-\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl \and Paweł Pałus\\ 197004@student.pwr.edu.pl}
-=======
-\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl \and Paweł Pałus\\ zzzzzz@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl }
->>>>>>> 937e9433fb8377b9d441e2bf29a05cf7c0ffbfa6
+\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl \and Paweł Pałus\\ 197004@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl }
 
 \begin{document}
 \thispagestyle{empty}
@@ -234,12 +230,12 @@ It is important to assign a weight to the king instead of giving hight (in absol
 
 \subsubsection{GUI}
 GUI is depicted in figure 4.
-\begin{figure*}[!htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{annealing/GUI.png} 
 	\caption{Simulated annealing dialog boxes}
 	\label{fig:annealingTab}
-\end{figure*}
+\end{figure}
 
 \begin{itemize}
  	\item Steps \hfill \\
@@ -273,7 +269,6 @@ Experiments was made most often for value of 10 for "Max number of turns" parame
 	\caption{initial board}
 	\label{fig:annealingTab}
 \end{figure*}
-\clearpage
 
 For above board metaheuristic player is white and there is actually its turn.
  
@@ -300,13 +295,10 @@ and for initial situation depicted in figure 5 the best result was cost function
 
 - drop in temperature: $\frac{0.8}{20000} \cdot 0.9 = 0.000031$
 
-<<<<<<< HEAD
 in time: 3734 sekund
-\section{Conclusion}
-\label{sec:conclusion}
 
-It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
-=======
+
+
 \section{Improvements}
 \label{sec:improvements}
 
@@ -317,9 +309,7 @@ It is rare to achive a checkmate by the algorithm due to several precised moves 
 \section{Conclusion}
 \label{sec:conclusion}
 
-
-It was fun / not fun.
->>>>>>> 937e9433fb8377b9d441e2bf29a05cf7c0ffbfa6
+It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
 
 \begin{thebibliography}{99}
 
