@@ -83,7 +83,46 @@ $\sum_{i,j} f(B_{8,8,t+n},v_{i,j,t+n}$) is maximised
 \section{Experimentation system}
 \label{sec:project}
 
-About the application
+Experimentation system will by discussed with images.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/Initial.png} 
+	\caption{Initial Run panel}
+	\label{fig:initialRunPanel}
+\end{figure}
+
+Figure \ref{fig:initialRunPanel} shows run panel that is displayed after starting the application. On the right side of the application are options on white and black player. Checking proper radio button one can choose what player will play a game as white player and also as black player. The choices are: AI(firenzina engine), human, or one of 3 metaheuristics. There are also file buttons that are used to input knowledge for ant search algorithm (proper file button for proper white or black player), and one next button that is used to make movements one after another from a textbox that is located in annealing tab. It will be further discussed in 4th section.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/InitialAfterRun.png} 
+	\caption{Initial Run panel after pressing run button}
+	\label{fig:initialRunPanelAfterRun}
+\end{figure}
+
+Figure \ref{fig:initialRunPanelAfterRun} shows the run panel after pressing the run button. Initial locations of chessmen are set according to chess rules.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/withHistory.png} 
+	\caption{Initial board after certain sequence of movements}
+	\label{fig:runPanelWithHistory}
+\end{figure}
+
+the application allows possibility to start game from other than standard initial locations of chessmen what is depicted in figure \ref{fig:runPanelWithHistory}. For this purpose sequence of movements should be typed (or pasted) to the textbox located above the run button.
+
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/withHistoryAndGameHistory.png} 
+	\caption{History of movements}
+	\label{fig:runPanelWithMovementsHistory}
+\end{figure}
+
+On the right side from the run button one can see the textbox responsible for showing the history of the movements as depicted in figure \ref{fig:runPanelWithMovementsHistory}. This is full history of movements including movements that was made using the textbox above the run button.
+
+At the top of the application are tabs for metaheuristics and the run panel.
 
 \subsection{UCI}
 \label{sec:uci}
@@ -309,7 +348,7 @@ Weights are positive for own pieces and negetive for opponent pieces.
 It is important to assign a weight to the king instead of giving hight (in absolute value) value for checkmate, because then it is possible to consider better and worse situations for games that has no max number of turns. without that the algorithm would have all the time the same sequence of saved moves expect very unlikly situation that metaheuristics wins, then the sequence would change only once.
 
 \subsubsection{GUI}
-GUI is depicted in figure 4.
+GUI is depicted in figure \ref{fig:annealingTab}).
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{annealing/GUI.png} 
@@ -347,7 +386,7 @@ Experiments was made most often for value of 10 for "Max number of turns" parame
 	\centering
 	\includegraphics[width=1.0\textwidth]{annealing/board.png} 
 	\caption{initial board}
-	\label{fig:annealingTab}
+	\label{fig:initialBoard}
 \end{figure*}
 
 For above board metaheuristic player is white and there is actually its turn.
@@ -364,8 +403,9 @@ Unfortunetelly checkmate was not achived. The best result for standard initial c
 - drop in temperature: $\frac{0.8}{10000} \cdot 0.9 = 0.000072$
 
 in time: 1485 seconds
+\newline
 
-and for initial situation depicted in figure 5 the best result was cost function equals 31.0 for parameters:
+and for initial situation depicted in figure \ref{fig:initialBoard} the best result was cost function equals 31.0 for parameters:
 
 - internal iteration number: 20000
 
@@ -376,6 +416,9 @@ and for initial situation depicted in figure 5 the best result was cost function
 - drop in temperature: $\frac{0.8}{20000} \cdot 0.9 = 0.000031$
 
 in time: 3734 sekund
+\newline
+
+Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
 
 
 
@@ -389,7 +432,7 @@ in time: 3734 sekund
 \section{Conclusion}
 \label{sec:conclusion}
 
-It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
+It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not.
 
 \begin{thebibliography}{99}
 
