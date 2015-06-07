@@ -35,7 +35,11 @@
 \newcommand{\eng}[1]{(ang.\ \emph{#1})}
 
 \title{Metaheuristic Chess Artificial Intelligence}
+<<<<<<< HEAD
 \author{Maciej Borkowski\\ 195968@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl \and Paweł Pałus\\ 197004@student.pwr.edu.pl}
+=======
+\author{Maciej Borkowski\\ 195968@student.pwr.edu.pl \and Paweł Pałus\\ zzzzzz@student.pwr.edu.pl  \and Mariusz Waszczyński\\  xxxxxx@student.pwr.edu.pl }
+>>>>>>> 937e9433fb8377b9d441e2bf29a05cf7c0ffbfa6
 
 \begin{document}
 \thispagestyle{empty}
@@ -112,13 +116,14 @@ For ant colony search algorithm a mapping is created between a placement of ches
 	\label{fig:pheromones}
 \end{figure*}
 
-Ant is defined here as a chess player, that uses pheromones to choose when its it's time to make a choice of movement. Ant can be a part of a colony, in which case the colony provides the pheromones or it can be independent (used for Greedy Mode). Pheromones can be saved to and loaded from a file. When an ant finds itself on a board that has not yet been added to pheromones a new pheromone is created (possible moves for the board are computed and assigned equal real values).
+Ant is defined here as a chess player, that uses pheromones to choose a move when it is metaheuristic's time to make a choice of movement. Ant can be a part of a colony, in which case the colony provides the pheromones or it can be independent (used for Greedy Mode). Pheromones can be saved to and loaded from a file. When an ant finds itself on a board that has not yet been added to pheromones a new pheromone is created (possible moves for the board are computed and assigned equal real values).
 
  Ant can work in one of two modes: 
 \begin{itemize}
  	\item Adventurous Mode \hfill \\
 		Used for learning. In this case the ant works for the betterment of its colony. It chooses moves randomly, according to the values of pheromones. This strategy improves the pheromones, by visiting a wide range of possible boards, which results in frequent updates and addition of new pheromones. The probability of choosing move M (with real value v):
 \begin{equation}
+\label{eq:choosingequation}
 	P(M) = \frac{v_m + |min(V)|}{\sum V + n|(min(V))|}
 \end{equation}
 where~$V$ are all values in a given pheromone,~$v_m$ the value for move and~$n$ is the length of~$V$.
@@ -158,6 +163,13 @@ Pheromones can be saved to a file. The file consists of a list of pheromones, ea
 
 Firstly, it has to be accentuated that chess is a complex game, the number of possible boards that have to be remembered in pheromones is huge and for each ant move another move has to be done by external Artificial Intelligence. Because of these reasons the learning phase of this metaheuristic takes a very long time. To get results appearing significantly different from completely random ones, hours have to be spent on learning. This makes it very difficult and time-consuming to experiment with parameters properly.
 
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{ant/antapplication.png} 
+	\caption{Ant colony dialog boxes}
+	\label{fig:antapplication}
+\end{figure}
+
 For the experiments the parametrization of many ant search specific variables has been put into dialog boxes in the application(Figure \ref{fig:antapplication}). This way user can change these values easily and create his own colonies. The user-available parameters are as follows:
 
 \begin{itemize}
@@ -170,21 +182,17 @@ The dissipation parameter of ant search algorithm dissipation equation (Equation
 	\item Piece weight \hfill \\
 Each piece has its own weight used in cost function (Equation~\ref{eq:costfunction})
 	\item Move history \hfill \\
-This parameter lets start the game from any point, provided a valid chess move history. Each ant in each iteration starts its game from this point and plays up until the end of the game (including the end of maximum number of turns defined as another parameter)
+This parameter sets the starting position of the game from any point, provided a valid chess move history. Each ant in each iteration starts its game from this point and plays up until the end of the game (including the end of maximum number of turns defined as another parameter)
 \end{itemize}
 
 The more obvious rules had to be applied to get to the point of metaheuristic being better than a random algorithm and able to win one game out of hundreds when playing against the artificial intelligence. Most importantly the weight of king should far bigger than other figures, the number of turns small, and a move history provided that gives a possibility of winning in a few turns. Increasing the number of concurrent ants and, at the same time, the dissipation level makes the results possibly even better but by a very small margin at the cost of a longer learning phase (making it difficult to test).
 
-Meddling in all of these parameters proved to be insufficient in obtaining better results. 
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.5\textwidth]{ant/antapplication.png} 
-	\caption{Ant colony dialog boxes}
-	\label{fig:antapplication}
-\end{figure}
 
 \subsubsection{Result}
+
+Meddling in all of these parameters proved to be insufficient in obtaining better results. After careful debugging of the application, the conclusion has been made, that the possible reason for improvement could be to increase the probability of choosing good moves instead of dwell on the bad moves. Even though the move choosing equation (Equation~\ref{eq:choosingequation}) gives more probability to good moves, it is not very significant to the sum of all the probabilities, because there are generally a lot of bad moves. One of the ideas was to sum up the logarithms of values in equation, which is often a way of dealing with those kind of issues. This however only made the values of pheromones more close to each other so the probability of choosing a good move didn't really change that much. 
+
+The really important change was observed when the Equation~\ref{eq:choosingequation} was modified to one with a "tolerance" factor multiplied by each value except the best one. This way the probability of choosing the best move in training is big, enabling  the colony to thoroughly establish how good of a situation on the board it results in. This can quite easily culminate in a fall into a local maximum of cost function, but it is not a bad situation to be in chess - at least we end up in a better situation than before. Additionally to really fall into a local maximum the moves have to contain a lot of weight gain, so it would be most probably a checkmate anyway, which is, for all intents and purposes, a global maximum. Indeed, if a winning sequence of moves has been established in this version the colony started winning very often.
 
 \subsection{Genetic algorithm}
 \label{sec:genetic}
@@ -292,11 +300,26 @@ and for initial situation depicted in figure 5 the best result was cost function
 
 - drop in temperature: $\frac{0.8}{20000} \cdot 0.9 = 0.000031$
 
+<<<<<<< HEAD
 in time: 3734 sekund
 \section{Conclusion}
 \label{sec:conclusion}
 
 It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
+=======
+\section{Improvements}
+\label{sec:improvements}
+
+- put all the variables/modes etc in GUI
+- adding new engines and randomize their use between moves
+- importing files for further learning
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+
+It was fun / not fun.
+>>>>>>> 937e9433fb8377b9d441e2bf29a05cf7c0ffbfa6
 
 \begin{thebibliography}{99}
 

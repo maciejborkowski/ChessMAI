@@ -73,7 +73,9 @@ public class AntPlayer extends MetaheuristicPlayer {
 			// List<MoveProbability> moves =
 			// removeLocalMaxima(probabilityMoves);
 			if (probabilityMoves.size() > 0) {
-				move = chooseRandom(probabilityMoves);
+				// move = chooseRandom(probabilityMoves);
+				// move = chooseRandomLogarithmically(probabilityMoves);
+				move = chooseRandomIntolerantly(probabilityMoves, 2.0);
 			}
 		}
 		// System.out.println("CHOSEN MOVE: " + MoveParser.parse(move));
@@ -90,6 +92,8 @@ public class AntPlayer extends MetaheuristicPlayer {
 		return moves;
 	}
 
+	@SuppressWarnings("unused")
+	@Deprecated
 	private List<MoveProbability> removeLocalMaxima(List<MoveProbability> source) {
 		List<MoveProbability> target = new ArrayList<>();
 		for (MoveProbability moveProbability : source) {
@@ -100,14 +104,45 @@ public class AntPlayer extends MetaheuristicPlayer {
 		return target;
 	}
 
-	private int[] chooseRandom(List<MoveProbability> probabilityMoves) throws Exception {
-		double min = Math.abs(minPheromone(probabilityMoves));
-		double value = random.nextDouble() * sumPheromone(probabilityMoves, min);
+	private int[] chooseRandom(List<MoveProbability> pheromone) throws Exception {
+		double min = Math.abs(minPheromone(pheromone));
+		double value = random.nextDouble() * sumPheromone(pheromone, min);
 		double cumulativeProbability = 0.0;
-		for (MoveProbability move : probabilityMoves) {
-			cumulativeProbability += move.getProbability() + min;
+		for (MoveProbability moveProbability : pheromone) {
+			cumulativeProbability += moveProbability.getProbability() + min;
 			if (value <= cumulativeProbability) {
-				return move.getMove();
+				return moveProbability.getMove();
+			}
+		}
+		throw new Exception("PROBABILITY ERROR");
+	}
+
+	private int[] chooseRandomLogarithmically(List<MoveProbability> pheromone) throws Exception {
+		double min = Math.abs(minPheromone(pheromone));
+		double value = random.nextDouble() * sumLogPheromone(pheromone, min);
+		double cumulativeProbability = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			cumulativeProbability += Math.log(moveProbability.getProbability() + min + 1);
+			if (value <= cumulativeProbability) {
+				return moveProbability.getMove();
+			}
+		}
+		throw new Exception("PROBABILITY ERROR");
+	}
+
+	private int[] chooseRandomIntolerantly(List<MoveProbability> pheromone, double tolerance) throws Exception {
+		double min = Math.abs(minPheromone(pheromone));
+		int[] best = chooseBest(pheromone);
+		double value = random.nextDouble() * sumIntolerantPheromone(pheromone, min, best, tolerance);
+		double cumulativeProbability = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			if (moveProbability.getMove().equals(best)) {
+				cumulativeProbability += (moveProbability.getProbability() + min);
+			} else {
+				cumulativeProbability += (moveProbability.getProbability() + min) / (pheromone.size() / tolerance);
+			}
+			if (value <= cumulativeProbability) {
+				return moveProbability.getMove();
 			}
 		}
 		throw new Exception("PROBABILITY ERROR");
@@ -129,6 +164,26 @@ public class AntPlayer extends MetaheuristicPlayer {
 			sum += moveProbability.getProbability();
 		}
 		sum += min * pheromone.size();
+		return sum;
+	}
+
+	private double sumLogPheromone(List<MoveProbability> pheromone, double min) {
+		double sum = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			sum += Math.log(moveProbability.getProbability() + min + 1);
+		}
+		return sum;
+	}
+
+	private double sumIntolerantPheromone(List<MoveProbability> pheromone, double min, int[] best, double tolerance) {
+		double sum = 0.0;
+		for (MoveProbability moveProbability : pheromone) {
+			if (moveProbability.getMove().equals(best)) {
+				sum += (moveProbability.getProbability() + min);
+			} else {
+				sum += (moveProbability.getProbability() + min) / (pheromone.size() / tolerance);
+			}
+		}
 		return sum;
 	}
 
