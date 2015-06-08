@@ -8,3 +8,10 @@
 *.war
 *.ear
 
+#Metaheuristic result files
+*result.txt
+
+#Tex files
+*.aux
+*.log
+*.synctex.gz

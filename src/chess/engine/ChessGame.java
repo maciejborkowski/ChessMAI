@@ -56,7 +56,6 @@ public class ChessGame implements Runnable {
 	}
 
 	public void initGame() {
-
 		setActive(null);
 		whitePieces = new LinkedList<Piece>();
 		blackPieces = new LinkedList<Piece>();
@@ -65,6 +64,7 @@ public class ChessGame implements Runnable {
 
 		ChessEngine.createPieces(this);
 		currentTurn = ChessColor.WHITE;
+		state = State.NORMAL;
 
 		moveHistory = new StringBuilder();
 		if (options.getInitialMoveHistory() != null) {
@@ -72,7 +72,6 @@ public class ChessGame implements Runnable {
 		}
 
 		turnNumber = 0;
-		this.state = State.NORMAL;
 		updateGUI();
 	}
 

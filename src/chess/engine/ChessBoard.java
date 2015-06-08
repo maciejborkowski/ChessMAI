@@ -75,7 +75,11 @@ public class ChessBoard {
 				if (board[j][i].getPiece() == null) {
 					builder.append('#');
 				} else {
-					builder.append(values.get(board[j][i].getPiece().getClass()));
+					Character val = values.get(board[j][i].getPiece().getClass());
+					if (board[j][i].getPiece().getColor() == ChessColor.WHITE) {
+						val = Character.toUpperCase(val);
+					}
+					builder.append(val);
 				}
 			}
 		}
