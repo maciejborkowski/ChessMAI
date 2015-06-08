@@ -104,7 +104,7 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 			}
 			gens.put(hash, mc);
 		}
-		System.out.println("LOADED SOLUTION FILE");
+		//System.out.println("LOADED SOLUTION FILE");
 	}
 	
 	public List<int[]> getMoves() {
