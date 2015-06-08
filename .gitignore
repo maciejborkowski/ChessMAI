@@ -11,9 +11,6 @@
 #Metaheuristic result files
 *result.txt
 
-#Metaheuristic result files
-*result.txt
-
 #Tex files
 *.aux
 *.log

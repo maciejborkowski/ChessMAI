@@ -1,7 +1,6 @@
 \RequirePackage{ifpdf}
 	\ifpdf	
 		\documentclass[pdftex]{article}
-		%\usepackage[colorlinks, linkcolor=black, pdftex, plainpages=false, hyperindex, %pdfview=FitBH]{hyperref}
 		\RequirePackage{color} 
 	\else
 		\documentclass[10pt]{article} 
@@ -16,7 +15,6 @@
 \usepackage{titling}
 \usepackage{abstract}
 \usepackage{fancyhdr}
-\usepackage{framed}
 
 \lhead{} \chead{} \rhead{}
 \lfoot{\emph{Research Skills and Methodology, 2014/2015}} \cfoot{} \rfoot{\thepage}
@@ -42,10 +40,10 @@
 \twocolumn[
 	\maketitle
 	\begin{abstract}
-something something something something something something something something something something something something something something something something something something something 
+The use of metaheuristics (ant colony search, genetic algorithm, simulated annealing) in playing the game of chess as one of the players against an external artificial intelligence.
 	{
 		\begin{description} 
-		\item[Index Terms:] \emph{chess, metaheuristics, artificial intelligence, ant colony, genetic, simulated annealing}
+		\item[Index Terms:] \emph{game, chess, metaheuristics, artificial intelligence, ant colony, genetic, simulated annealing, learning, artificial intelligence, AI}
 		\end{description}
 	}
 	\end{abstract}
@@ -55,46 +53,94 @@ something something something something something something something something 
 \section{Introduction}
 \label{sec:introduction}
 
-Hello
+In the age of quickly developing computers there is more and more need for good Artificial Intelligence. A significant number of IT systems tries to appear intelligent one way or another. One of the fields where intelligence appears to be an important factor are multiplayer games played for fun and competitively for hundreds of years. There are numerous methods to imitate an intelligence - neural networks, fuzzy logic, decision trees. Many of the therse methods are being improved upon to this day. Metaheuristics are commonly used to find good, not necessarily optimal solutions for optimization problems and could be used to imitate an real player.
+
+The game of chess drew our attention. It is a game known to most and its rules make for some very complicated strategies thanks to emergent behaviour of the chess system. Worldwide competitions are organized, which verify players skills in this complex game. One of the most important factors in players skills comes from experience - the training. Each chess figure has well-defined moves it is able to take, which results in an astoundingly big number of possible scenarios. A new player quickly finds out that some pieces are more important than others and subconsciously assign to them different weights. It is an important property, which is generally taken into consideration when designing an artificial chess player.~\cite{comparison}
+
+A real chess game is not deterministic from the perspective of one of the players. However, a metaheuristic could be used in this situation to learn from its own mistakes when playing a game of chess, especially when the opponent always uses the same strategy (which is the case when playing with a normal chess AI). The objective of this research is to find out how would metaheuristic algorithms, such as genetic, ant colony search and simulated annealing behave when used as an artificial intelligence in chess.
 
 \section{Optimization Problem}
 \label{sec:problem}
 
-The problem describes a standard game of chess, with a square board of 64 fields. Two players have to consecutively move a piece the board onto another field according to complex, well-defined rules. Our task is to find the series of movements in a game of chess that gives the best chance of winning the game in the end. The starting position of pieces can be arbitrary.
+The problem describes a standard game of chess, with a square board of 64 fields. Two players have to consecutively move a piece the board onto another field according to complex, well-defined rules. Our task is to find the series of movements in a game of chess that gives the best chance of winning the game in the end. The starting position of pieces can be arbitrary. 
 
 \subsection{Mathematical model}
 \label{sec:model}
+
 Given:
 \begin{itemize}
  	\item $t \in N$ - initial game turn 
- 	\item $n \in N$ - maximum number of game turns intended by for playing 
+ 	\item $n \in N$ - maximum number of game turns intended for playing 
  	\item $i,j \in \{1,2,3,4,5,6,7,8\}$ - number of rows and columns
- 	\item $B_{8,8,t}$ - fields on the board taking values $v_{i,j,t}\in R$ describing the field on board(e.g. the chessmen standing on field) during turn t
+ 	\item $B_{8,8,t}$ - fields on the board taking values $v_{i,j,t}\in R$ describing the field on board (e.g. the chessmen standing on field) during turn t
  	\item f($B_{8,8,t},v_{i,j,t}$) - takes negatives values for bad situations on the field $v_{i,j,t}$ (e.g. an opponent's piece) positive for good situations (e.g. player's piece)
 \end{itemize}
-To find:
-\newline
-a series of movements starting from $B_{8,8,t}$ and ending in $B_{8,8,t+n}$ according to rules of chess
-\newline
-such that
 
-$\sum_{i,j} f(B_{8,8,t+n},v_{i,j,t+n}$) is maximised
+To find:
+
+\begin{itemize}
+	\item a series of movements starting from $B_{8,8,t}$ and ending in $B_{8,8,t+n}$ according to rules of chess
+\end{itemize}
+
+Such that:
+
+\begin{equation}
+\label{eq:costfunction}
+	\sum_{i,j} f(B_{8,8,t+n},v_{i,j,t+n}) \quad is \quad maximised
+\end{equation}
+
 
 \section{Experimentation system}
 \label{sec:project}
 
-About the application
+\subsection{Chess engine}
+\label{sec:engine}
 
-\subsection{UCI}
-\label{sec:uci}
-UCI (Universal Chess Interface) - an open communication protocol that enables a chess program's engine to communicate with its user interface
-\subsubsection{Firenzina}
-\label{sec:firenzina}
+For learning purposes a real, competitive artificial intelligence was required. A choice has been made to use an external chess engine, which provides required functionality. Such engines commonly implement the Universal Chess Interface (UCI)~\cite{uci} for two-way communication between outside application (like the one made for this research) and the engine implementing an artificial intelligence. 
+In the end we have chosen to use Firenzina Engine~\cite{firenzina} because of its good implementation of UCI standard and being able to make good moves in a very short amount of time (one milisecond).
+
+From the side of our application the UCI interface had to be implemented, as well as the whole set of chess rules so that human player can know which moves are valid (through graphical cues). Metaheuristics also required this knowledge, because they have to start from making random moves chosen from the set of valid ones. A Graphical User Interface (GUI) was also fully implemented for user's convinience.
 
 \subsection{GUI}
 \label{sec:uci}
 
-About the GUI
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/Initial.png} 
+	\caption{Initial, empty run panel enables us to choose the types of players and starting game situation}
+	\label{fig:initialRunPanel}
+\end{figure}
+
+Figure \ref{fig:initialRunPanel} shows run panel that is displayed after starting the application. On the right side of the application the user can see options for white and black player. Checking proper radio button one can choose what type of player will play a game as white player and also as a black player. The choices are: AI (Firenzina engine), human, or one of 3 metaheuristics. There are also File buttons that are used to input knowledge base for ant search algorithm and genetic algorithm (proper file button for proper white or black player), and a Next button that is used to make movements one after another from a textbox that is located in annealing tab. It will be further discussed in a later section. The Next button is not displayed in another figures.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/InitialAfterRun.png} 
+	\caption{Initial Run panel after pressing run button to start the game}
+	\label{fig:initialRunPanelAfterRun}
+\end{figure}
+
+Figure \ref{fig:initialRunPanelAfterRun} shows the run panel after pressing the run button. Initial locations of chessmen are set according to chess rules. In the bottom  right corner of the board the is a square coloured black or white depending on which player is expected to make the next move.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/withHistory.png} 
+	\caption{Initial board after started with a certain move history}
+	\label{fig:runPanelWithHistory}
+\end{figure}
+
+The application allows the possibility to start a game from any position other than the standard initial locations of chessmen what is depicted in figure \ref{fig:runPanelWithHistory}. For this purpose sequence of valid movements should be typed (or pasted) to the textbox located above the run button.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{chessImages/withHistoryAndGameHistory.png} 
+	\caption{History of movements}
+	\label{fig:runPanelWithMovementsHistory}
+\end{figure}
+
+On the right side from the run button one can see the textbox responsible for showing the history of the movements as depicted in figure \ref{fig:runPanelWithMovementsHistory}. This is the full history of movements including movements that was made using the textbox above the run button and its primary use is to copy it into a move history field to always start the game from this position.
+
+At the top of the application are tabs for metaheuristics, where the learning phase can be started, which are will be described in according sections later.
 
 \section{Algorithms}
 \label{sec:project}
@@ -146,10 +192,9 @@ where~$v_{new}$ is the new value, ~$v_{old}$ is the old value,~$i$ is the index 
 	v_{new} =  v_{old} *  (1 - dissipation)
 \end{equation}
 where~$v_{new}$ is the new value, ~$v_{old}$ is the old value and~$dissipation$ is a parameter. 
-
 \end{enumerate}
 
-Pheromones can be saved to a file. The file consists of a list of pheromones, each is described with two lines:
+Pheromones can be saved to a file. The file consists of a list of pheromones, which can be used when playing in the Run panel. Each is described with two lines:
 \begin{enumerate}
  	\item String representation of a board, left to right, bottom to up, where \# means no chessman, upper case letters mean white chessmen and lower case letters mean black chessmen \hfill \\
 	\item A list of moves. Each move is described by five integer values. First two are the coordinates of chessman to move, third and fourth where to move the chessman to, the fifth is a special value used for promotion (when a pawn becomes another chess piece) and the sixth a real value of pheromone describing its effectiveness. \hfill \\
@@ -188,27 +233,26 @@ The more obvious rules had to be applied to get to the point of metaheuristic be
 
 Meddling in all of these parameters proved to be insufficient in obtaining better results. After careful debugging of the application, the conclusion has been made, that the possible reason for improvement could be to increase the probability of choosing good moves instead of dwell on the bad moves. Even though the move choosing equation (Equation~\ref{eq:choosingequation}) gives more probability to good moves, it is not very significant to the sum of all the probabilities, because there are generally a lot of bad moves. One of the ideas was to sum up the logarithms of values in equation, which is often a way of dealing with those kind of issues. This however only made the values of pheromones more close to each other so the probability of choosing a good move didn't really change that much. 
 
-The really important change was observed when the Equation~\ref{eq:choosingequation} was modified to one with a "tolerance" factor multiplied by each value except the best one. This way the probability of choosing the best move in training is big, enabling  the colony to thoroughly establish how good of a situation on the board it results in. This can quite easily culminate in a fall into a local maximum of cost function, but it is not a bad situation to be in chess - at least we end up in a better situation than before. Additionally to really fall into a local maximum the moves have to contain a lot of weight gain, so it would be most probably a checkmate anyway, which is, for all intents and purposes, a global maximum. Indeed, if a winning sequence of moves has been established in this version the colony started winning very often.
+The really important change was observed when the Equation~\ref{eq:choosingequation} was modified to one with a "tolerance" factor multiplied by each value except the best one. This way the probability of choosing the best move in training is big, enabling  the colony to thoroughly establish how good of a situation on the board it results in. This can quite easily culminate in a fall into a local maximum of cost function, but it is not a bad situation to be in chess - at least we end up in a better situation than before. Additionally to really fall into a local maximum the moves have to contain a lot of weight gain, so it would be most probably a checkmate anyway, which is, for all intents and purposes, a global maximum. Indeed, if a winning sequence of moves has been established in this version the colony started winning very often. At this point a file containing the pheromones could be exported and played in Greedy Mode to win games. 
 
 \subsection{Genetic algorithm (Mariusz Waszczyński)}
 \label{sec:genetic}
 
 \subsubsection{Idea}
-Our second proposal of metaheuristic algortihms is genetic algortihm. It is pure related to a human nature evoluates from the ages. Looking for humans, it gives interesting results. The population consist with many individuals - games. The individual is a set of gens which here is called moves. From programmicaly point of view a mapping is created between a placement of chess pieces on a chessboard and a move the current player, when provided such board. Each individual is additionally annotated with a real value, which describes the fitness of the final move.
+Our second proposal of a metaheuristic algortihm is the genetic algortihm. It is purely related to how living beings nature evolves through the ages. Looking at it from the perspective of one life beaing equal to one chess game, it may give interesting results. The population consist with many individual living through life - games. The individual is a set of gens which here are called moves. From a programming point of view a mapping is created between a placement of chess pieces on a chessboard and a move for the current player, when provided such board. Each individual is additionally annotated with a real value, which describes the fitness of the final move, calculated with help of cost function (Equation~\ref{eq:costfunction}).
 
-In application each metaheuristic algorithm is defined as a player. Even Artificial Inteligence is marked as player. Hence different players can play against each other. Genetic player is divided into two modes (as ant colony algorithm has):
+In the application each metaheuristic algorithm works as a set of players. Even Artificial Inteligence is marked as player. Hence different players can play against each other. Genetic player is divided into two modes (similar to the ant colony algorithm's):
 \begin{itemize}
  	\item Adventurous Mode \hfill \\
 		Used for learning. In this case the individual is created. The moves are chosen randomly.
 
 	\item Greedy Mode \hfill \\
-		Used for testing and real games. Based on global individual choose appropriate moves. If the individual has not current a placement of chess pieces on a chessboard, move is picked randomly.
+		Used for testing and real games. Based on global individual choosing appropriate moves. If the individual does not recognize current placement of chess pieces on a chessboard, the move is picked randomly.
 \end{itemize}
 
 Entire proccess is divided into two phases: generating a population and learning.
 Genereting population phase creates a new thread for playing individuals, waits for them to end and updates their fitness.
-When the first phase has been finished the learning process which consist of many interations is runned.
-
+When the first phase has been finished the learning process which consist of many interations is started.
 
 \begin{figure*}[!htb]
 	\centering
@@ -216,8 +260,8 @@ When the first phase has been finished the learning process which consist of man
 	\caption{Genetic: crossing phase}
 	\label{fig:genetic_crossing}
 \end{figure*}
-\newpage
-The interation has follwing steps:
+
+The iteration has follwing steps:
 
 \begin{enumerate}
  	\item Selection \hfill \\
@@ -241,11 +285,11 @@ The interation has follwing steps:
 \end{figure}
 
 	\item Crossing phase \hfill \\
-		Two individuals are chosen randomly. Every board\footnote{a placement of chess pieces on a chessboard} from first individual is comparing with every board from second individual. If the boards are equal the proper is chosen and added to the descendant. To choose optimal one probability with cost function are used. Cost function from first and second individual is summed. The sum is a boundary for randomize the number. If the randomized value is from zero to the value of first individual cost function then first individual is chosen, otherwise second individual. Nevertheless If board has not the equivalent, is added to the descendant. Process is showed on Figure \ref{fig:genetic_crossing}. This step is repeating up to fill population, in order to avoid losings.
+		Two individuals are chosen randomly. Every board\footnote{a placement of chess pieces on a chessboard} from first individual is comparing with every board from second individual. If the boards are equal the proper is chosen and added to the descendant. To choose the optimal one the with not equal probability, cost function are used. Cost function from first and second individual is summed. The sum is a boundary for randomize the number. If the randomized value is from zero to the value of first individual cost function then first individual is chosen, otherwise second individual. Nevertheless if the board has not found an equivalent, it is added to the descendant. Process is showed on Figure \ref{fig:genetic_crossing}. This step is repeating up to fill population, in order to avoid a decrease in population size.
 
 \end{enumerate}
 
-When user decide to stop learning, global individual is stored to file which can be used in normal game - greedy mode.
+When user decides to stop learning, global individual is stored to file which can be used in normal game - greedy mode.
 Optimal time for 5 moves for learning is couple hours.
 
 \subsubsection{Experiment}
@@ -274,8 +318,7 @@ Optimal time for learning depends on parameters provided by user. Significant pa
 
 \subsubsection{Result}
 Unfortunetelly checkmate was not achived. 
-For almost 2 tousand tries Artificial Inteligence was winning. Should be emphasize that important is initial board from which games is starting. If cost function is very high at the beginning then is the most probability that genetic algorithm will win. Of course significant impact has manner how cost function is calculated. What factors are taking into consideration, what vages has pieces. 
-
+For almost 2 thousand tries Artificial Inteligence was winning. The importance of initial board should be emphasized. If cost function is very high at the beginning then is the most probability that genetic algorithm will win. Of course there is a significant impact of the way how cost function is calculated. What factors are takien into consideration, what weight are associated with pieces. 
 
 \subsection{Simulated Annealing (Paweł Pałus)}
 \label{sec:annealing}
@@ -291,7 +334,7 @@ There are many optimization algorithms, including ant search, genetic algorithms
 	\label{fig:annealingSchema}
 \end{figure*}
 
-in the first game the Algorithm chooses random possible moves, all moves performed by AI and the algorithm are saved. In the end of the game cost function is calculated and saved. Then the algorithm simulate another game (iteration) in which chooses a saved moves, or a random possible moves and it depends on temperature. If the algorithm choosed random move, opponent move is performed by AI, but if saved move was choosed then opponent move is also a saved move. Not always saved move can be performed therefore in case of one cannot make a saved move, a random move is performed. If there is checkmate or maximum number of turns is achived game ends and cost function is calculated if this cost function is greater than previous one then old saved moves and cost function are exchanged for present. There can occour a situation in which game ends before achieving maximum number of turns (for example if there is a checkmate) and its cost function is greater than previous one. Then in the next simulated game the algorithm will have less saved moves for example 4 and when this number is exceeded random moves are performed in metaheuristic's turns and AI moves in opponent turns. The cost function base only on weights of chess pieces. Weights for chess pieces are as follows:
+In the first game the Algorithm chooses random possible moves, all moves performed by AI and the algorithm are saved. In the end of the game cost function is calculated and saved. Then the algorithm simulates another game (iteration) in which chooses a saved moves, or a random possible moves and it depends on temperature. If the algorithm has chosen a random move, then the opponent's move is performed by AI, but if saved move was choosed then opponent move is also a saved move. Not always saved move can be performed therefore in case of one cannot make a saved move, a random move is performed. If there is a checkmate or maximum number of turns is achived the game ends and cost function is calculated if this cost function is greater than previous one then old saved moves and cost function are exchanged for present. There can occour a situation in which game ends before achieving maximum number of turns (for example if there is a checkmate) and its cost function is greater than the previous one. Then in the next simulated game the algorithm will have less saved moves for example 4 and when this number is exceeded random moves are performed in metaheuristic's turns and AI moves in opponent turns. The cost function is based only on weights of chess pieces. Weights for chess pieces are as follows:
 
 pawn - 1
 
@@ -306,14 +349,14 @@ queen - 10
 king - 1000
 
 Weights are positive for own pieces and negetive for opponent pieces.
-It is important to assign a weight to the king instead of giving hight (in absolute value) value for checkmate, because then it is possible to consider better and worse situations for games that has no max number of turns. without that the algorithm would have all the time the same sequence of saved moves expect very unlikly situation that metaheuristics wins, then the sequence would change only once.
+It is important to assign a weight to the king instead of giving weight (in absolute value) value for checkmate, because then it is possible to consider better and worse situations for games that has no max number of turns. without that the algorithm would have all the time the same sequence of saved moves expect very unlikly situation that metaheuristics wins, then the sequence would change only once.
 
 \subsubsection{GUI}
-GUI is depicted in figure 4.
+GUI is depicted in figure \ref{fig:annealingTab}).
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{annealing/GUI.png} 
-	\caption{Simulated annealing dialog boxes}
+	\caption{Simulated annealing - dialog boxes}
 	\label{fig:annealingTab}
 \end{figure}
 
@@ -332,7 +375,7 @@ An integer number that says how many times the algorithm should repeat an action
 \end{itemize}
 
 \subsubsection{eqperiments}
-It is hard to tell what parameters should be to abtain the best results due to big randomness of the algorithm work. As good parameters have been choosed:
+It is hard to tell what parameters should be used to obtain the best results due to big randomness of the algorithm's work. Some good parameters have been chosen:
 \begin{itemize}
 	\item Initial temperature = 0.8 \hfill \\
 
@@ -343,16 +386,16 @@ in this case the temperature for the last iteration equals $10\%$ of the initial
 Of course the greater number of the "number of internal iterations" parameter the greater the chance to achieve better solution. Experiments was made in a range from 10 to 20000 for "number of internal iterations" parameter parameter.
 Experiments was made most often for value of 10 for "Max number of turns" parameter. There were considered 2 kinds of initial board, standard initial situation for chess and situation depicted in figure 5.
 
-\begin{figure*}[!htb]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1.0\textwidth]{annealing/board.png} 
-	\caption{initial board}
-	\label{fig:annealingTab}
-\end{figure*}
+	\includegraphics[width=0.5\textwidth]{annealing/board.png} 
+	\caption{Initial board}
+	\label{fig:initialBoard}
+\end{figure}
 
-For above board metaheuristic player is white and there is actually its turn.
+For above board metaheuristic player is white and it is actually its turn.
  
-\subsubsection{result}
+\subsubsection{Result}
 Unfortunetelly checkmate was not achived. The best result for standard initial chess board was cost function: 21.0 for parameters:
 
 - internal iteration number: 10000
@@ -365,7 +408,7 @@ Unfortunetelly checkmate was not achived. The best result for standard initial c
 
 in time: 1485 seconds
 
-and for initial situation depicted in figure 5 the best result was cost function equals 31.0 for parameters:
+And for initial situation depicted in figure \ref{fig:initialBoard} the best result was cost function equals 31.0 for parameters:
 
 - internal iteration number: 20000
 
@@ -375,21 +418,26 @@ and for initial situation depicted in figure 5 the best result was cost function
 
 - drop in temperature: $\frac{0.8}{20000} \cdot 0.9 = 0.000031$
 
-in time: 3734 sekund
+in time: 3734 seconds
 
+Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
 
+It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not.
 
 \section{Improvements}
 \label{sec:improvements}
 
-- put all the variables/modes etc in GUI
-- adding new engines and randomize their use between moves
-- importing files for further learning
+Some general improvements should be considered for further development of the application:
+\begin{itemize}
+ 	\item Putting all the variables and modes into GUI, so that a wider range of possible parameters can be changed non-programically 
+ 	\item Adding new engines that implement UCI (other than Firenzina) and use them randomly when choosing a move by AI. This way the metaheuristics will have much wider knowledge. One artificial intelligence can sometimes make mistake moves, but if many engines were to be used randomly, then it would probably not be just a mistake on the part of external AI, but a truly needed sacrifice.
+ 	\item The learning phases of algorithms are in need of previous data import, so that they can continue learning from a previously saved point.
+\end{itemize}
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-It is rare to achive a checkmate by the algorithm due to several precised moves has to be performed to obtain one-time increasing of the cost function. The algorithm would work better if the cost function better expressed a situation on the board. Actually only a material situation is considered, there is a possibility to consider a positional situation, for example the weight of a pawn would increase after each move towards promotion field or the weight of a rook would increase with the number of possible moves that can be performed by the rook, it could be also considered if certain chess piece is protected or not. Different wariants of the algorithm could be considered, the algorithm could simultaneously play for example 5 different games instead of one and at the end of all games choose moves (that would exchange previous saved moves) from the game that achieved the greatest cost function (as far as this cost function would be greater than previous one), or the algorithm could save only its moves and every opponent move would be performed by AI.
+In conclusion, our experiments proved that it is possible to make a kind of artificial intelligence for chess using metaheuristics that can play better than a completly random algorithm. The results can vary greatly between not only a chosen metaheuristic, but also the chosen parameters and algorithm's details. However, it has to be emphasized that metaheuristics require a huge amount of learning time even when being close to the end of the game and as such would not be viable alternative for a standard type of artificial intelligence.
 
 \begin{thebibliography}{99}
 
@@ -398,6 +446,7 @@ It is rare to achive a checkmate by the algorithm due to several precised moves 
 \bibitem{genetic} \textsc{David, O.E. ; van den Herik, H.J. ; Koppel, M. ; Netanyahu, N.S. }, Genetic Algorithms for Evolving Computer Chess Programs 
 \bibitem{annealing} \textsc{S. Kirkpatrick; C. D. Gelatt; M. P. Vecchi.}, Optimization by Simulated Annealing 
 \bibitem{uci} \textsc{R. Huber, S. Meyer-Kahlen}, Universal Chess Interface, http://www.shredderchess.com/chess-info/features/uci-universal-chess-interface.html, 2015/06/01
+\bibitem{firenzina} \textsc{Kranium (Norman Schmidt), Yuri Censor (Dmitri Gusev)}, Firenzina Engine, http://firenzina.wikispaces.com/, 2015/06/01
 
 \end{thebibliography}
 \end{document}
