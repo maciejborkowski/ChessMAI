@@ -15,7 +15,7 @@ public class ChessOptions {
 	private AdapterPool adapterPool;
 	private String initialMoveHistory;
 	private HistoryContainer moveHistoryContainer;
-
+	
 	public ChessOptions() {
 	}
 
