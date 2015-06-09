@@ -53,7 +53,7 @@ The use of metaheuristics (ant colony search, genetic algorithm, simulated annea
 \section{Introduction}
 \label{sec:introduction}
 
-In the age of quickly developing computers there is more and more need for good Artificial Intelligence. A significant number of IT systems tries to appear intelligent one way or another. One of the fields where intelligence appears to be an important factor are multiplayer games played for fun and competitively for hundreds of years. There are numerous methods to imitate an intelligence - neural networks, fuzzy logic, decision trees. Many of the therse methods are being improved upon to this day. Metaheuristics are commonly used to find good, not necessarily optimal solutions for optimization problems and could be used to imitate an real player.
+In the age of quickly developing computers there is more and more need for good Artificial Intelligence. A significant number of IT systems tries to appear intelligent one way or another. One of the fields where intelligence appears to be an important factor are multiplayer games played for fun and competitively for hundreds of years. There are numerous methods to imitate an intelligence - neural networks, fuzzy logic, decision trees. Many of the these methods are being improved upon to this day. Metaheuristics are commonly used to find good, not necessarily optimal solutions for optimization problems and could be used to imitate an real player.
 
 The game of chess drew our attention. It is a game known to most and its rules make for some very complicated strategies thanks to emergent behaviour of the chess system. Worldwide competitions are organized, which verify players skills in this complex game. One of the most important factors in players skills comes from experience - the training. Each chess figure has well-defined moves it is able to take, which results in an astoundingly big number of possible scenarios. A new player quickly finds out that some pieces are more important than others and subconsciously assign to them different weights. It is an important property, which is generally taken into consideration when designing an artificial chess player.~\cite{comparison}
 
@@ -232,7 +232,12 @@ The more obvious rules had to be applied to get to the point of metaheuristic be
 \subsubsection{Result}
 
 Meddling in all of these parameters proved to be insufficient in obtaining better results. After careful debugging of the application, the conclusion has been made, that the possible reason for improvement could be to increase the probability of choosing good moves instead of dwell on the bad moves. Even though the move choosing equation (Equation~\ref{eq:choosingequation}) gives more probability to good moves, it is not very significant to the sum of all the probabilities, because there are generally a lot of bad moves. One of the ideas was to sum up the logarithms of values in equation, which is often a way of dealing with those kind of issues. This however only made the values of pheromones more close to each other so the probability of choosing a good move didn't really change that much. 
-
+\begin{figure*}[!htb]
+	\centering
+	\includegraphics[width=0.85\textwidth]{genetic/genetic_crossing.png} 
+	\caption{Genetic - crossing phase}
+	\label{fig:genetic_crossing}
+\end{figure*}
 The really important change was observed when the Equation~\ref{eq:choosingequation} was modified to one with a "tolerance" factor multiplied by each value except the best one. This way the probability of choosing the best move in training is big, enabling  the colony to thoroughly establish how good of a situation on the board it results in. This can quite easily culminate in a fall into a local maximum of cost function, but it is not a bad situation to be in chess - at least we end up in a better situation than before. Additionally to really fall into a local maximum the moves have to contain a lot of weight gain, so it would be most probably a checkmate anyway, which is, for all intents and purposes, a global maximum. Indeed, if a winning sequence of moves has been established in this version the colony started winning very often. At this point a file containing the pheromones could be exported and played in Greedy Mode to win games. 
 
 \subsection{Genetic algorithm (Mariusz Waszczyński)}
@@ -254,13 +259,6 @@ Entire proccess is divided into two phases: generating a population and learning
 Genereting population phase creates a new thread for playing individuals, waits for them to end and updates their fitness.
 When the first phase has been finished the learning process which consist of many interations is started.
 
-\begin{figure*}[!htb]
-	\centering
-	\includegraphics[width=\textwidth]{genetic/genetic_crossing.png} 
-	\caption{Genetic: crossing phase}
-	\label{fig:genetic_crossing}
-\end{figure*}
-
 The iteration has follwing steps:
 
 \begin{enumerate}
@@ -270,7 +268,7 @@ The iteration has follwing steps:
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{genetic/genetic_selection.png} 
-	\caption{Genetic: selection phase}
+	\caption{Genetic - selection phase}
 	\label{fig:genetic_selection}
 \end{figure}
 
@@ -280,10 +278,10 @@ The iteration has follwing steps:
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{genetic/genetic_global.png} 
-	\caption{Genetic: comparing with the global individual}
+	\caption{Genetic - comparing with the global individual}
 	\label{fig:genetic_global}
 \end{figure}
-
+\newpage
 	\item Crossing phase \hfill \\
 		Two individuals are chosen randomly. Every board\footnote{a placement of chess pieces on a chessboard} from first individual is comparing with every board from second individual. If the boards are equal the proper one is chosen and added to the descendant. Cost function is used to provide probabilities, by which a good candidate is chosen. Cost function from first and second individual is summed. The sum is the boundary for a random number. If the random value is from zero to the value of first individual cost function then first individual is chosen, otherwise second individual. Nevertheless if the board has not found an equivalent, it is added to the descendant. Process is showed on Figure \ref{fig:genetic_crossing}. This step is repeating up to fill population, in order to avoid a decrease in population size.
 
