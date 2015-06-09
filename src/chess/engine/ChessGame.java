@@ -11,6 +11,7 @@ import chess.engine.ChessEngine.State;
 import chess.pieces.Piece;
 import chess.player.AIPlayer;
 import chess.player.MetaheuristicPlayer;
+import chess.player.GeneticPlayer;
 import chess.player.Player;
 
 public class ChessGame implements Runnable {
@@ -29,6 +30,7 @@ public class ChessGame implements Runnable {
 	private ChessColor winner;
 	private int turnNumber;
 	private int turnMax = 0;
+	private double cost=0;
 
 	public ChessGame(ChessOptions options) {
 		running = true;
@@ -36,11 +38,21 @@ public class ChessGame implements Runnable {
 		if (null != options.getBoard()) {
 			options.getBoard().setGame(this);
 		}
-
+			
 		whitePlayer = createPlayer(options, ChessColor.WHITE);
 		blackPlayer = createPlayer(options, ChessColor.BLACK);
-
+		
 		initGame();
+	}
+	
+	public double getCost()
+	{
+		return cost;
+	}
+	
+	public void setCost(double cost)
+	{
+		this.cost = cost;
 	}
 
 	public void initGame() {
@@ -150,7 +162,7 @@ public class ChessGame implements Runnable {
 
 	private void checkEndgameConditions() {
 		if (turnMax != 0 && turnNumber >= turnMax) {
-			System.out.println("REACHED MAX NUMBER OF TURNS!");
+			//System.out.println("REACHED MAX NUMBER OF TURNS!");
 			stop();
 		}
 		if (state == State.CHECKMATE) {
