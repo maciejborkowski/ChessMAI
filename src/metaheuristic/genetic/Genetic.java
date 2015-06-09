@@ -111,27 +111,42 @@ public class Genetic implements Runnable {
 		for (int i=0; i < maxGames; i++)
 		{
 			int idx1 = random.nextInt(games.size());
-			int idx2 = random.nextInt(games.size());
-			Map<String, MoveCost> gensOfIndividualFirst = ((GeneticPlayer)games.get(idx1).getWhitePlayer()).getGens();
-			Map<String, MoveCost> gensOfIndividualSecond = ((GeneticPlayer)games.get(idx2).getWhitePlayer()).getGens();
+			int idx2 = random.nextInt(games.size());//getWhitePlayer()
+			ChessGame firstIndividual = games.get(idx1);
+			ChessGame secondIndividual = games.get(idx2);
+			Map<String, int[]> gensOfFirstIndividual = ((GeneticPlayer)firstIndividual.getWhitePlayer()).getGens();
+			Map<String, int[]> gensOfSecondIndividual = ((GeneticPlayer)secondIndividual.getWhitePlayer()).getGens();
 			ChessGame game = initGame();
-			double cost=0;
-			for (String board : gensOfIndividualFirst.keySet())
+			double cost=-10000;
+			for (String board : gensOfFirstIndividual.keySet())
 			{
-				Map<String, MoveCost> newGens = ((GeneticPlayer)game.getWhitePlayer()).getGens();
-				MoveCost moveCostFirstInd = gensOfIndividualFirst.get(board);
-				MoveCost moveCostSecondInd = gensOfIndividualSecond.get(board);
-				MoveCost newMoveCost;
-				if (null == moveCostSecondInd)
+				Map<String, int[]> newGens = ((GeneticPlayer)game.getWhitePlayer()).getGens();
+				int[] moveFirstInd = gensOfFirstIndividual.get(board);
+				int[] moveSecondInd = gensOfSecondIndividual.get(board);
+				int[] newMove;
+				if (null == moveSecondInd)
 				{
-					newMoveCost = moveCostFirstInd;
+					newMove = moveFirstInd;
+					if (cost < firstIndividual.getCost())
+						cost = firstIndividual.getCost();
 				}
 				else
 				{
-					newMoveCost = chooseBest(moveCostFirstInd, moveCostSecondInd);
+					ChessGame choosen = chooseBest(firstIndividual, secondIndividual);
+					if (choosen == firstIndividual)
+					{
+						newMove = moveFirstInd;
+						if (cost < firstIndividual.getCost())
+							cost = firstIndividual.getCost();
+					} else
+					{
+						newMove = moveSecondInd;
+						if (cost < secondIndividual.getCost())
+							cost = secondIndividual.getCost();
+					}
+					
 				}
-				cost = newMoveCost.getCost();
-				newGens.put(board, newMoveCost);
+				newGens.put(board, newMove);
 			}
 			game.setCost(cost);
 			newGames.add(game);
@@ -139,58 +154,27 @@ public class Genetic implements Runnable {
 		games = newGames;
 	}
 	
-	private MoveCost chooseBest(MoveCost mc1, MoveCost mc2)
+	private ChessGame chooseBest(ChessGame mc1, ChessGame mc2)
 	{
-		MoveCost move1 = mc1;
-		MoveCost move2 = mc2;
+		ChessGame game1 = mc1;
+		ChessGame game2 = mc2;
 		double cost1 = mc1.getCost();
 		double cost2 = mc2.getCost();
 		double sum = Math.abs(cost1) + Math.abs(cost2);
 		if (cost1 < cost2)
 		{
-			move1 = mc2;
-			move2 = mc1;
+			game1 = mc2;
+			game2 = mc1;
 		}
 		double x = random.nextDouble()*sum;
-		return (Math.abs(cost1)>x) ? move1 : move2;
-		
-		/*if ((cost1 < 0 && cost2 < 0) || (cost1 >= 0 && cost2 >= 0))
-		{
-			double sum = Math.abs(cost1) + Math.abs(cost2);
-			if (cost1 < cost2)
-			{
-				move1 = mc2.get(0);
-				move2 = mc1.get(0);
-			}
-			x = random.nextDouble()*sum;
-		}
-		else if ((cost1 < 0 && cost2 >= 0))
-		{
-			double sum = Math.abs(cost1) + Math.abs(cost2);
-			if (cost1 < cost2) // zbedne
-			{
-				move1 = mc2.get(0);
-				move2 = mc1.get(0);
-			}
-			x = random.nextDouble()*sum;
-		}
-		else if (cost1 >= 0 && cost2 < 0)
-		{
-			double sum = Math.abs(cost1) + Math.abs(cost2);
-			x = random.nextDouble()*sum;
-		}*/
+		return (Math.abs(cost1)>x) ? game1 : game2;
 	}
 	
 	public void updateAllCosts()
 	{
 		for (int i = 0; i < size; i++) {
 			ChessGame game = games.get(games.size()-i-1);
-			Map<String, MoveCost> gameGens = ((GeneticPlayer)game.getWhitePlayer()).getGens();
 			double cost = CostFunction.weightedPieces(game, ChessColor.WHITE, geneticOptions.getPieceCostMap());
-			for (String key: gameGens.keySet()) {
-				MoveCost moveCosts = gameGens.get(key);
-				moveCosts.setCost(cost);
-			}
 			game.setCost(cost);
 		}
 	}
@@ -229,36 +213,26 @@ public class Genetic implements Runnable {
 		((GeneticPlayer) game.getWhitePlayer()).setMode(MetaheuristicPlayer.Mode.ADVENTUROUS);
 		return game;
 	}
-	
-/*	private void collectGens()
-	{
-		for (ChessGame game : games)
-		{
-			Map<String, MoveCost> gameGens = ((GeneticPlayer)game.getWhitePlayer()).getGens();
-			//System.out.println(gameGens.values());
-			for (String board : gameGens.keySet())
-			{
-				List <MoveCost> moveCostGlobal = gens.get(board);
-				List <MoveCost> moveCostIndividual = gameGens.get(board);
-				if (null == moveCostGlobal)
-					gens.put(board, moveCostIndividual);
-				else
-					moveCostGlobal.addAll(moveCostIndividual);
-			}
-		}
-	}*/
 
 	@SuppressWarnings("resource")
 	private void saveSolution(File file) {
 	try {
 			file.delete();
-			Map<String, MoveCost> gens = ((GeneticPlayer)globalIndividual.getWhitePlayer()).getGens();
+			Map<String, int[]> gens = ((GeneticPlayer)globalIndividual.getWhitePlayer()).getGens();
 			PrintWriter writer = new PrintWriter(file, "UTF-8");
-			for (Entry<String, MoveCost> costEntry : gens.entrySet()) {
+			for (Entry<String, int[]> costEntry : gens.entrySet()) {
 				String string = costEntry.getKey();
 				writer.write(string);
 				writer.write("\n");
-				writer.write(costEntry.getValue().toString());
+
+				StringBuilder builder = new StringBuilder();
+				for (int val : costEntry.getValue()) {
+					builder.append(val);
+					builder.append(" ");
+				}
+				builder.append(globalIndividual.getCost());
+				builder.append(" ");
+				writer.write( builder.toString() );
 				writer.write("\n");
 			}
 			writer.flush();

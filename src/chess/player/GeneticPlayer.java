@@ -12,13 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import metaheuristic.genetic.MoveCost;
 import chess.engine.ChessEngine;
 
 import java.util.Arrays;
 
 public class GeneticPlayer extends MetaheuristicPlayer {
-	private Map<String, MoveCost> gens = new HashMap<>();
+	private Map<String, int[]> gens = new HashMap<>();
 	private List<String> boardsStrings = new ArrayList<>();
 	private List<int[]> moves = new ArrayList<>();
 	private Random random = new Random();
@@ -42,17 +41,14 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 	private int[] greedyMove() {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
-		MoveCost costMove = gens.get(boardString);
-		int[] move = null;
+		int[] move = gens.get(boardString);
 
-		if (costMove == null) {
+		if (move == null) {
 			List<int[]> availableMoves = ChessEngine.availableMoves(game);
 			if (availableMoves.size() > 0) {
 				int idx = random.nextInt(availableMoves.size());
 				move = availableMoves.get(idx);
 			}
-		} else {
-			move = costMove.getMove();
 		}
 		moves.add(move);
 		return move;
@@ -61,20 +57,19 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 	private int[] adventurousMove() {
 		String boardString = game.getBoard().toString();
 		boardsStrings.add(boardString);
-		MoveCost probabilityMove = gens.get(boardString);
+		int[] probabilityMove = gens.get(boardString);
 		int[] move = null;
 		
 		List<int[]> availableMoves = ChessEngine.availableMoves(game);
 		if (availableMoves.size() > 0) {
 			int idx = random.nextInt(availableMoves.size());
 			move = availableMoves.get(idx);
-			MoveCost moveCost = new MoveCost(move, 0);
 			
 			if (probabilityMove != null) {
 				gens.remove(boardString);
 				System.out.println("WARNING: THE SAME BOARD OCCURED !");
 			}
-			gens.put(boardString, moveCost);
+			gens.put(boardString, move);
 		}
 		//System.out.println("CHOSEN MOVE: " + Arrays.toString(move));
 		moves.add(move);
@@ -88,7 +83,7 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 
 		for (int i = 0; i < lines.size(); i += 2) {
 			String hash = lines.get(i);
-			MoveCost mc=null;// = new MoveCost();
+			int[] mc=null;// = new MoveCost();
 			String[] values = lines.get(i + 1).split(" ");
 			if (values.length > 1) {
 				//for (int j = 0; j < values.length; j += 6) {
@@ -99,7 +94,7 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 					move[3] = Integer.parseInt(values[3]);
 					move[4] = Integer.parseInt(values[4]);
 					double cost = Double.parseDouble(values[5]);
-					mc = new MoveCost(move, cost);
+					mc = move.clone();
 				//}
 			}
 			gens.put(hash, mc);
@@ -119,7 +114,7 @@ public class GeneticPlayer extends MetaheuristicPlayer {
 		this.gens = gens;
 	}*/
 	
-	public Map<String, MoveCost> getGens() {
+	public Map<String, int[]> getGens() {
 		return gens;
 	}
 }
